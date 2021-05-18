@@ -29,6 +29,9 @@ import whitelist from './constants/whitelist'
 import cardList from './constants/cards'
 // import emails from './constants/membersList'
 import NftAccountCard from './components/NftAccountCard'
+import NftNavTabs from './components/NftNavTabs'
+import NftPoolsHeader from './components/NftPoolsHeader'
+import NftPoolCard from './components/NftPoolCard'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -163,10 +166,39 @@ const StyledTextWrapper = styled.div`
   }
 `
 
-const NftCardsContainer = styled.div`
-  > button:not(:last-child) {
-    margin-right: 30px;
-  }
+const NftCardsContainer = styled(Flex)`
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-left: -15px;
+  margin-right: -15px;
+`
+
+const HelperDiv = styled(Text)`
+  padding: 8px 16px;
+  border: 1px solid #D2D6E5;
+  box-sizing: border-box;
+  border-radius: 6px;
+  margin-top: 17px;
+  width: fit-content;
+  span {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: 0.3px;
+    color: #FF4D00;
+    margin-right: 8px;
+  };
+`
+
+const NftTable = styled.div`
+  margin-top: 24px;
+`
+const NftTableContent = styled(Flex)`
+  margin-top: 8px;
+  flex-direction: column;
+  width: 100%;
 `
 
 // const NotifyMembers = (hash, currency) => {
@@ -389,24 +421,24 @@ const InvestorsAccount = () => {
             </StyledTextWrapper>
           </Flex>
         </Modal>
-        <Modal isOpen={isHideModalOpen} onDismiss={handleClose}>
-          <Flex flexDirection="column" style={{ margin: '0 auto' }}>
-            <Text
-              mb="30px"
-              style={{
-                textAlign: 'center',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                lineHeight: '22px',
-                letterSpacing: '0.3px',
-                color: '#0B1359',
-              }}
-            >
-              {t('pleaseUnlockWallet')}
-            </Text>
-            <ConnectWalletButton fullwidth />
-          </Flex>
-        </Modal>
+        {/* <Modal isOpen={isHideModalOpen} onDismiss={handleClose}> */}
+        {/*  <Flex flexDirection="column" style={{ margin: '0 auto' }}> */}
+        {/*    <Text */}
+        {/*      mb="30px" */}
+        {/*      style={{ */}
+        {/*        textAlign: 'center', */}
+        {/*        fontWeight: 'bold', */}
+        {/*        fontSize: '16px', */}
+        {/*        lineHeight: '22px', */}
+        {/*        letterSpacing: '0.3px', */}
+        {/*        color: '#0B1359', */}
+        {/*      }} */}
+        {/*    > */}
+        {/*      {t('pleaseUnlockWallet')} */}
+        {/*    </Text> */}
+        {/*    <ConnectWalletButton fullwidth /> */}
+        {/*  </Flex> */}
+        {/* </Modal> */}
         <Modal isOpen={isTxOpen} onDismiss={handleTxClose} maxHeight={90} padding="24px" isTransparancy>
           <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
         </Modal>
@@ -423,55 +455,29 @@ const InvestorsAccount = () => {
         </StyledHeading>
 
         <AppBody>
+          <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+            Private Pool Cards
+          </StyledHeading>
           <NftCardsContainer>
             {cardList.map((card) => (
               <NftAccountCard
                 card={card}
-                // handleChange={handleChange}
-                // buttonWrap={
-                //   <ButtonWrap>
-                //     {!account ? (
-                //       <ConnectWalletButton fullwidth />
-                //     ) : (
-                //       <AutoColumn gap="md">
-                //         {sufficientBalance ? (
-                //           approval === ApprovalState.APPROVED ? (
-                //             !bought ? (
-                //               <RowBetween>
-                //                 <Button onClick={handleBuy}  style={{width: '100%'}}>{t('buyAmountCards', { count: 1 })}</Button>
-                //               </RowBetween>
-                //             ) : (
-                //               <GreyCard style={{ textAlign: 'center' }}>
-                //                 Please, wait...
-                //               </GreyCard>
-                //             )
-                //           ) : (
-                //             <RowBetween>
-                //               <Button
-                //                 onClick={approveCallback}
-                //                 disabled={approval === ApprovalState.PENDING || approvalSubmitted}
-                //                 style={{width: '100%'}}
-                //               >
-                //                 {approval === ApprovalState.PENDING || approvalSubmitted ? (
-                //                   <Dots>{t('approving', { count: values.currency })}</Dots>
-                //                 ) : (
-                //                   t('approve', { count: values.currency })
-                //                 )}
-                //               </Button>
-                //             </RowBetween>
-                //           )
-                //         ) : (
-                //           <GreyCard style={{ textAlign: 'center', width: '100%' }}>
-                //             {balance && !sufficientBalance ? t('insufficientBalance') : 'Please, wait...'}
-                //           </GreyCard>
-                //         )}
-                //       </AutoColumn>
-                //     )}
-                //   </ButtonWrap>
-                // }
               />
             ))}
           </NftCardsContainer>
+          <HelperDiv>
+            <span>*</span>
+            Please note that converting Private NFTs to ALMs is an irreversible action.
+          </HelperDiv>
+          <NftNavTabs/>
+          <NftTable>
+            <NftPoolsHeader/>
+            <NftTableContent>
+              <NftPoolCard/>
+              <NftPoolCard/>
+              <NftPoolCard/>
+            </NftTableContent>
+          </NftTable>
         </AppBody>
       </CardWrapper>
     </ContentHolder>

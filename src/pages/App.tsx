@@ -57,7 +57,7 @@ export default function App() {
                 <Menu>
                   <Route exact strict path="/" component={InvestorsAccount} />
                 </Menu>
-                <Route render={() => <Redirect to={{ pathname: '/' }} />} />
+                {/* <Route render={() => <Redirect to={{ pathname: '/' }} />} /> */}
               </Switch>
             </Web3ReactManager>
             <Marginer />
