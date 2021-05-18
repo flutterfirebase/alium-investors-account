@@ -181,12 +181,11 @@ const Home = () => {
 
   useEffect(() => {
     if (account) {
-    //   setHideModalOpen(false)
-    //   if (whitelist.indexOf(account) === -1) {
-    //     if (!isOpenModal) setOpenModal(true)
-    //   } else if (isOpenModal) setOpenModal(false)
-    // } else if (!isHideModalOpen) setHideModalOpen(true)
-    }
+      setHideModalOpen(false)
+      if (whitelist.indexOf(account) === -1) {
+        if (!isOpenModal) setOpenModal(true)
+      } else if (isOpenModal) setOpenModal(false)
+    } else if (!isHideModalOpen) setHideModalOpen(true)
   }, [account, isHideModalOpen, isOpenModal])
 
   const nftContract = useNFTPrivateContract()
@@ -204,7 +203,7 @@ const Home = () => {
   const [activeCard, setActiveCard] = useState<any>('0')
 
   const updateMaxCardsAmount = useCallback(() => {
-    ;(async () => {
+    (async () => {
       const maxAmounts = await Promise.all(
         [1, 2, 3].map(async (item) => {
           const result = await collectibleContract

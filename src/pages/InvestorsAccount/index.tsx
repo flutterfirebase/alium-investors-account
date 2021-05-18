@@ -45,11 +45,11 @@ const CardWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   position: relative;
-  
+
   @media screen and (max-width: 1024px) {
     max-width: 954px;
   }
-  
+
   @media screen and (max-width: 1016px) {
     padding: 0 32px 0 32px;
   }
@@ -137,27 +137,27 @@ const AddressWrap = styled.div`
 `
 
 const StyledLink = styled.a`
-  color: #6C5DD3;
+  color: #6c5dd3;
   display: inline-block;
   text-decoration: underline;
   cursor: pointer;
   :active {
-    outline: none; 
+    outline: none;
     border: none;
   }
   :focus {
-    outline: none; 
+    outline: none;
     border: none;
   }
 `
 
 const StyledTextWrapper = styled.div`
   padding: 0 80px;
-  
+
   @media screen and (max-width: 655px) {
     padding: 0 50px;
   }
-  
+
   @media screen and (max-width: 500px) {
     padding: 0;
   }
@@ -195,21 +195,20 @@ const InvestorsAccount = () => {
   useEffect(() => {
     if (account) {
       setHideModalOpen(false)
-    //   if (whitelist.indexOf(account) === -1) {
-    //     if (!isOpenModal) setOpenModal(true)
-    //   } else if (isOpenModal) setOpenModal(false)
-    // } else if (!isHideModalOpen) setHideModalOpen(true)
-    }
+      if (whitelist.indexOf(account) === -1) {
+        if (!isOpenModal) setOpenModal(true)
+      } else if (isOpenModal) setOpenModal(false)
+    } else if (!isHideModalOpen) setHideModalOpen(true)
   }, [account, isHideModalOpen, isOpenModal])
 
   const nftContract = useNFTPrivateContract()
-  const [ isSucceedPopupVisible, setSucceedPopupVisible ] = useState(false);
+  const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
 
   useEffect(() => {
     if (!account) return
-    nftContract?.bought(account).then(res => {
+    nftContract?.bought(account).then((res) => {
       if (res === true) {
-        setSucceedPopupVisible(true);
+        setSucceedPopupVisible(true)
       } else if (isSucceedPopupVisible) {
         setSucceedPopupVisible(false)
       }
@@ -326,7 +325,9 @@ const InvestorsAccount = () => {
   return (
     <ContentHolder>
       <CardWrapper>
-        <Text fontSize="48px" style={{fontWeight: 700, marginBottom: '32px'}}>Your NFT deck</Text>
+        <Text fontSize="48px" style={{ fontWeight: 700, marginBottom: '32px' }}>
+          Your NFT deck
+        </Text>
         <Modal isOpen={isOpenModal} onDismiss={handleClose}>
           <Flex flexDirection="column">
             <Text
@@ -341,16 +342,19 @@ const InvestorsAccount = () => {
               }}
             >
               Sorry, we haven’t found this address in
-              <Text style={{
-                textAlign: 'center',
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                lineHeight: '22px',
-                letterSpacing: '0.3px',
-                color: '#0B1359',
-              }}>
-                the Strategical Partnership Whitelist:</Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontStyle: 'normal',
+                  fontWeight: 'bold',
+                  fontSize: '16px',
+                  lineHeight: '22px',
+                  letterSpacing: '0.3px',
+                  color: '#0B1359',
+                }}
+              >
+                the Strategical Partnership Whitelist:
+              </Text>
             </Text>
             <AddressWrap>{accountEllipsis}</AddressWrap>
             <StyledTextWrapper>
@@ -379,7 +383,8 @@ const InvestorsAccount = () => {
                   color: '#0B1359',
                 }}
               >
-                If that didn&#39;t help, please contact <StyledLink href="https://t.me/akents">@Akents</StyledLink> and he will help you to solve this issue.
+                If that didn&#39;t help, please contact <StyledLink href="https://t.me/akents">@Akents</StyledLink> and
+                he will help you to solve this issue.
               </Text>
             </StyledTextWrapper>
           </Flex>

@@ -209,11 +209,10 @@ const StrategicalPartnershipHome = () => {
   useEffect(() => {
     if (account) {
       setHideModalOpen(false)
-    //   if (whitelist.indexOf(account) === -1) {
-    //     if (!isOpenModal) setOpenModal(true)
-    //   } else if (isOpenModal) setOpenModal(false)
-    // } else if (!isHideModalOpen) setHideModalOpen(true)
-    }
+      if (whitelist.indexOf(account) === -1) {
+        if (!isOpenModal) setOpenModal(true)
+      } else if (isOpenModal) setOpenModal(false)
+    } else if (!isHideModalOpen) setHideModalOpen(true)
   }, [account, isHideModalOpen, isOpenModal])
 
   const nftContract = useNFTPrivateContract()
