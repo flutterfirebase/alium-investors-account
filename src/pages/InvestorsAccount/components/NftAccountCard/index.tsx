@@ -1,8 +1,8 @@
+import { Button, Flex, Input } from '@alium-official/uikit'
 import React from 'react'
 // import { BigNumber } from '@ethersproject/bignumber'
 // import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { Text, Flex, Button, Input } from '@alium-official/uikit'
 import { CardType } from '../../constants/cards'
 
 const NFTWrapper = styled.div`
@@ -35,13 +35,13 @@ const StyledFlex = styled(Flex)`
   padding: 16px;
   box-sizing: border-box;
 `
-const TotalFlex = styled(Flex)`
-  justify-content: space-between;
-  padding: 2px 0;
-  margin-top: 16px;
-  box-sizing: border-box;
-  width: 100%;
-`
+// const TotalFlex = styled(Flex)`
+//   justify-content: space-between;
+//   padding: 2px 0;
+//   margin-top: 16px;
+//   box-sizing: border-box;
+//   width: 100%;
+// `
 const ButtonFlex = styled(Flex)`
   padding 0;
   margin-top: 16px;
@@ -64,23 +64,22 @@ const InputWrapper = styled(Flex)`
   width: 100%;
 `
 const Label = styled.label`
-  font-size: 12px; 
-  color: #6C5DD3;
+  font-size: 12px;
+  color: #6c5dd3;
   position: absolute;
   background-color: white;
   line-height: 14px;
   top: -6px;
   left: 12px;
   padding: 0 4px;
-  top: calc(0% - 14px/2);
+  top: calc(0% - 14px / 2);
   @media (min-width: 568px) {
-    font-size: 10px; 
+    font-size: 10px;
   }
   @media (min-width: 1024px) {
-    font-size: 12px; 
+    font-size: 12px;
   }
 `
-
 
 // type TextPropsType = React.ComponentProps<typeof Text>
 
@@ -107,9 +106,9 @@ type PropsType = {
 }
 
 const NftAccountCard = ({
-                          card
-                          // , handleChange, buttonWrap
-                        }: PropsType) => {
+  card,
+}: // , handleChange, buttonWrap
+PropsType) => {
   // const { t } = useTranslation()
 
   const ID = card.id.toString()
@@ -119,16 +118,8 @@ const NftAccountCard = ({
       <StyledFlex>
         <Image src={card.img} alt="nft-preview" className="nft-preview" />
         <InputWrapper>
-          <Label>
-            Put you NFT id from your collection
-          </Label>
-          <Input
-            type="number"
-            scale="lg"
-            step={1}
-            min={1}
-            placeholder="0"
-          />
+          <Label>Put you NFT id from your collection</Label>
+          <Input type="number" scale="lg" step={1} min={1} placeholder="0" />
         </InputWrapper>
         <ButtonFlex>
           <Button>Convert to ALMs</Button>

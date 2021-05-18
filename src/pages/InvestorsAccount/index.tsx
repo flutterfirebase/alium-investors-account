@@ -1,37 +1,35 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-// import axios from 'axios'
-// import { parseUnits } from '@ethersproject/units'
-import styled from 'styled-components'
 // import { JSBI, TokenAmount } from '@alium-official/sdk'
-import { Heading, Text, Flex } from '@alium-official/uikit'
-import ConnectWalletButton from 'components/ConnectWalletButton'
+import { Flex, Heading, Text } from '@alium-official/uikit'
 import Modal from 'components/Modal'
-
+import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'hooks'
 // import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useNFTPrivateContract } from 'hooks/useContract'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 // import { NFT_PRIVATE_ADDRESS } from 'constants/abis/nftPrivate'
 // import { WrappedTokenInfo } from 'state/lists/hooks'
 // import { useCurrencyBalance } from 'state/wallet/hooks'
 // import { useTransactionAdder } from 'state/transactions/hooks'
 import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
-import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
+// import axios from 'axios'
+// import { parseUnits } from '@ethersproject/units'
+import styled from 'styled-components'
 // import { AutoColumn } from 'components/Column'
 // import { RowBetween } from 'components/Row'
 // import { GreyCard } from 'components/Card'
 // import { Dots } from '../Pool/styleds'
 import AppBody from '../AppBody'
-// import currencies from './constants/currencies'
-import whitelist from './constants/whitelist'
-import cardList from './constants/cards'
 // import emails from './constants/membersList'
 import NftAccountCard from './components/NftAccountCard'
 import NftNavTabs from './components/NftNavTabs'
-import NftPoolsHeader from './components/NftPoolsHeader'
 import NftPoolCard from './components/NftPoolCard'
+import NftPoolsHeader from './components/NftPoolsHeader'
+import cardList from './constants/cards'
+// import currencies from './constants/currencies'
+import whitelist from './constants/whitelist'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -177,7 +175,7 @@ const NftCardsContainer = styled(Flex)`
 
 const HelperDiv = styled(Text)`
   padding: 8px 16px;
-  border: 1px solid #D2D6E5;
+  border: 1px solid #d2d6e5;
   box-sizing: border-box;
   border-radius: 6px;
   margin-top: 17px;
@@ -187,9 +185,9 @@ const HelperDiv = styled(Text)`
     font-size: 24px;
     line-height: 30px;
     letter-spacing: 0.3px;
-    color: #FF4D00;
+    color: #ff4d00;
     margin-right: 8px;
-  };
+  }
 `
 
 const NftTable = styled.div`
@@ -460,22 +458,20 @@ const InvestorsAccount = () => {
           </StyledHeading>
           <NftCardsContainer>
             {cardList.map((card) => (
-              <NftAccountCard
-                card={card}
-              />
+              <NftAccountCard card={card} />
             ))}
           </NftCardsContainer>
           <HelperDiv>
             <span>*</span>
             Please note that converting Private NFTs to ALMs is an irreversible action.
           </HelperDiv>
-          <NftNavTabs/>
+          <NftNavTabs />
           <NftTable>
-            <NftPoolsHeader/>
+            <NftPoolsHeader />
             <NftTableContent>
-              <NftPoolCard/>
-              <NftPoolCard/>
-              <NftPoolCard/>
+              <NftPoolCard />
+              <NftPoolCard />
+              <NftPoolCard />
             </NftTableContent>
           </NftTable>
         </AppBody>

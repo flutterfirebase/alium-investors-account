@@ -1,51 +1,46 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import axios from 'axios'
-import { parseUnits } from '@ethersproject/units'
-import styled from 'styled-components'
 import { JSBI, TokenAmount } from '@alium-official/sdk'
-import { Heading, Button, Text, Flex } from '@alium-official/uikit'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import { AutoColumn } from 'components/Column'
-import { RowBetween } from 'components/Row'
-import { GreyCard } from 'components/Card'
-import Modal from 'components/Modal'
+import { Button, Flex, Heading, Text } from '@alium-official/uikit'
+import { parseUnits } from '@ethersproject/units'
 import {
   FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  InputAdornment,
-  IconButton,
   FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
 } from '@material-ui/core'
-
+import axios from 'axios'
+import { GreyCard } from 'components/Card'
+import { AutoColumn } from 'components/Column'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import Modal from 'components/Modal'
+import { RowBetween } from 'components/Row'
+import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
+import { NFT_PRIVATE_ADDRESS } from 'constants/abis/nftPrivate'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useCollectibleContract, useNFTPrivateContract } from 'hooks/useContract'
-
-import { NFT_PRIVATE_ADDRESS } from 'constants/abis/nftPrivate'
-import { WrappedTokenInfo } from 'state/lists/hooks'
-import { useCurrencyBalance } from 'state/wallet/hooks'
-import { useTransactionAdder } from 'state/transactions/hooks'
-import { PopupList } from 'state/application/reducer'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { useRemovePopup } from 'state/application/hooks'
+import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
-
-import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
-import { Dots } from '../Pool/styleds'
+import { WrappedTokenInfo } from 'state/lists/hooks'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import styled from 'styled-components'
 import AppBody from '../AppBody'
-import max from './images/max-button.svg'
-import currencies from './constants/currencies'
-import whitelist from './constants/whitelist'
-import cardList from './constants/cards'
-
+import { Dots } from '../Pool/styleds'
 import NftCard from './components/NftCard'
-import { StyledTextField, StyledFormControl } from './components/Styled/Inputs'
-import bgIMG from './images/background-img.svg'
+import { StyledFormControl, StyledTextField } from './components/Styled/Inputs'
+import cardList from './constants/cards'
+import currencies from './constants/currencies'
 import emails from './constants/membersList'
+import bgIMG from './images/background-img.svg'
+import max from './images/max-button.svg'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -173,6 +168,7 @@ const NotifyMembers = (hash, count, card, currency) => {
 }
 
 const Home = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isOpenModal, setOpenModal] = useState(false)
   const [isHideModalOpen, setHideModalOpen] = useState(false)
   const { account, chainId } = useActiveWeb3React()
@@ -182,9 +178,10 @@ const Home = () => {
   useEffect(() => {
     if (account) {
       setHideModalOpen(false)
-      if (whitelist.indexOf(account) === -1) {
-        if (!isOpenModal) setOpenModal(true)
-      } else if (isOpenModal) setOpenModal(false)
+      // TODO: temporary disabled whitelist
+      // if (whitelist.indexOf(account) === -1) {
+      //   if (!isOpenModal) setOpenModal(true)
+      // } else if (isOpenModal) setOpenModal(false)
     } else if (!isHideModalOpen) setHideModalOpen(true)
   }, [account, isHideModalOpen, isOpenModal])
 
@@ -446,19 +443,17 @@ const Home = () => {
         </Modal>
         <Modal isOpen={isTxOpen} onDismiss={handleTxClose} maxHeight={90} padding="24px">
           <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
-        </Modal>129
-
+        </Modal>
+        129
         <Modal isOpen={isSucceedPopupVisible} onDismiss={handleSucceedModalClose} maxHeight={90} padding="24px">
           <TransactionSucceedContent hash={succeedHash} onDismiss={handleSucceedModalClose} />
         </Modal>
-
         <StyledHeading as="h1" size="xl" color="heading" mb="40px" mt="20px" className="heading--desktop">
           {t('privateRound')}
         </StyledHeading>
         <StyledHeading as="h1" size="xl" color="heading" mb="40px" mt="20px" className="heading--mobile">
           {t('butNftCards')}
         </StyledHeading>
-
         <AppBody>
           <GridContainer>
             {cardList.map((card) => (

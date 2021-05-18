@@ -1,11 +1,11 @@
-import nft1 from '../images/legendary-illustris.gif'
+import nft5 from '../images/common-necesse.gif'
 import nft2 from '../images/epic-castus.gif'
+import nft1 from '../images/legendary-illustris.gif'
 import nft3 from '../images/rare-altum.gif'
 import nft4 from '../images/uncommon-regno.gif'
-import nft5 from '../images/common-necesse.gif'
 // import strategicalIcon from '../images/StrategicalCardIcon.svg'
 
-const cardLink = 'https://gateway.pinata.cloud/ipfs/QmTVgjsjv4hMiaNtZzX7Fj4zs8WAjz2SktsY3C7qsSFjQW'
+// const cardLink = 'https://gateway.pinata.cloud/ipfs/QmTVgjsjv4hMiaNtZzX7Fj4zs8WAjz2SktsY3C7qsSFjQW'
 
 export type CardType = {
   id: number
