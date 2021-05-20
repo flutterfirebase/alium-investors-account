@@ -1,10 +1,10 @@
 import useEagerConnect from 'hooks/useEagerConnect'
 import React, { Suspense } from 'react'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
+import Menu from '../components/Menu'
 import Popups from '../components/Popups'
 import Web3ReactManager from '../components/Web3ReactManager'
-import Menu from '../components/Menu'
 import InvestorsAccount from './InvestorsAccount'
 import Collection from './InvestorsAccount/Collection'
 
@@ -43,7 +43,7 @@ const Marginer = styled.div`
 `
 
 export default function App() {
-  useEagerConnect();
+  useEagerConnect()
 
   return (
     <Suspense fallback={null}>

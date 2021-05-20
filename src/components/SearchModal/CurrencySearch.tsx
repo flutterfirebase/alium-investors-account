@@ -1,29 +1,27 @@
 import { Currency, ETHER, Token } from '@alium-official/sdk'
+import { CloseIcon, Text } from '@alium-official/uikit'
 import React, { KeyboardEvent, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { Text, CloseIcon } from '@alium-official/uikit'
-
 import { useTranslation } from 'react-i18next'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList } from 'react-window'
 import { ThemeContext } from 'styled-components'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens, useToken } from '../../hooks/Tokens'
 import { useSelectedListInfo } from '../../state/lists/hooks'
-import { LinkStyledButton, TYPE } from '../Shared'
 import { isAddress } from '../../utils'
 import Card from '../Card'
 import Column from '../Column'
 import ListLogo from '../ListLogo'
 import QuestionHelper from '../QuestionHelper'
 import Row, { RowBetween } from '../Row'
+import { LinkStyledButton, TYPE } from '../Shared'
+import TranslatedText from '../TranslatedText'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
 import { filterTokens } from './filtering'
 import SortButton from './SortButton'
 import { useTokenComparator } from './sorting'
 import { PaddedColumn, SearchInput, Separator } from './styleds'
-import TranslatedText from '../TranslatedText'
-import { TranslateString } from '../../utils/translateTextHelpers'
 
 const { main: Main } = TYPE
 
@@ -34,8 +32,8 @@ interface CurrencySearchProps {
   onCurrencySelect: (currency: Currency) => void
   otherSelectedCurrency?: Currency | null
   showCommonBases?: boolean
-  onChangeList: () => void,
-  currencyList?: any,
+  onChangeList: () => void
+  currencyList?: any
 }
 
 export function CurrencySearch({
@@ -46,7 +44,7 @@ export function CurrencySearch({
   onDismiss,
   isOpen,
   onChangeList,
-  currencyList
+  currencyList,
 }: CurrencySearchProps) {
   const { t } = useTranslation()
   const { chainId } = useActiveWeb3React()
@@ -55,7 +53,7 @@ export function CurrencySearch({
   const fixedList = useRef<FixedSizeList>()
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [invertSearchOrder, setInvertSearchOrder] = useState<boolean>(false)
-  const globalTokenList = useAllTokens();
+  const globalTokenList = useAllTokens()
   const allTokens = currencyList || globalTokenList
 
   // if they input an address, use it
@@ -64,12 +62,11 @@ export function CurrencySearch({
 
   const showETH: boolean = useMemo(() => {
     const s = searchQuery.toLowerCase().trim()
-    if (currencyList) return false;
+    if (currencyList) return false
     return s === '' || s === 'e' || s === 'et' || s === 'eth'
   }, [currencyList, searchQuery])
 
   const tokenComparator = useTokenComparator(invertSearchOrder)
-
 
   const filteredTokens: Token[] = useMemo(() => {
     if (isAddressSearch) return searchToken ? [searchToken] : []
@@ -142,9 +139,7 @@ export function CurrencySearch({
         <RowBetween>
           <Text>
             <TranslatedText translationId={82}>{t('selectToken')}</TranslatedText>
-            <QuestionHelper
-              text={t('findTokenBySearch')}
-            />
+            <QuestionHelper text={t('findTokenBySearch')} />
           </Text>
           <CloseIcon onClick={onDismiss} />
         </RowBetween>
@@ -161,9 +156,7 @@ export function CurrencySearch({
           <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
         )}
         <RowBetween>
-          <Text fontSize="14px">
-            {t('tokenName')}
-          </Text>
+          <Text fontSize="14px">{t('tokenName')}</Text>
           <SortButton ascending={invertSearchOrder} toggleSortOrder={() => setInvertSearchOrder((iso) => !iso)} />
         </RowBetween>
       </PaddedColumn>

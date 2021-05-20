@@ -1,82 +1,44 @@
-import React from 'react'
-import { Menu as UikitMenu, MenuEntry } from '@alium-official/uikit'
-import { useWeb3React } from '@web3-react/core'
-import { useTranslation } from 'react-i18next'
-import useTheme from 'hooks/useTheme'
-import useAuth from 'hooks/useAuth'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import { ETHER } from '@alium-official/sdk'
+import { externalLinks, Menu as UikitMenu, MenuEntry } from '@alium-official/uikit'
+import { useWeb3React } from '@web3-react/core'
+import useAuth from 'hooks/useAuth'
+import useTheme from 'hooks/useTheme'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useCurrencyBalance } from 'state/wallet/hooks'
 
 const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ...props }) => {
   const { t } = useTranslation()
 
   const links: MenuEntry[] = [
-    {
-      label: 'Home',
-      icon: 'HomeIcon',
-      href: process.env.REACT_APP_HOME_URL,
-    },
+    { label: 'Home', icon: 'HomeIcon', href: '/' },
     {
       label: 'Trade',
       icon: 'TradeIcon',
       items: [
-        {
-          label: 'Exchange',
-          href: '/swap',
-        },
-        {
-          label: 'Liquidity',
-          href: '/pool',
-        },
-        // {
-        //   label: 'Migrate',
-        //   href: '/migrate',
-        // },
+        { label: 'Exchange', href: process.env.REACT_APP_EXCHANGE_URL },
+        { label: 'Liquidity', href: process.env.REACT_APP_LIQUIDITY_URL },
       ],
     },
-    {
-      label: 'Private Round NFTs',
-      icon: 'PrivateRoundIcon',
-      href: '/'
-    },
-    {
-      label: 'Analytics',
-      icon: 'InfoIcon',
-      items: [
-        {
-          label: 'Overview',
-          href: process.env.REACT_APP_INFO_URL,
-        },
-        {
-          label: 'Tokens',
-          href: `${process.env.REACT_APP_INFO_URL}/tokens`,
-        },
-        {
-          label: 'Pairs',
-          href: `${process.env.REACT_APP_INFO_URL}/pairs`,
-        },
-      ],
-    },
+    // {
+    //   label: 'Analytics',
+    //   icon: 'InfoIcon',
+    //   items: [
+    //     { label: 'Overview', href: process.env.REACT_APP_INFO_URL },
+    //     { label: 'Tokens', href: `${process.env.REACT_APP_INFO_URL}/tokens` },
+    //     { label: 'Pairs', href: `${process.env.REACT_APP_INFO_URL}/pairs` },
+    //   ],
+    // },
+    { label: 'Token holder area', icon: 'PrivateRoundIcon', href: '/' },
     {
       label: 'More',
       icon: 'MoreIcon',
       items: [
-        // {
-        //   label: 'Voting',
-        //   href: 'https://voting.dev.alium.finance',
-        // },
-        {
-          label: 'GitHub',
-          href: 'https://github.com/Aliumswap',
-        },
-        {
-          label: 'Docs',
-          href: 'https://aliumswap.gitbook.io/alium-finance',
-        },
-        {
-          label: 'Blog',
-          href: 'https://medium.com/@aliumswap',
-        },
+        { label: 'Audits', href: `${process.env.REACT_APP_HOME_URL}/audits` },
+        // { label: 'Voting', href: 'https://voting.dev.alium.finance' },
+        { label: 'GitHub', href: externalLinks.github },
+        { label: 'Docs', href: 'https://aliumswap.gitbook.io/alium-finance/' },
+        { label: 'Blog', href: externalLinks.medium },
       ],
     },
   ]

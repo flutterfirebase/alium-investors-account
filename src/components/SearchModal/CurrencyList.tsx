@@ -1,23 +1,22 @@
 import { Currency, CurrencyAmount, currencyEquals, ETHER, Token } from '@alium-official/sdk'
+import { Text } from '@alium-official/uikit'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FixedSizeList } from 'react-window'
 import styled from 'styled-components'
-import { Text } from '@alium-official/uikit'
-
 import { useActiveWeb3React } from '../../hooks'
+import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useSelectedTokenList, WrappedTokenInfo } from '../../state/lists/hooks'
 import { useAddUserToken, useRemoveUserAddedToken } from '../../state/user/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { LinkStyledButton, TYPE } from '../Shared'
-import { useIsUserAddedToken } from '../../hooks/Tokens'
+import { isTokenOnList } from '../../utils'
 import Column from '../Column'
-import { RowFixed } from '../Row'
 import CurrencyLogo from '../CurrencyLogo'
+import Loader from '../Loader'
+import { RowFixed } from '../Row'
+import { LinkStyledButton, TYPE } from '../Shared'
 import { MouseoverTooltip } from '../Tooltip'
 import { FadedSpan, MenuItem } from './styleds'
-import Loader from '../Loader'
-import { isTokenOnList } from '../../utils'
-import { useTranslation } from 'react-i18next'
 
 const { main: Main } = TYPE
 
@@ -105,8 +104,8 @@ function CurrencyRow({
   const balance = useCurrencyBalance(account ?? undefined, currency)
 
   const removeToken = useRemoveUserAddedToken()
-  const addToken = useAddUserToken();
-  const {t} = useTranslation();
+  const addToken = useAddUserToken()
+  const { t } = useTranslation()
 
   // only show add or remove buttons if not on selected list
   return (
