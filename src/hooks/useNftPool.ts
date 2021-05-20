@@ -15,6 +15,7 @@ export default function useNftPool() {
 
   useEffect(() => {
     if (library && account) {
+      console.log(NFT_VESTING)
       const instance = getContract(NFT_VESTING, AliumVestingAbi, library, account)
       setVestingContract(instance)
     }
