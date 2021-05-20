@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Contract } from '@ethersproject/contracts'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 // import axios from 'axios'
@@ -23,15 +24,21 @@ import { TransactionSubmittedContent, TransactionSucceedContent } from 'componen
 // import { RowBetween } from 'components/Row'
 // import { GreyCard } from 'components/Card'
 // import { Dots } from '../Pool/styleds'
+import useNftPoolHook from 'hooks/useNftPool'
 import AppBody from '../AppBody'
 // import currencies from './constants/currencies'
 import whitelist from './constants/whitelist'
-import cardList from './constants/cards'
+import { cardListPrivate, cardListPublic, cardListStrategical } from './constants/cards'
 // import emails from './constants/membersList'
 import NftAccountCard from './components/NftAccountCard'
 import NftNavTabs from './components/NftNavTabs'
 import NftPoolsHeader from './components/NftPoolsHeader'
 import NftPoolCard from './components/NftPoolCard'
+import pools, { PoolsTypes } from './constants/pools'
+import { AliumVestingAbi, NFT_VESTING_PRIVATE } from './constants'
+import multicall from '../../utils/multicall'
+import { useSingleContractMultipleData } from '../../state/multicall/hooks'
+import { getContract } from '../../utils'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -220,6 +227,7 @@ const NftTableContent = styled(Flex)`
 const InvestorsAccount = () => {
   const [isOpenModal, setOpenModal] = useState(false)
   const [isHideModalOpen, setHideModalOpen] = useState(false)
+  // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
   const { account, chainId } = useActiveWeb3React()
 
   const { t } = useTranslation()
@@ -232,6 +240,8 @@ const InvestorsAccount = () => {
       } else if (isOpenModal) setOpenModal(false)
     } else if (!isHideModalOpen) setHideModalOpen(true)
   }, [account, isHideModalOpen, isOpenModal])
+
+  const { poolsWithData, onClaim, pendingClaimResult } = useNftPoolHook()
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
@@ -333,7 +343,8 @@ const InvestorsAccount = () => {
   const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const handleClose = () => {}
+  const handleClose = () => {
+  }
 
   const handleTxClose = () => {
     setTxOpen(false)
@@ -354,6 +365,17 @@ const InvestorsAccount = () => {
     // setTempTxHash('')
   }
 
+  const onClaimHandler = useCallback((pid: number) => {
+    onClaim(pid)
+      .then((tx) => {
+        if (tx) {
+          setTxHash(tx)
+          setTxOpen(true)
+        }
+      })
+      // .finally(() => setTxOpen(false))
+  }, [onClaim])
+
   return (
     <ContentHolder>
       <CardWrapper>
@@ -370,7 +392,7 @@ const InvestorsAccount = () => {
                 fontSize: '16px',
                 lineHeight: '22px',
                 letterSpacing: '0.3px',
-                color: '#0B1359',
+                color: '#0B1359'
               }}
             >
               Sorry, we haven’t found this address in
@@ -382,7 +404,7 @@ const InvestorsAccount = () => {
                   fontSize: '16px',
                   lineHeight: '22px',
                   letterSpacing: '0.3px',
-                  color: '#0B1359',
+                  color: '#0B1359'
                 }}
               >
                 the Strategical Partnership Whitelist:
@@ -398,7 +420,7 @@ const InvestorsAccount = () => {
                   fontSize: '14px',
                   lineHeight: '20px',
                   letterSpacing: '0.3px',
-                  color: '#0B1359',
+                  color: '#0B1359'
                 }}
               >
                 If you have been registered for the Whitelist before, please try to connect with another address.
@@ -412,7 +434,7 @@ const InvestorsAccount = () => {
                   fontSize: '14px',
                   lineHeight: '20px',
                   letterSpacing: '0.3px',
-                  color: '#0B1359',
+                  color: '#0B1359'
                 }}
               >
                 If that didn&#39;t help, please contact <StyledLink href="https://t.me/akents">@Akents</StyledLink> and
@@ -459,23 +481,53 @@ const InvestorsAccount = () => {
             Private Pool Cards
           </StyledHeading>
           <NftCardsContainer>
-            {cardList.map((card) => (
+            {cardListPrivate.map((card) => (
               <NftAccountCard
+                key={`cardListPrivate-${card.id}`}
                 card={card}
               />
             ))}
+          </NftCardsContainer>
+          <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+            Strategical Pool Cards
+          </StyledHeading>
+          <NftCardsContainer>
+            {cardListStrategical.map((card) => (
+              <NftAccountCard
+                key={`cardListStrategical-${card.id}`}
+                card={card}
+              />
+            ))}
+          </NftCardsContainer>
+          <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+            Public Pool Cards
+          </StyledHeading>
+          <NftCardsContainer>
+            {cardListPublic.map((card) => (
+              <NftAccountCard
+                key={`cardListPublic-${card.id}`}
+                card={card}
+              />
+            ))}
+
           </NftCardsContainer>
           <HelperDiv>
             <span>*</span>
             Please note that converting Private NFTs to ALMs is an irreversible action.
           </HelperDiv>
-          <NftNavTabs/>
+          <NftNavTabs />
           <NftTable>
-            <NftPoolsHeader/>
+            <NftPoolsHeader />
             <NftTableContent>
-              <NftPoolCard/>
-              <NftPoolCard/>
-              <NftPoolCard/>
+              {
+                poolsWithData.map((pool) => (
+                  <NftPoolCard
+                    key={`Pool-Nft-${pool.id}`}
+                    pool={pool} onClaim={onClaimHandler}
+                    pending={Boolean(pendingClaimResult?.[0] === pool.id)}
+                  />
+                ))
+              }
             </NftTableContent>
           </NftTable>
         </AppBody>

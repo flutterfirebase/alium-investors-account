@@ -1,8 +1,9 @@
 import { Button, Flex } from '@alium-official/uikit'
 import React from 'react'
 import styled from 'styled-components'
+import { Link, useLocation } from 'react-router-dom'
 import { ReactComponent as AlmTokenStatsIcon } from '../../../../assets/images/nav-stats.svg'
-import { ReactComponent as MyCollectionIcon }  from '../../../../assets/images/nav-collection.svg'
+import { ReactComponent as MyCollectionIcon } from '../../../../assets/images/nav-collection.svg'
 
 const NavWrap = styled(Flex)`
   padding: 8px 16px;
@@ -11,7 +12,7 @@ const NavWrap = styled(Flex)`
   border-radius: 6px;
   margin-top: 56px;
   width: fit-content;
-  button:first-child {
+  a:first-child {
     margin-right: 8px;
   }
   @media (max-width: 568px){
@@ -27,7 +28,7 @@ const NavWrap = styled(Flex)`
   }
 `
 
-const IconWrapper = styled.div<{ size?: number }>`
+const IconWrapper = styled.div<{ size?: number, active: boolean }>`
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -38,22 +39,30 @@ const IconWrapper = styled.div<{ size?: number }>`
     height: ${({ size }) => (size ? `${size}px` : '32px')};
     width: ${({ size }) => (size ? `${size}px` : '32px')};
   }
+  svg {
+   path{
+     stroke: ${({ active }) => (active ? '#FFF' : "#6C5DD3")}
+   } 
+  }
   ${({ theme }) => theme.mediaQueries.lg} {
     align-items: flex-end;
   }
 `
 
 function NftNavTabs() {
+
+  const location = useLocation()
+
   return (
     <NavWrap>
-      <Button>
-        <IconWrapper size={16}>
-          <AlmTokenStatsIcon/>
+      <Button to='/' variant={location.pathname === '/' ? 'primary' : 'tertiary'} as={Link}>
+        <IconWrapper active={location.pathname === '/'} size={16}>
+          <AlmTokenStatsIcon />
         </IconWrapper>
         ALM token stats
       </Button>
-      <Button variant="tertiary">
-        <IconWrapper size={16}>
+      <Button variant={location.pathname === '/collection' ? 'primary' : 'tertiary'} to='/collection' as={Link}>
+        <IconWrapper active={location.pathname === '/collection'} size={16}>
           <MyCollectionIcon />
           {/* <img src={MyCollectionIcon} alt="My collection" /> */}
         </IconWrapper>

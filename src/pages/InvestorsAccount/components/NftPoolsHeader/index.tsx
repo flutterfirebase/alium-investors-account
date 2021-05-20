@@ -27,9 +27,10 @@ const Field = styled(Flex)<{maxWidth: string}>`
   width: 100%;
   max-width: ${({maxWidth}) => maxWidth};
   flex: 1;
-  &:last-child {
-    justify-content: flex-end; 
-  }
+`
+
+const FieldEnd = styled(Field)`
+  justify-content: flex-end;  
 `
 
 function NftPoolsHeader() {
@@ -39,8 +40,8 @@ function NftPoolsHeader() {
       <Field maxWidth="96px">Total ALMs</Field>
       <Field maxWidth="96px">Locked</Field>
       <Field maxWidth="172px">Unlocked</Field>
-      <Field maxWidth="80px">Claimed</Field>
-      <Field maxWidth="140px">Next unclocked date</Field>
+      <FieldEnd maxWidth="80px">Claimed</FieldEnd>
+      <FieldEnd maxWidth="140px">Next unclocked date</FieldEnd>
     </NftPoolsHeaderWrap>
   )
 }

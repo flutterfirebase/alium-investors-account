@@ -57,6 +57,11 @@ const Image = styled.img`
   max-height: 333px;
   margin: 0 auto;
 `
+const Video = styled.video`
+  max-width: 100%;
+  max-height: 333px;
+  margin: 0 auto;
+`
 
 const InputWrapper = styled(Flex)`
   margin-top: 32px;
@@ -111,13 +116,19 @@ const NftAccountCard = ({
                           // , handleChange, buttonWrap
                         }: PropsType) => {
   // const { t } = useTranslation()
-
+  const isMp4 = card.img.split('.')[1] === 'mp4'
   const ID = card.id.toString()
 
   return (
-    <NFTWrapper key={ID}>
+    <NFTWrapper>
       <StyledFlex>
-        <Image src={card.img} alt="nft-preview" className="nft-preview" />
+        {
+          isMp4
+          ? <Video autoPlay loop muted>
+              <source src={card.img} type="video/mp4" />
+            </Video>
+            : <Image src={card.img} alt="nft-preview" className="nft-preview" />
+        }
         <InputWrapper>
           <Label>
             Put you NFT id from your collection
