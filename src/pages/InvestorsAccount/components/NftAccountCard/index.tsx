@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 // import { BigNumber } from '@ethersproject/bignumber'
 // import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Text, Flex, Button, Input } from '@alium-official/uikit'
 import { CardType } from '../../constants/cards'
+import useNftAccountCard from '../../../../hooks/useNftAccountCard'
+import Modal from '../../../../components/Modal'
+import { TransactionSubmittedContent } from '../../../../components/TransactionConfirmationModal'
+import { useActiveWeb3React } from '../../../../hooks'
+import { Dots } from '../../../../components/swap/styleds'
 
 const NFTWrapper = styled.div`
   border: none;
@@ -86,25 +91,6 @@ const Label = styled.label`
   }
 `
 
-
-// type TextPropsType = React.ComponentProps<typeof Text>
-
-// const StyledHeading = (props: TextPropsType) => (
-//   <Text
-//     mb="15px"
-//     style={{
-//       textAlign: 'left',
-//       fontStyle: 'normal',
-//       fontWeight: '500',
-//       fontSize: '24px',
-//       lineHeight: '22px',
-//       letterSpacing: '0.3px',
-//       color: '#0B1359',
-//     }}
-//     {...props}
-//   />
-// )
-
 type PropsType = {
   card: CardType
   // handleChange: any
@@ -115,12 +101,63 @@ const NftAccountCard = ({
                           card
                           // , handleChange, buttonWrap
                         }: PropsType) => {
-  // const { t } = useTranslation()
   const isMp4 = card.img.split('.')[1] === 'mp4'
-  const ID = card.id.toString()
+  const [value, setValue] = useState<number | string>('')
+  const [isTxOpen, setTxOpen] = useState(false)
+  const [txHash, setTxHash] = useState('xczxczxczxc')
+  const { chainId } = useActiveWeb3React()
+  const handleTxClose = () => {
+    setTxOpen(false)
+  }
+
+  const {totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert} = useNftAccountCard(value, card.id)
+
+  const limitId: number = useMemo(() => {
+    return totalSupply ? parseInt(totalSupply) : 1
+  }, [totalSupply])
+
+  const handleInput = useCallback(
+    (event) => {
+      let input = event.target.value
+      input = parseInt(input) <= 1 ? '1' : input
+      input = parseInt(input) >= limitId ? limitId.toString() : input
+      const withoutSpaces = input.replace(/\s+/g, '')
+      setValue(withoutSpaces)
+    },
+    [setValue, limitId]
+  )
+
+  const onApproveHandler = useCallback(() => {
+    onApprove(card.privateCall)
+      .then((tx) => {
+        if (tx) {
+          setTxHash(tx)
+          setTxOpen(true)
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }, [card.privateCall, onApprove])
+
+  const onConvertHandler = useCallback(() => {
+    onConvert(card.privateCall, typeof value === 'string' ? parseInt(value) : value)
+      .then((tx) => {
+        if (tx) {
+          setTxHash(tx)
+          setTxOpen(true)
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }, [card.privateCall, onConvert, value])
 
   return (
     <NFTWrapper>
+      <Modal isOpen={isTxOpen} onDismiss={handleTxClose} maxHeight={90} padding="24px" isTransparancy>
+        <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
+      </Modal>
       <StyledFlex>
         {
           isMp4
@@ -138,11 +175,17 @@ const NftAccountCard = ({
             scale="lg"
             step={1}
             min={1}
-            placeholder="0"
+            placeholder="1"
+            value={value}
+            onChange={handleInput}
           />
         </InputWrapper>
         <ButtonFlex>
-          <Button>Convert to ALMs</Button>
+          {
+            (card.privateCall && isApprovedPrivate) || (!card.privateCall && isApprovedPublic)
+            ? <Button onClick={onConvertHandler} disabled={Boolean(error)}>{pending ? <Dots>Converting</Dots> : error || "Convert to ALMs"}</Button>
+              : <Button onClick={onApproveHandler} disabled={pending}>{pending ? <Dots>Approving</Dots> : "Approve"}</Button>
+          }
         </ButtonFlex>
       </StyledFlex>
     </NFTWrapper>

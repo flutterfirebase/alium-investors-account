@@ -1,53 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Contract } from '@ethersproject/contracts'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-// import axios from 'axios'
-// import { parseUnits } from '@ethersproject/units'
 import styled from 'styled-components'
-// import { JSBI, TokenAmount } from '@alium-official/sdk'
 import { Heading, Text, Flex } from '@alium-official/uikit'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import Modal from 'components/Modal'
 
 import { useActiveWeb3React } from 'hooks'
-// import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useNFTPrivateContract } from 'hooks/useContract'
-// import { NFT_PRIVATE_ADDRESS } from 'constants/abis/nftPrivate'
-// import { WrappedTokenInfo } from 'state/lists/hooks'
-// import { useCurrencyBalance } from 'state/wallet/hooks'
-// import { useTransactionAdder } from 'state/transactions/hooks'
 import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
 import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
-// import { AutoColumn } from 'components/Column'
-// import { RowBetween } from 'components/Row'
-// import { GreyCard } from 'components/Card'
-// import { Dots } from '../Pool/styleds'
 import useNftPoolHook from 'hooks/useNftPool'
 import AppBody from '../AppBody'
-// import currencies from './constants/currencies'
 import whitelist from './constants/whitelist'
 import { cardListPrivate, cardListPublic, cardListStrategical } from './constants/cards'
-// import emails from './constants/membersList'
 import NftAccountCard from './components/NftAccountCard'
 import NftNavTabs from './components/NftNavTabs'
 import NftPoolsHeader from './components/NftPoolsHeader'
 import NftPoolCard from './components/NftPoolCard'
-import pools, { PoolsTypes } from './constants/pools'
-import { AliumVestingAbi, NFT_VESTING_PRIVATE } from './constants'
-import multicall from '../../utils/multicall'
-import { useSingleContractMultipleData } from '../../state/multicall/hooks'
-import { getContract } from '../../utils'
 
 const ContentHolder = styled.div`
   position: relative;
   margin: -11px 9px;
 `
-
-// const ButtonWrap = styled.div`
-//
-// `
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -372,6 +347,9 @@ const InvestorsAccount = () => {
           setTxHash(tx)
           setTxOpen(true)
         }
+      })
+      .catch(e => {
+        console.log(e)
       })
       // .finally(() => setTxOpen(false))
   }, [onClaim])

@@ -5,14 +5,13 @@ import card1Three from '../../images/Card-03.png'
 import card1Two from '../../images/Card-02.png'
 import card1One from '../../images/Card-01.png'
 import { PoolsTypes } from '../../constants/pools'
-import { CardType } from '../../constants/cards'
 
 
 interface CardRowProps {
   pool: PoolsTypes;
   selectedCard: [number, number] | null;
   onSelectCard: (pid: number, cid: number) => void;
-  cards: CardType[];
+  cards: number[];
 }
 
 const CardRowWrap = styled(Flex)`
@@ -93,14 +92,13 @@ function CardRow({ selectedCard, onSelectCard, cards, pool }: CardRowProps) {
           }
           return (
             <Card onClick={() => {
-              onSelectCard(pool.id, card.id)
+              onSelectCard(pool.id, card)
             }}
-                  active={selectedCard?.[0] === pool.id && selectedCard?.[1] ===  card.id}
+                  active={selectedCard?.[0] === pool.id && selectedCard?.[1] ===  card}
                   margin={margin} index={id}
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={`${pool.name}-${card.id}`}>
+                  key={`${pool.name}-${card}`}>
               <img src={imgSrc} alt="" />
-              <span>{card.id}</span>
+              <span>{card}</span>
             </Card>
           )
         })

@@ -1,6 +1,7 @@
 import { Button, Flex, Heading, Text } from '@alium-official/uikit'
 import React from 'react'
 import styled from 'styled-components'
+import { BigNumber, ethers } from 'ethers'
 import { PoolsTypes } from '../../constants/pools'
 
 interface NftPoolCardProps {
@@ -117,6 +118,32 @@ const FieldPoolDescription = styled(Flex)`
   flex-direction: row;
 `
 
+const month = {
+  0: 'January',
+  1: 'February',
+  2: 'March',
+  3: 'April',
+  4: 'May',
+  5: 'June',
+  6: 'July',
+  7: 'August',
+  8: 'September',
+  9: 'October',
+  10: 'November',
+  11: 'December',
+}
+
+const getTimeFormat = (timestamp: string | undefined) => {
+  if (timestamp === '0') {
+    return 'completed'
+  }
+  if (timestamp) {
+    const date = new Date(parseInt(`${timestamp}000`))
+    return `${date.getDate()}th ${month[date.getMonth()]} ${date.getFullYear()}`
+  }
+  return 'loading'
+}
+
 function NftPoolCard({pool, onClaim, pending}: NftPoolCardProps) {
 
   return (
@@ -129,20 +156,20 @@ function NftPoolCard({pool, onClaim, pending}: NftPoolCardProps) {
       </FieldPool>
       <Field maxWidth="96px">
         <FieldName>Total ALMs</FieldName>
-        {pool.total?.toString()}
+        {ethers.utils.formatEther(pool.total || BigNumber.from(0))}
       </Field>
       <Field maxWidth="96px">
         <FieldName>Locked</FieldName>
-        {pool.locked?.toString()}
+        {ethers.utils.formatEther(pool.locked || BigNumber.from(0))}
       </Field>
       <Field maxWidth="80px">
         <FieldName>Unlocked</FieldName>
-        {pool.unlocked?.toString()}
+        {ethers.utils.formatEther(pool.unlocked || BigNumber.from(0))}
       </Field>
       <FieldClaim maxWidth="172px">
         <FieldName>Claimed</FieldName>
         <FieldValue>
-          {pool.claimed?.toString()}
+          {ethers.utils.formatEther(pool.claimed || BigNumber.from(0))}
           <Button
             variant="secondary"
             size="sm"
@@ -157,7 +184,7 @@ function NftPoolCard({pool, onClaim, pending}: NftPoolCardProps) {
       </FieldClaim>
       <Field maxWidth="140px">
         <FieldName>Next unclocked date</FieldName>
-        24th June 2021
+        {getTimeFormat(pool.timestamp)}
       </Field>
     </NftPoolCardWrap>
   )

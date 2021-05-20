@@ -8,13 +8,7 @@ import NftCollectionHeader from './components/NftCollectionHeader'
 import pools from './constants/pools'
 import NftCollectionCard from './components/NftCollectionCard'
 import cardImage from './images/Card-Preview.png'
-
-
-type PropsType = {
-  card: CardType
-  // handleChange: any
-  // buttonWrap: any
-}
+import useCollectionNft from '../../hooks/useCollectionNft'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -94,14 +88,14 @@ const NftTableContent = styled(Flex)`
 
 function Collection() {
 
-  // const [selectedCard, setSelectedCard] = useState<CardType | null>(null)
   const [selectedCard, setSelectedCard] = useState<[number, number] | null>(null)
 
   const onSelectCard = (pid, cid) => {
     setSelectedCard([pid, cid])
   }
 
-  // const isMp4 = selectedCard?.img.split('.')[1] === 'mp4'
+  const {poolsWithCards} = useCollectionNft()
+
   return (
     <ContentHolder>
       <CardWrapper>
@@ -119,15 +113,6 @@ function Collection() {
                   </>
                 )
               }
-              {/* { */}
-              {/*  selectedCard && ( */}
-              {/*    isMp4 */}
-              {/*      ? <Video autoPlay loop muted> */}
-              {/*        <source src={selectedCard?.img} type="video/mp4" /> */}
-              {/*      </Video> */}
-              {/*      : <Image src={selectedCard?.img} alt="nft-preview" className="nft-preview" /> */}
-              {/*  ) */}
-              {/* } */}
             </SelectedNftWrapper>
           </SelectedNftRow>
           <NftNavTabs />
@@ -136,7 +121,7 @@ function Collection() {
             <NftCollectionHeader />
             <NftTableContent>
               {
-                pools.map((pool) => (
+                poolsWithCards.map((pool) => (
                   <NftCollectionCard
                     key={`Pool-Nft-${pool.id}`}
                     selectedCard={selectedCard}

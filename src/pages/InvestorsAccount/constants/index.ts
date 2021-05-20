@@ -12,9 +12,7 @@ export const NFT_EXCHANGER_PRIVATE: any = process.env.REACT_APP_NFT_EXCHANGER_PR
 export const NFT_EXCHANGER_STRATEGICAL_PRIVATE: any = process.env.REACT_APP_NFT_EXCHANGER_STRATEGICAL_PRIVATE;
 export const NFT_EXCHANGER_PUBLIC: any = process.env.REACT_APP_NFT_EXCHANGER_PUBLIC;
 
-export const NFT_VESTING_PRIVATE: any = process.env.REACT_APP_NFT_VESTING_PRIVATE;
-export const NFT_VESTING_STRATEGICAL_PRIVATE: any = process.env.REACT_APP_NFT_VESTING_STRATEGICAL_PRIVATE;
-export const NFT_VESTING_PUBLIC: any = process.env.REACT_APP_NFT_VESTING_PUBLIC;
+export const NFT_VESTING: any = process.env.REACT_APP_NFT_VESTING_PRIVATE;
 export const NFT_VESTING_TOTAL_VIA_TRANSIVER: any = process.env.REACT_APP_NFT_VESTING_TOTAL_VIA_TRANSIVER;
 
 export {AliumVestingAbi, AliumCollectibleAbi, AliumTokenAbi, NFTPublicExchangerAbi, NFTPrivateExchangerAbi}

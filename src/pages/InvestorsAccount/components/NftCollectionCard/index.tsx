@@ -108,8 +108,11 @@ const TotalCards = styled(Flex)`
 function NftCollectionCard({pool, selectedCard, onSelectCard}: NftCollectionCardProps) {
 
   const [multiRows, setMultiRows] = useState(false)
-  const [cards, setCards] = useState<CardType[]>(cardListPublic)
+  const [cards, setCards] = useState<number[]>([])
   const fieldCards = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    setCards(pool?.cards || [])
+  }, [pool])
   useEffect(() => {
     if (fieldCards.current) {
       const cardRowWidth = fieldCards.current.offsetWidth;
@@ -127,7 +130,7 @@ function NftCollectionCard({pool, selectedCard, onSelectCard}: NftCollectionCard
       </FieldPool>
       <FieldCards ref={fieldCards} maxWidth="unset">
         <TotalCards>
-          <Text>0 </Text>
+          <Text>{pool.cards?.length || 0} </Text>
           <Text>cards</Text>
         </TotalCards>
         {
