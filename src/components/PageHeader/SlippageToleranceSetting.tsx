@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { Button, Flex, Input, Text } from '@alium-official/uikit'
-
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useUserSlippageTolerance } from 'state/user/hooks'
+import styled from 'styled-components'
 import QuestionHelper from '../QuestionHelper'
 import TranslatedText from '../TranslatedText'
-import { useTranslation } from 'react-i18next'
 
 const MAX_SLIPPAGE = 5000
 const RISKY_SLIPPAGE_LOW = 50
@@ -46,14 +45,14 @@ const Label = styled.div`
 const predefinedValues = [
   { label: '0.1%', value: 0.1 },
   { label: '0.5%', value: 0.5 },
-  { label: '1%', value: 1 }
+  { label: '1%', value: 1 },
 ]
 
 const SlippageToleranceSettings = () => {
   const [userSlippageTolerance, setUserslippageTolerance] = useUserSlippageTolerance()
   const [value, setValue] = useState(userSlippageTolerance / 100)
   const [error, setError] = useState<string | null>(null)
-  const {t} = useTranslation();
+  const { t } = useTranslation()
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value: inputValue } = evt.target
@@ -73,7 +72,7 @@ const SlippageToleranceSettings = () => {
     } catch {
       setError(t('errors.enterValidPercentage'))
     }
-  }, [value, setError, setUserslippageTolerance])
+  }, [value, setError, setUserslippageTolerance, t])
 
   // Notify user if slippage is risky
   useEffect(() => {

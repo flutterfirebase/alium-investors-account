@@ -1,13 +1,12 @@
-import React, { useCallback, useState } from 'react'
-import styled from 'styled-components'
 import { Button, Text } from '@alium-official/uikit'
-
+import React, { useCallback, useState } from 'react'
 import { AlertTriangle } from 'react-feather'
-import { TYPE } from '../Shared'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import { AutoRow, RowBetween } from '../Row'
-import { AutoColumn } from '../Column'
-import { useTranslation } from 'react-i18next'
+import { TYPE } from '../Shared'
 
 const { main: Main, body: Body } = TYPE
 
@@ -36,7 +35,7 @@ export default function SyrupWarningModal({
 }) {
   const [understandChecked, setUnderstandChecked] = useState(false)
   const toggleUnderstand = useCallback(() => setUnderstandChecked((uc) => !uc), [])
-  const {t} = useTranslation();
+  const { t } = useTranslation()
   const handleDismiss = useCallback(() => null, [])
   return (
     <Modal isOpen={isOpen} onDismiss={handleDismiss} maxHeight={90}>
@@ -51,11 +50,7 @@ export default function SyrupWarningModal({
               <Body color="failure">
                 {t('beCarefulWhen')} <strong>{transactionType}</strong> {t('syrup')}.
               </Body>
-              <Body color="failure">
-                {transactionType === 'Buying'
-                  ? t('willNotReceiveCAKE')
-                  : t('needBuyBack')}
-              </Body>
+              <Body color="failure">{transactionType === 'Buying' ? t('willNotReceiveCAKE') : t('needBuyBack')}</Body>
             </>
           )}
           <RowBetween>
