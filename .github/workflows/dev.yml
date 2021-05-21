@@ -11,7 +11,8 @@ on:
       - master
       
 jobs:
-  build:
+  build_dev:
+    if: github.ref == 'refs/heads/develop'  
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2.1.1
@@ -32,7 +33,7 @@ jobs:
       - name: Install dependincies
         run: yarn install
       - name: Build project
-        run: yarn build      
+        run: yarn build:dev      
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
