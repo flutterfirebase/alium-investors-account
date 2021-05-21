@@ -1,20 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Heading, Text, Flex, Button } from '@alium-official/uikit'
 import Modal from 'components/Modal'
-import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'hooks'
 import { useNFTPrivateContract } from 'hooks/useContract'
-import useNftPoolHook from 'hooks/useNftPool'
-import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
 import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import useNftPoolHook from 'hooks/useNftPool'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 import AppBody from '../AppBody'
 import NftNavTabs from './components/NftNavTabs'
 import NftAccountCard from './components/NftAccountCard'
@@ -109,49 +105,6 @@ const StyledHeading = styled(Heading)`
   }
 `
 
-// const AddressWrap = styled.div`
-//   margin-top: 10px;
-//   background: rgba(108, 93, 211, 0.1);
-//   border: 1px solid #6c5dd3;
-//   padding: 5px;
-//   margin: 8px 0 32px 0;
-//   width: 207px;
-//   align-self: center;
-//   border-radius: 6px;
-//   text-align: center;
-//   font-size: 14px;
-//   line-height: 20px;
-//   letter-spacing: 0.3px;
-//   color: #6c5dd3;
-// `
-
-// const StyledLink = styled.a`
-//   color: #6c5dd3;
-//   display: inline-block;
-//   text-decoration: underline;
-//   cursor: pointer;
-//   :active {
-//     outline: none;
-//     border: none;
-//   }
-//   :focus {
-//     outline: none;
-//     border: none;
-//   }
-// `
-
-// const StyledTextWrapper = styled.div`
-//   padding: 0 80px;
-
-//   @media screen and (max-width: 655px) {
-//     padding: 0 50px;
-//   }
-
-//   @media screen and (max-width: 500px) {
-//     padding: 0;
-//   }
-// `
-
 const NftCardsContainer = styled(Flex)`
   flex-wrap: wrap;
   align-content: flex-start;
@@ -241,11 +194,11 @@ const InvestorsAccount = () => {
   }
 
 
-  const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
+  // const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const handleClose = () => {
-  }
+  // const handleClose = () => {
+  // }
 
   const handleTxClose = () => {
     setTxOpen(false)
@@ -289,7 +242,7 @@ const InvestorsAccount = () => {
         <Modal
           isOpen={isHideModalOpen}
           onDismiss={() => {
-            return ''
+            setHideModalOpen(false)
           }}
         >
           <Flex flexDirection="column" style={{ margin: '0 auto' }}>
@@ -328,7 +281,7 @@ const InvestorsAccount = () => {
            {
             balanceAccount === undefined
             ? <Dots>Loading</Dots>
-              : balanceAccount.toNumber() <= 11
+              : balanceAccount.toNumber() <= 0
              ? <NoNFT>
                 <NoNFTText>You don&apos;t have NFT tokens yet, but you can purchase them on the page</NoNFTText>
                 <Button href='https://public.alium.finance/' target="_blank" as="a">Buy NFT</Button>

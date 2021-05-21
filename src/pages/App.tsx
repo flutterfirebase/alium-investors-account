@@ -4,8 +4,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 import Menu from '../components/Menu'
 import Popups from '../components/Popups'
-import Web3ReactManager from '../components/Web3ReactManager'
 import InvestorsAccount from './InvestorsAccount'
+import Web3ReactManager from '../components/Web3ReactManager'
 import Collection from './InvestorsAccount/Collection'
 
 const AppWrapper = styled.div`
