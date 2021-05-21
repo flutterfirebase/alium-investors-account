@@ -12,7 +12,7 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
 
   const links: MenuEntry[] = [
     {
-      label: t('mainMenu.home'),
+      label: t('Home'),
       icon: 'HomeIcon',
       href: process.env.REACT_APP_HOME_URL,
     },
