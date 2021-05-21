@@ -28,8 +28,6 @@ import NftNavTabs from './components/NftNavTabs'
 import NftPoolCard from './components/NftPoolCard'
 import NftPoolsHeader from './components/NftPoolsHeader'
 import cardList from './constants/cards'
-// import currencies from './constants/currencies'
-import whitelist from './constants/whitelist'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -121,48 +119,48 @@ const StyledHeading = styled(Heading)`
   }
 `
 
-const AddressWrap = styled.div`
-  margin-top: 10px;
-  background: rgba(108, 93, 211, 0.1);
-  border: 1px solid #6c5dd3;
-  padding: 5px;
-  margin: 8px 0 32px 0;
-  width: 207px;
-  align-self: center;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.3px;
-  color: #6c5dd3;
-`
+// const AddressWrap = styled.div`
+//   margin-top: 10px;
+//   background: rgba(108, 93, 211, 0.1);
+//   border: 1px solid #6c5dd3;
+//   padding: 5px;
+//   margin: 8px 0 32px 0;
+//   width: 207px;
+//   align-self: center;
+//   border-radius: 6px;
+//   text-align: center;
+//   font-size: 14px;
+//   line-height: 20px;
+//   letter-spacing: 0.3px;
+//   color: #6c5dd3;
+// `
 
-const StyledLink = styled.a`
-  color: #6c5dd3;
-  display: inline-block;
-  text-decoration: underline;
-  cursor: pointer;
-  :active {
-    outline: none;
-    border: none;
-  }
-  :focus {
-    outline: none;
-    border: none;
-  }
-`
+// const StyledLink = styled.a`
+//   color: #6c5dd3;
+//   display: inline-block;
+//   text-decoration: underline;
+//   cursor: pointer;
+//   :active {
+//     outline: none;
+//     border: none;
+//   }
+//   :focus {
+//     outline: none;
+//     border: none;
+//   }
+// `
 
-const StyledTextWrapper = styled.div`
-  padding: 0 80px;
+// const StyledTextWrapper = styled.div`
+//   padding: 0 80px;
 
-  @media screen and (max-width: 655px) {
-    padding: 0 50px;
-  }
+//   @media screen and (max-width: 655px) {
+//     padding: 0 50px;
+//   }
 
-  @media screen and (max-width: 500px) {
-    padding: 0;
-  }
-`
+//   @media screen and (max-width: 500px) {
+//     padding: 0;
+//   }
+// `
 
 const NftCardsContainer = styled(Flex)`
   flex-wrap: wrap;
@@ -216,20 +214,9 @@ const NftTableContent = styled(Flex)`
 // }
 
 const InvestorsAccount = () => {
-  const [isOpenModal, setOpenModal] = useState(false)
-  const [isHideModalOpen, setHideModalOpen] = useState(false)
   const { account, chainId } = useActiveWeb3React()
 
   const { t } = useTranslation()
-
-  useEffect(() => {
-    if (account) {
-      setHideModalOpen(false)
-      if (whitelist.indexOf(account) === -1) {
-        if (!isOpenModal) setOpenModal(true)
-      } else if (isOpenModal) setOpenModal(false)
-    } else if (!isHideModalOpen) setHideModalOpen(true)
-  }, [account, isHideModalOpen, isOpenModal])
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
@@ -328,10 +315,10 @@ const InvestorsAccount = () => {
   //   parseInt(balance?.raw.toString()) >=
   //   parseInt(parseUnits(cardPrice, currencies.match[values.currency]?.decimals).toString())
 
-  const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
+  // const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const handleClose = () => {}
+  // const handleClose = () => {}
 
   const handleTxClose = () => {
     setTxOpen(false)
@@ -358,67 +345,7 @@ const InvestorsAccount = () => {
         <Text fontSize="48px" style={{ fontWeight: 700, marginBottom: '32px' }}>
           Your NFT deck
         </Text>
-        <Modal isOpen={isOpenModal} onDismiss={handleClose}>
-          <Flex flexDirection="column">
-            <Text
-              style={{
-                textAlign: 'center',
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                lineHeight: '22px',
-                letterSpacing: '0.3px',
-                color: '#0B1359',
-              }}
-            >
-              Sorry, we haven’t found this address in
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  lineHeight: '22px',
-                  letterSpacing: '0.3px',
-                  color: '#0B1359',
-                }}
-              >
-                the Strategical Partnership Whitelist:
-              </Text>
-            </Text>
-            <AddressWrap>{accountEllipsis}</AddressWrap>
-            <StyledTextWrapper>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  letterSpacing: '0.3px',
-                  color: '#0B1359',
-                }}
-              >
-                If you have been registered for the Whitelist before, please try to connect with another address.
-              </Text>
-              <Text
-                mt="15px"
-                style={{
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  letterSpacing: '0.3px',
-                  color: '#0B1359',
-                }}
-              >
-                If that didn&#39;t help, please contact <StyledLink href="https://t.me/akents">@Akents</StyledLink> and
-                he will help you to solve this issue.
-              </Text>
-            </StyledTextWrapper>
-          </Flex>
-        </Modal>
+
         {/* <Modal isOpen={isHideModalOpen} onDismiss={handleClose}> */}
         {/*  <Flex flexDirection="column" style={{ margin: '0 auto' }}> */}
         {/*    <Text */}
