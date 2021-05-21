@@ -11,7 +11,11 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
   const { t } = useTranslation()
 
   const links: MenuEntry[] = [
-    { label: 'Home', icon: 'HomeIcon', href: '/' },
+    {
+      label: t('mainMenu.home'),
+      icon: 'HomeIcon',
+      href: process.env.REACT_APP_HOME_URL,
+    },
     {
       label: 'Trade',
       icon: 'TradeIcon',
