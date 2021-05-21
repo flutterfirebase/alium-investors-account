@@ -50,8 +50,8 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
   const useBalance = async () => {
     // const bal = useCurrencyBalance(account as string, ETHER)
     // return bal?.toSignificant(6);
-    const result = await useCurrencyBalance(account as string, ETHER)
-    return result
+    // const result = await useCurrencyBalance(account as string, ETHER)
+    return balance
   }
 
   // useBalance().then((result)=>console.log(result))
