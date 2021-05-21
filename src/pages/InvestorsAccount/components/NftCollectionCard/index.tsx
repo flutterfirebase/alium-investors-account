@@ -1,8 +1,7 @@
-import { Button, Flex, Heading, Text } from '@alium-official/uikit'
+import { Flex, Heading, Text } from '@alium-official/uikit'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { PoolsTypes } from '../../constants/pools'
-import { cardListPublic, CardType } from '../../constants/cards'
 import CardRow from './CardRow'
 
 interface NftCollectionCardProps {
