@@ -11,6 +11,7 @@ import { AppState } from 'state/index'
 import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import useNftPoolHook from 'hooks/useNftPool'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { removePopup } from 'state/application/actions'
 import AppBody from '../AppBody'
 import NftNavTabs from './components/NftNavTabs'
 import NftAccountCard from './components/NftAccountCard'
@@ -178,7 +179,6 @@ const InvestorsAccount = () => {
     })
   }, [account, isSucceedPopupVisible, nftContract])
 
-
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const [tempTxHash, setTempTxHash] = useState('')
   const [isTxOpen, setTxOpen] = useState(false)
@@ -215,8 +215,9 @@ const InvestorsAccount = () => {
   }
 
   const handleSucceedModalClose = () => {
-    // removePopup(succeedHash)
-    // setTempTxHash('')
+    removePopup({ key: succeedHash })
+    setTempTxHash('')
+    setSucceedPopupVisible(false)
   }
 
   const onClaimHandler = useCallback((pid: number) => {

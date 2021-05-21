@@ -9,10 +9,9 @@ import { CardType } from 'pages/Home/constants/cards'
 import { NFT_COLLECTIBLE_ADDRESS } from 'constants/abis/nftPrivate'
 
 import styled from 'styled-components'
-import { Wrapper, Section, ContentHeader } from './helpers'
+import { Wrapper, Section } from './helpers'
 
 import previewImg from '../../assets/images/transaction-succeed-preview.svg'
-import copyImg from '../../assets/svg/copy-icon.svg'
 
 
 type TransactionSucceedContentProps = {
@@ -43,7 +42,7 @@ const Content = styled.div`
     outline: none;
     display: flex;
     flex-direction: column;
-    align-items: cetner;
+    align-items: center;
     justify-content: space-between;
   
     margin-top: 20px;
@@ -125,7 +124,7 @@ const TransactionSucceedContent = ({ onDismiss, hash }: TransactionSucceedConten
   const popupList = useSelector<AppState, PopupList | any>(s => s.application.popupList)
   const filteredPopups = popupList.filter(popup => popup.key === hash)
 
-  let popupSummary = { count: 0, card: { } } as { count: number, card: CardType }
+  let popupSummary = { count: 0, card: { }, price: undefined } as { count: number, card: CardType, price: undefined | string }
   if (filteredPopups[0]) {
     popupSummary = filteredPopups[0].content.txn.additionalData
   }
@@ -136,7 +135,7 @@ const TransactionSucceedContent = ({ onDismiss, hash }: TransactionSucceedConten
   }
 
   return (
-    <Wrapper style={{ maxWidth: "550px" }}>
+    <Wrapper style={{ maxWidth: "550px" }} onClick={onDismiss}>
       <Section>
 
         <Content>
@@ -151,11 +150,14 @@ const TransactionSucceedContent = ({ onDismiss, hash }: TransactionSucceedConten
               {/* <StyledDetailsText>{popupSummary.count} {popupSummary.count > 1 ? "cards" : "card"}</StyledDetailsText> */}
             </Flex>
 
-            <Flex alignItems="center" justifyContent="center" className="exchange-info" style={{ marginTop: "4px" }}>
-              <StyledDetailsLabel>{t('laterExchange')}</StyledDetailsLabel>
-              <StyledDetailsText>575 000 ALM</StyledDetailsText>
-              {/* <StyledDetailsText>{popupSummary?.card.tokens}</StyledDetailsText> */}
-            </Flex>
+            {
+              popupSummary.price && (
+                <Flex alignItems="center" justifyContent="center" className="exchange-info" style={{ marginTop: "4px" }}>
+                  <StyledDetailsLabel>{t('laterExchange')}</StyledDetailsLabel>
+                  <StyledDetailsText>{popupSummary.price} ALM</StyledDetailsText>
+                </Flex>
+              )
+            }
 
           </div>
           <button className="address-block" onClick={copyAddress} type="button">
