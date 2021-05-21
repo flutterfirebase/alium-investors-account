@@ -25,6 +25,7 @@ export type CardType = {
   tokens: string
   price: number
   privateCall: boolean
+  cardsCount: number;
 }
 
 export const cardListPublic: CardType[] = [
@@ -36,7 +37,8 @@ export const cardListPublic: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: false
+    privateCall: false,
+    cardsCount: 0
   },
   {
     id: 7,
@@ -46,7 +48,8 @@ export const cardListPublic: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: false
+    privateCall: false,
+    cardsCount: 0
   },
   {
     id: 8,
@@ -56,7 +59,8 @@ export const cardListPublic: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: false
+    privateCall: false,
+    cardsCount: 0
   },
   {
     id: 9,
@@ -66,7 +70,8 @@ export const cardListPublic: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: false
+    privateCall: false,
+    cardsCount: 0
   },
   {
     id: 10,
@@ -76,7 +81,8 @@ export const cardListPublic: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: false
+    privateCall: false,
+    cardsCount: 0
   },
 ]
 export const cardListStrategical: CardType[] = [
@@ -88,7 +94,8 @@ export const cardListStrategical: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: true
+    privateCall: true,
+    cardsCount: 0
   }
 ]
 export const cardListPrivate: CardType[] = [
@@ -100,7 +107,8 @@ export const cardListPrivate: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: true
+    privateCall: true,
+    cardsCount: 0
   },
   {
     id: 2,
@@ -110,7 +118,8 @@ export const cardListPrivate: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: true
+    privateCall: true,
+    cardsCount: 0
   },
   {
     id: 3,
@@ -120,6 +129,7 @@ export const cardListPrivate: CardType[] = [
     cost: '100 000 BUSD',
     tokens: '575 000 ALM',
     price: 100000,
-    privateCall: true
+    privateCall: true,
+    cardsCount: 0
   }
 ]

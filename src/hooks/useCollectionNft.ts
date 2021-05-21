@@ -5,6 +5,7 @@ import { getContract } from '../utils'
 import { AliumCollectibleAbi, NFT_ALIUM_COLLECTIBLE_NFT } from '../pages/InvestorsAccount/constants'
 import { useSingleCallResult, useSingleContractMultipleData } from '../state/multicall/hooks'
 import pools from '../pages/InvestorsAccount/constants/pools'
+import { cardListPrivate, cardListPublic, cardListStrategical, CardType } from '../pages/InvestorsAccount/constants/cards'
 
 export default function useCollectionNft() {
   const [collectibleContract, setCollectibleContract] = useState<Contract | null>(null)
@@ -21,10 +22,7 @@ export default function useCollectionNft() {
   const balanceInputs = useMemo(() => {
     return [account || undefined]
   }, [account])
-  const balancesResult = useSingleCallResult(collectibleContract, 'balanceOf', balanceInputs)
-  const balanceAccount = useMemo(() => {
-    return balancesResult.result?.[0]
-  }, [balancesResult])
+  const balanceAccount = useSingleCallResult(collectibleContract, 'balanceOf', balanceInputs).result?.[0]
 
   useEffect(() => {
     const countNft = balanceAccount?.toNumber()
@@ -66,20 +64,58 @@ export default function useCollectionNft() {
     })
   }, [tokenTypeResults])
 
+  const tokenTypesWithTokenId: {[tokenType: string] : number[]} = useMemo(() => {
+    const newObj = {}
+    tokensTypes.forEach((tokenType: string, id) => {
+      if (newObj[parseInt(tokenType)]) {
+        newObj[parseInt(tokenType)]?.push(tokensIds[id])
+      } else {
+        newObj[parseInt(tokenType)] = [tokensIds[id]]
+      }
+    })
+    return newObj
+  }, [tokensIds, tokensTypes])
+
   const poolsWithCards = useMemo(() => {
     return  pools.map((pool) => {
       return {
         ...pool,
-        cards: tokensTypes.map((tokenType, id) => {
-          if (parseInt(tokenType) === pool.id) {
-            return tokensIds[id]
-          }
-          return null
-        }).filter((tokenId) => tokenId !== null)
+        cards: tokenTypesWithTokenId[pool.id] || []
       }
     })
-  }, [tokensTypes, tokensIds])
+  }, [tokenTypesWithTokenId])
+
+  const publicCardsWithCount: CardType[] = useMemo(() => {
+    return cardListPublic.map((card) => {
+      return {
+        ...card,
+        cardsCount: tokenTypesWithTokenId[card.id]?.length || 0
+      }
+    })
+  }, [tokenTypesWithTokenId])
+
+  const strategicalCardsWithCount: CardType[] = useMemo(() => {
+    return cardListStrategical.map((card) => {
+      return {
+        ...card,
+        cardsCount: tokenTypesWithTokenId[card.id]?.length || 0
+      }
+    })
+  }, [tokenTypesWithTokenId])
+
+  const privateCardsWithCount: CardType[] = useMemo(() => {
+    return cardListPrivate.map((card) => {
+      return {
+        ...card,
+        cardsCount: tokenTypesWithTokenId[card.id]?.length || 0
+      }
+    })
+  }, [tokenTypesWithTokenId])
   return {
+    balanceAccount,
+    privateCardsWithCount,
+    publicCardsWithCount,
+    strategicalCardsWithCount,
     poolsWithCards
   }
 }

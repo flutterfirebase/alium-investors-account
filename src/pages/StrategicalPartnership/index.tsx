@@ -26,7 +26,6 @@ import { GreyCard } from 'components/Card'
 import { Dots } from '../Pool/styleds'
 import AppBody from '../AppBody'
 import currencies from './constants/currencies'
-import whitelist from './constants/whitelist'
 import cardList from './constants/cards'
 import bgIMG from '../Home/images/background-img.svg'
 import emails from './constants/membersList'
@@ -209,9 +208,6 @@ const StrategicalPartnershipHome = () => {
   useEffect(() => {
     if (account) {
       setHideModalOpen(false)
-      if (whitelist.indexOf(account) === -1) {
-        if (!isOpenModal) setOpenModal(true)
-      } else if (isOpenModal) setOpenModal(false)
     } else if (!isHideModalOpen) setHideModalOpen(true)
   }, [account, isHideModalOpen, isOpenModal])
 

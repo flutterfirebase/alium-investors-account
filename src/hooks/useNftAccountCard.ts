@@ -31,7 +31,6 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
   const inputs = useMemo(() => tokenId !== '' ? [tokenId] : [1], [tokenId])
   const ownerOfToken = useSingleCallResult(collectibleContract, 'ownerOf', inputs).result
   const tokenType = useSingleCallResult(collectibleContract, 'getTokenType', inputs).result?.[0].toString()
-  // const allowance = useSingleCallResult(collectibleContract, 'getApproved', inputs).result
   const isApprovedPublic = useSingleCallResult(collectibleContract, 'isApprovedForAll', [account || undefined, NFT_EXCHANGER_PUBLIC]).result?.[0]
   const isApprovedPrivate = useSingleCallResult(collectibleContract, 'isApprovedForAll', [account || undefined, NFT_EXCHANGER_PRIVATE]).result?.[0]
   const totalSupply = useSingleCallResult(collectibleContract, 'totalSupply').result

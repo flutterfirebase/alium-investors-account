@@ -178,10 +178,6 @@ const Home = () => {
   useEffect(() => {
     if (account) {
       setHideModalOpen(false)
-      // TODO: temporary disabled whitelist
-      // if (whitelist.indexOf(account) === -1) {
-      //   if (!isOpenModal) setOpenModal(true)
-      // } else if (isOpenModal) setOpenModal(false)
     } else if (!isHideModalOpen) setHideModalOpen(true)
   }, [account, isHideModalOpen, isOpenModal])
 
