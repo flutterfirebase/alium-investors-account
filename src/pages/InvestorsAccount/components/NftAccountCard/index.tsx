@@ -1,8 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
-// import { BigNumber } from '@ethersproject/bignumber'
-// import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { Text, Flex, Button, Input } from '@alium-official/uikit'
+import { Flex, Button, Input } from '@alium-official/uikit'
 import { CardType } from '../../constants/cards'
 import useNftAccountCard from '../../../../hooks/useNftAccountCard'
 import Modal from '../../../../components/Modal'
@@ -39,13 +37,6 @@ const StyledFlex = styled(Flex)`
   flex-direction: column;
   padding: 16px;
   box-sizing: border-box;
-`
-const TotalFlex = styled(Flex)`
-  justify-content: space-between;
-  padding: 2px 0;
-  margin-top: 16px;
-  box-sizing: border-box;
-  width: 100%;
 `
 const ButtonFlex = styled(Flex)`
   padding 0;
@@ -93,13 +84,10 @@ const Label = styled.label`
 
 type PropsType = {
   card: CardType
-  // handleChange: any
-  // buttonWrap: any
 }
 
 const NftAccountCard = ({
                           card
-                          // , handleChange, buttonWrap
                         }: PropsType) => {
   const isMp4 = card.img.split('.')[1] === 'mp4'
   const [value, setValue] = useState<number | string>('')
@@ -136,7 +124,7 @@ const NftAccountCard = ({
         }
       })
       .catch(e => {
-        console.log(e)
+        console.error(e.message || e)
       })
   }, [card.privateCall, onApprove])
 
@@ -149,7 +137,7 @@ const NftAccountCard = ({
         }
       })
       .catch(e => {
-        console.log(e)
+        console.error(e.message || e)
       })
   }, [card.privateCall, onConvert, value])
 

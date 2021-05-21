@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Text } from '@alium-official/uikit'
+import { Flex } from '@alium-official/uikit'
 
 const NftCollectionHeaderWrap = styled(Flex)`
   justify-content: space-between;
@@ -27,10 +27,6 @@ const Field = styled(Flex)<{maxWidth: string}>`
   width: 100%;
   max-width: ${({maxWidth}) => maxWidth};
   flex: 1;
-`
-
-const FieldEnd = styled(Field)`
-  justify-content: flex-end;  
 `
 
 function NftCollectionHeader() {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Contract } from '@ethersproject/contracts'
 import pools from '../pages/InvestorsAccount/constants/pools'
 import { useSingleContractMultipleData } from '../state/multicall/hooks'
@@ -15,7 +15,6 @@ export default function useNftPool() {
 
   useEffect(() => {
     if (library && account) {
-      console.log(NFT_VESTING)
       const instance = getContract(NFT_VESTING, AliumVestingAbi, library, account)
       setVestingContract(instance)
     }
@@ -52,7 +51,7 @@ export default function useNftPool() {
   async function onClaim(pid): Promise<string | null> {
     if (vestingContract) {
       if (!account) {
-        console.log('No account')
+        console.warn('No account')
         return null
       }
       setPendingClaimResult([pid, true])
@@ -69,7 +68,7 @@ export default function useNftPool() {
          return response.hash
         })
         .catch(e => {
-          console.log(e.message)
+          console.error(e.message || e)
         })
         .finally(
           setPendingClaimResult(null)

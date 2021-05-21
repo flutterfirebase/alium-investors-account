@@ -3,9 +3,7 @@ import styled from 'styled-components'
 import { Flex, Text } from '@alium-official/uikit'
 import NftNavTabs from './components/NftNavTabs'
 import AppBody from '../AppBody'
-import { CardType } from './constants/cards'
 import NftCollectionHeader from './components/NftCollectionHeader'
-import pools from './constants/pools'
 import NftCollectionCard from './components/NftCollectionCard'
 import cardImage from './images/Card-Preview.png'
 import useCollectionNft from '../../hooks/useCollectionNft'
@@ -68,11 +66,6 @@ const CardWrapper = styled.div`
 
 const Image = styled.img`
   width: 100%;
-  max-height: 342px;
-  margin: 0 auto;
-`
-const Video = styled.video`
-  max-width: 100%;
   max-height: 342px;
   margin: 0 auto;
 `

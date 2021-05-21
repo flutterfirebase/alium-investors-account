@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Text } from '@alium-official/uikit'
+import { Flex } from '@alium-official/uikit'
 
 const NftPoolsHeaderWrap = styled(Flex)`
   justify-content: space-between;

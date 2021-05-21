@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -349,7 +349,7 @@ const InvestorsAccount = () => {
         }
       })
       .catch(e => {
-        console.log(e)
+        console.error(e.message || e)
       })
       // .finally(() => setTxOpen(false))
   }, [onClaim])

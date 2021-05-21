@@ -14,7 +14,7 @@ const private3 = '/images/nft/private-3.gif'
 const strategy1 = '/images/nft/strategy-1.gif'
 // import strategicalIcon from '../images/StrategicalCardIcon.svg'
 
-const cardLink = 'https://gateway.pinata.cloud/ipfs/QmTVgjsjv4hMiaNtZzX7Fj4zs8WAjz2SktsY3C7qsSFjQW'
+// const cardLink = 'https://gateway.pinata.cloud/ipfs/QmTVgjsjv4hMiaNtZzX7Fj4zs8WAjz2SktsY3C7qsSFjQW'
 
 export type CardType = {
   id: number

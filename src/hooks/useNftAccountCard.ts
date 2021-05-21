@@ -49,18 +49,11 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
           return response.hash
         })
         .catch((e) => {
-          console.log(e)
+          console.error(e.message || e)
         })
         .finally(() => {
           setPending(false)
         })
-      // const res = await new Promise<string>((resolve => {
-      //   setTimeout(() => {
-      //     setPending(false)
-      //     resolve('0x123123123')
-      //   }, 1000)
-      // }))
-      // return res
     }
     return null
   }, [collectibleContract, account, addTransaction])
@@ -80,7 +73,7 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
           return response.hash
         })
         .catch((e) => {
-          console.log(e)
+          console.error(e.message || e)
         })
         .finally(() => {
           setPending(false)
