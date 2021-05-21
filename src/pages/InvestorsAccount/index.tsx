@@ -1,4 +1,5 @@
 import { Flex, Heading, Text } from '@alium-official/uikit'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 import Modal from 'components/Modal'
 import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'hooks'
@@ -199,6 +200,7 @@ const NftTableContent = styled(Flex)`
 
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
+  const [isHideModalOpen, setHideModalOpen] = useState(false)
   const { account, chainId } = useActiveWeb3React()
 
   const { t } = useTranslation()
@@ -237,6 +239,25 @@ const InvestorsAccount = () => {
     setTxHash('')
     setTxOpen(false)
   }
+
+  useEffect(() => {
+    setHideModalOpen(!account)
+
+    // if (account) {
+    //   nftContract
+    //     ?.isMember(account)
+    //     .then((isMemberBool) => {
+    //       if (isMemberBool) {
+    //         if (isOpenModal) {
+    //           setOpenModal(false)
+    //         }
+    //       } else if (!isOpenModal) {
+    //         setOpenModal(true)
+    //       }
+    //     })
+    //     .catch((err) => console.error('isMember error', err))
+    // }
+  }, [account, nftContract])
 
   // const addTransaction = useTransactionAdder()
   //
@@ -344,24 +365,29 @@ const InvestorsAccount = () => {
         <Text fontSize="48px" style={{ fontWeight: 700, marginBottom: '32px' }}>
           Your NFT deck
         </Text>
-        {/* <Modal isOpen={isHideModalOpen} onDismiss={handleClose}> */}
-        {/*  <Flex flexDirection="column" style={{ margin: '0 auto' }}> */}
-        {/*    <Text */}
-        {/*      mb="30px" */}
-        {/*      style={{ */}
-        {/*        textAlign: 'center', */}
-        {/*        fontWeight: 'bold', */}
-        {/*        fontSize: '16px', */}
-        {/*        lineHeight: '22px', */}
-        {/*        letterSpacing: '0.3px', */}
-        {/*        color: '#0B1359', */}
-        {/*      }} */}
-        {/*    > */}
-        {/*      {t('pleaseUnlockWallet')} */}
-        {/*    </Text> */}
-        {/*    <ConnectWalletButton fullwidth /> */}
-        {/*  </Flex> */}
-        {/* </Modal> */}
+        <Modal
+          isOpen={isHideModalOpen}
+          onDismiss={() => {
+            return ''
+          }}
+        >
+          <Flex flexDirection="column" style={{ margin: '0 auto' }}>
+            <Text
+              mb="30px"
+              style={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                lineHeight: '22px',
+                letterSpacing: '0.3px',
+                color: '#0B1359',
+              }}
+            >
+              {t('pleaseUnlockWallet')}
+            </Text>
+            <ConnectWalletButton fullwidth />
+          </Flex>
+        </Modal>
         <Modal isOpen={isTxOpen} onDismiss={handleTxClose} maxHeight={90} padding="24px" isTransparancy>
           <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
         </Modal>
