@@ -1,42 +1,26 @@
-// import { JSBI, TokenAmount } from '@alium-official/sdk'
 import { Flex, Heading, Text } from '@alium-official/uikit'
 import Modal from 'components/Modal'
 import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'hooks'
-// import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useNFTPrivateContract } from 'hooks/useContract'
-import React, { useEffect, useState } from 'react'
+import useNftPoolHook from 'hooks/useNftPool'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-// import { NFT_PRIVATE_ADDRESS } from 'constants/abis/nftPrivate'
-// import { WrappedTokenInfo } from 'state/lists/hooks'
-// import { useCurrencyBalance } from 'state/wallet/hooks'
-// import { useTransactionAdder } from 'state/transactions/hooks'
 import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
-// import axios from 'axios'
-// import { parseUnits } from '@ethersproject/units'
 import styled from 'styled-components'
-// import { AutoColumn } from 'components/Column'
-// import { RowBetween } from 'components/Row'
-// import { GreyCard } from 'components/Card'
-// import { Dots } from '../Pool/styleds'
 import AppBody from '../AppBody'
-// import emails from './constants/membersList'
 import NftAccountCard from './components/NftAccountCard'
 import NftNavTabs from './components/NftNavTabs'
 import NftPoolCard from './components/NftPoolCard'
 import NftPoolsHeader from './components/NftPoolsHeader'
-import cardList from './constants/cards'
+import { cardListPrivate, cardListPublic, cardListStrategical } from './constants/cards'
 
 const ContentHolder = styled.div`
   position: relative;
   margin: -11px 9px;
 `
-
-// const ButtonWrap = styled.div`
-//
-// `
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -214,9 +198,12 @@ const NftTableContent = styled(Flex)`
 // }
 
 const InvestorsAccount = () => {
+  // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
   const { account, chainId } = useActiveWeb3React()
 
   const { t } = useTranslation()
+
+  const { poolsWithData, onClaim, pendingClaimResult } = useNftPoolHook()
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
@@ -315,11 +302,6 @@ const InvestorsAccount = () => {
   //   parseInt(balance?.raw.toString()) >=
   //   parseInt(parseUnits(cardPrice, currencies.match[values.currency]?.decimals).toString())
 
-  // const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  // const handleClose = () => {}
-
   const handleTxClose = () => {
     setTxOpen(false)
   }
@@ -339,13 +321,29 @@ const InvestorsAccount = () => {
     // setTempTxHash('')
   }
 
+  const onClaimHandler = useCallback(
+    (pid: number) => {
+      onClaim(pid)
+        .then((tx) => {
+          if (tx) {
+            setTxHash(tx)
+            setTxOpen(true)
+          }
+        })
+        .catch((e) => {
+          console.error(e.message || e)
+        })
+      // .finally(() => setTxOpen(false))
+    },
+    [onClaim]
+  )
+
   return (
     <ContentHolder>
       <CardWrapper>
         <Text fontSize="48px" style={{ fontWeight: 700, marginBottom: '32px' }}>
           Your NFT deck
         </Text>
-
         {/* <Modal isOpen={isHideModalOpen} onDismiss={handleClose}> */}
         {/*  <Flex flexDirection="column" style={{ margin: '0 auto' }}> */}
         {/*    <Text */}
@@ -384,8 +382,24 @@ const InvestorsAccount = () => {
             Private Pool Cards
           </StyledHeading>
           <NftCardsContainer>
-            {cardList.map((card) => (
-              <NftAccountCard card={card} />
+            {cardListPrivate.map((card) => (
+              <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
+            ))}
+          </NftCardsContainer>
+          <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+            Strategical Pool Cards
+          </StyledHeading>
+          <NftCardsContainer>
+            {cardListStrategical.map((card) => (
+              <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
+            ))}
+          </NftCardsContainer>
+          <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+            Public Pool Cards
+          </StyledHeading>
+          <NftCardsContainer>
+            {cardListPublic.map((card) => (
+              <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
             ))}
           </NftCardsContainer>
           <HelperDiv>
@@ -396,9 +410,14 @@ const InvestorsAccount = () => {
           <NftTable>
             <NftPoolsHeader />
             <NftTableContent>
-              <NftPoolCard />
-              <NftPoolCard />
-              <NftPoolCard />
+              {poolsWithData.map((pool) => (
+                <NftPoolCard
+                  key={`Pool-Nft-${pool.id}`}
+                  pool={pool}
+                  onClaim={onClaimHandler}
+                  pending={Boolean(pendingClaimResult?.[0] === pool.id)}
+                />
+              ))}
             </NftTableContent>
           </NftTable>
         </AppBody>

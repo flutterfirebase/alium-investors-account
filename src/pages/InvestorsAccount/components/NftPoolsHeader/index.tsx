@@ -1,12 +1,12 @@
-import { Flex } from '@alium-official/uikit'
 import React from 'react'
 import styled from 'styled-components'
+import { Flex } from '@alium-official/uikit'
 
 const NftPoolsHeaderWrap = styled(Flex)`
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  background: #ebedf9;
+  background: #EBEDF9;
   border-radius: 6px;
   width: 100%;
   padding: 16px 24px;
@@ -15,7 +15,7 @@ const NftPoolsHeaderWrap = styled(Flex)`
   }
 `
 
-const Field = styled(Flex)<{ maxWidth: string }>`
+const Field = styled(Flex)<{maxWidth: string}>`
   font-style: normal;
   justify-content: flex-start;
   font-weight: bold;
@@ -23,13 +23,14 @@ const Field = styled(Flex)<{ maxWidth: string }>`
   line-height: 16px;
   letter-spacing: 0.3px;
   text-transform: uppercase;
-  color: #8990a5;
+  color: #8990A5;
   width: 100%;
-  max-width: ${({ maxWidth }) => maxWidth};
+  max-width: ${({maxWidth}) => maxWidth};
   flex: 1;
-  &:last-child {
-    justify-content: flex-end;
-  }
+`
+
+const FieldEnd = styled(Field)`
+  justify-content: flex-end;  
 `
 
 function NftPoolsHeader() {
@@ -39,8 +40,8 @@ function NftPoolsHeader() {
       <Field maxWidth="96px">Total ALMs</Field>
       <Field maxWidth="96px">Locked</Field>
       <Field maxWidth="172px">Unlocked</Field>
-      <Field maxWidth="80px">Claimed</Field>
-      <Field maxWidth="140px">Next unclocked date</Field>
+      <FieldEnd maxWidth="80px">Claimed</FieldEnd>
+      <FieldEnd maxWidth="140px">Next unclocked date</FieldEnd>
     </NftPoolsHeaderWrap>
   )
 }

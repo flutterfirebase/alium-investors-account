@@ -144,7 +144,7 @@ const TransactionSucceedContent = ({ onDismiss, hash }: TransactionSucceedConten
             {/* <ContentHeader onDismiss={onDismiss}> </ContentHeader> */}
             <img className="preview-image" src={previewImg} alt="transaction-succeed-preview" />
             <Heading style={{ textAlign: "center", marginTop: 20, marginBottom: 16 }}>{t('congratulations')}!</Heading>
-            <StyledDetailsText>{popupSummary.card.headline}</StyledDetailsText>
+            <StyledDetailsText>{popupSummary?.card.headline}</StyledDetailsText>
 
             <Flex alignItems="center" justifyContent="center" style={{ marginTop: "4px" }}>
               <StyledDetailsLabel>{t('successfullyBought')}</StyledDetailsLabel>

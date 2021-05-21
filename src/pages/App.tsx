@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Menu from '../components/Menu'
 import Popups from '../components/Popups'
 import Web3ReactManager from '../components/Web3ReactManager'
+import Collection from './InvestorsAccount/Collection'
 import InvestorsAccount from './InvestorsAccount'
 
 const AppWrapper = styled.div`
@@ -56,6 +57,7 @@ export default function App() {
                 {/* <Route exact strict path="/" component={StrategicalPartnerShipHome} /> */}
                 <Menu>
                   <Route exact strict path="/" component={InvestorsAccount} />
+                  <Route exact strict path="/collection" component={Collection} />
                 </Menu>
                 {/* <Route render={() => <Redirect to={{ pathname: '/' }} />} /> */}
               </Switch>

@@ -1,6 +1,14 @@
 import { Button, Flex, Heading, Text } from '@alium-official/uikit'
 import React from 'react'
 import styled from 'styled-components'
+import { BigNumber, ethers } from 'ethers'
+import { PoolsTypes } from '../../constants/pools'
+
+interface NftPoolCardProps {
+  pool: PoolsTypes;
+  onClaim: (pid: number) => void;
+  pending: boolean;
+}
 
 const NftPoolCardWrap = styled(Flex)`
   justify-content: space-between;
@@ -64,9 +72,10 @@ const FieldName = styled(Text)`
 `
 const FieldValue = styled(Flex)`
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   @media (max-width: 1024px){
     flex-direction: column;
+    align-items: flex-end;
   }
 `
 
@@ -81,61 +90,101 @@ const FieldPool = styled(Field)`
 const FieldClaim = styled(Field)`
   align-items: center;
   align-content: center;
+  & > div {
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+  }
   button {
     margin-left: 8px;
   }  
   @media (max-width: 1024px){
     align-items: flex-start;
+    justify-content: space-between;
     button {
       margin-top: 8px;
       margin-left: 0;
+    }
+    & > div {
+      width: unset;
+      flex-direction: column;
+      align-items: flex-end;
     }  
   }
 `
 
 const FieldPoolDescription = styled(Flex)`
   margin-top: 8px;
-  flex-direction: column;
-  @media (max-width: 1024px){
-    flex-direction: row;
-  }
-  @media (max-width: 568px){
-    flex-direction: column;
-  }
+  flex-direction: row;
 `
 
-function NftPoolCard() {
+const month = {
+  0: 'January',
+  1: 'February',
+  2: 'March',
+  3: 'April',
+  4: 'May',
+  5: 'June',
+  6: 'July',
+  7: 'August',
+  8: 'September',
+  9: 'October',
+  10: 'November',
+  11: 'December',
+}
+
+const getTimeFormat = (timestamp: string | undefined) => {
+  if (timestamp === '0') {
+    return 'completed'
+  }
+  if (timestamp) {
+    const date = new Date(parseInt(`${timestamp}000`))
+    return `${date.getDate()}th ${month[date.getMonth()]} ${date.getFullYear()}`
+  }
+  return 'loading'
+}
+
+function NftPoolCard({pool, onClaim, pending}: NftPoolCardProps) {
+
   return (
-    <NftPoolCardWrap>
+    <NftPoolCardWrap >
       <FieldPool maxWidth="310px">
-        <Heading as="h3" size="lg" color="#0B1359">ALMs pool A</Heading>
+        <Heading as="h3" size="lg" color="#0B1359">{pool.name}</Heading>
         <FieldPoolDescription>
-          <Text fontSize="14" color="#8990A5">20% unlocking after Public Sale starts, </Text>
-          <Text fontSize="14" color="#8990A5">20% each month after 3rd month </Text>
+          <Text fontSize="14" color="#8990A5">{pool.description}</Text>
         </FieldPoolDescription>
       </FieldPool>
       <Field maxWidth="96px">
         <FieldName>Total ALMs</FieldName>
-        1.000.000
+        {ethers.utils.formatEther(pool.total || BigNumber.from(0))}
       </Field>
       <Field maxWidth="96px">
         <FieldName>Locked</FieldName>
-        800.000
+        {ethers.utils.formatEther(pool.locked || BigNumber.from(0))}
       </Field>
       <Field maxWidth="80px">
-        <FieldName>Locked</FieldName>
-        200.000
+        <FieldName>Unlocked</FieldName>
+        {ethers.utils.formatEther(pool.unlocked || BigNumber.from(0))}
       </Field>
       <FieldClaim maxWidth="172px">
         <FieldName>Claimed</FieldName>
         <FieldValue>
-          0
-          <Button variant="secondary" size="sm" >Claim</Button>
+          {ethers.utils.formatEther(pool.claimed || BigNumber.from(0))}
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={pending}
+            onClick={() => {
+              onClaim(pool.id)
+            }}
+          >
+            {pending ? 'Wait' : 'Claim'}
+          </Button>
         </FieldValue>
       </FieldClaim>
       <Field maxWidth="140px">
         <FieldName>Next unclocked date</FieldName>
-        24th June 2021
+        {getTimeFormat(pool.timestamp)}
       </Field>
     </NftPoolCardWrap>
   )
