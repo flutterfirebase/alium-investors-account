@@ -1,23 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import { Heading, Text, Flex } from '@alium-official/uikit'
+import { Flex, Heading, Text } from '@alium-official/uikit'
 import Modal from 'components/Modal'
-
+import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'hooks'
 import { useNFTPrivateContract } from 'hooks/useContract'
+import useNftPoolHook from 'hooks/useNftPool'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
-import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
-import useNftPoolHook from 'hooks/useNftPool'
+import styled from 'styled-components'
 import AppBody from '../AppBody'
-import whitelist from './constants/whitelist'
-import { cardListPrivate, cardListPublic, cardListStrategical } from './constants/cards'
-import NftNavTabs from './components/NftNavTabs'
 import NftAccountCard from './components/NftAccountCard'
-import NftPoolsHeader from './components/NftPoolsHeader'
+import NftNavTabs from './components/NftNavTabs'
 import NftPoolCard from './components/NftPoolCard'
+import NftPoolsHeader from './components/NftPoolsHeader'
+import { cardListPrivate, cardListPublic, cardListStrategical } from './constants/cards'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -105,48 +103,48 @@ const StyledHeading = styled(Heading)`
   }
 `
 
-const AddressWrap = styled.div`
-  margin-top: 10px;
-  background: rgba(108, 93, 211, 0.1);
-  border: 1px solid #6c5dd3;
-  padding: 5px;
-  margin: 8px 0 32px 0;
-  width: 207px;
-  align-self: center;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.3px;
-  color: #6c5dd3;
-`
+// const AddressWrap = styled.div`
+//   margin-top: 10px;
+//   background: rgba(108, 93, 211, 0.1);
+//   border: 1px solid #6c5dd3;
+//   padding: 5px;
+//   margin: 8px 0 32px 0;
+//   width: 207px;
+//   align-self: center;
+//   border-radius: 6px;
+//   text-align: center;
+//   font-size: 14px;
+//   line-height: 20px;
+//   letter-spacing: 0.3px;
+//   color: #6c5dd3;
+// `
 
-const StyledLink = styled.a`
-  color: #6c5dd3;
-  display: inline-block;
-  text-decoration: underline;
-  cursor: pointer;
-  :active {
-    outline: none;
-    border: none;
-  }
-  :focus {
-    outline: none;
-    border: none;
-  }
-`
+// const StyledLink = styled.a`
+//   color: #6c5dd3;
+//   display: inline-block;
+//   text-decoration: underline;
+//   cursor: pointer;
+//   :active {
+//     outline: none;
+//     border: none;
+//   }
+//   :focus {
+//     outline: none;
+//     border: none;
+//   }
+// `
 
-const StyledTextWrapper = styled.div`
-  padding: 0 80px;
+// const StyledTextWrapper = styled.div`
+//   padding: 0 80px;
 
-  @media screen and (max-width: 655px) {
-    padding: 0 50px;
-  }
+//   @media screen and (max-width: 655px) {
+//     padding: 0 50px;
+//   }
 
-  @media screen and (max-width: 500px) {
-    padding: 0;
-  }
-`
+//   @media screen and (max-width: 500px) {
+//     padding: 0;
+//   }
+// `
 
 const NftCardsContainer = styled(Flex)`
   flex-wrap: wrap;
@@ -159,7 +157,7 @@ const NftCardsContainer = styled(Flex)`
 
 const HelperDiv = styled(Text)`
   padding: 8px 16px;
-  border: 1px solid #D2D6E5;
+  border: 1px solid #d2d6e5;
   box-sizing: border-box;
   border-radius: 6px;
   margin-top: 17px;
@@ -169,9 +167,9 @@ const HelperDiv = styled(Text)`
     font-size: 24px;
     line-height: 30px;
     letter-spacing: 0.3px;
-    color: #FF4D00;
+    color: #ff4d00;
     margin-right: 8px;
-  };
+  }
 `
 
 const NftTable = styled.div`
@@ -200,21 +198,10 @@ const NftTableContent = styled(Flex)`
 // }
 
 const InvestorsAccount = () => {
-  const [isOpenModal, setOpenModal] = useState(false)
-  const [isHideModalOpen, setHideModalOpen] = useState(false)
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
   const { account, chainId } = useActiveWeb3React()
 
   const { t } = useTranslation()
-
-  useEffect(() => {
-    if (account) {
-      setHideModalOpen(false)
-      if (whitelist.indexOf(account) === -1) {
-        if (!isOpenModal) setOpenModal(true)
-      } else if (isOpenModal) setOpenModal(false)
-    } else if (!isHideModalOpen) setHideModalOpen(true)
-  }, [account, isHideModalOpen, isOpenModal])
 
   const { poolsWithData, onClaim, pendingClaimResult } = useNftPoolHook()
 
@@ -315,12 +302,6 @@ const InvestorsAccount = () => {
   //   parseInt(balance?.raw.toString()) >=
   //   parseInt(parseUnits(cardPrice, currencies.match[values.currency]?.decimals).toString())
 
-  const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const handleClose = () => {
-  }
-
   const handleTxClose = () => {
     setTxOpen(false)
   }
@@ -340,19 +321,22 @@ const InvestorsAccount = () => {
     // setTempTxHash('')
   }
 
-  const onClaimHandler = useCallback((pid: number) => {
-    onClaim(pid)
-      .then((tx) => {
-        if (tx) {
-          setTxHash(tx)
-          setTxOpen(true)
-        }
-      })
-      .catch(e => {
-        console.error(e.message || e)
-      })
+  const onClaimHandler = useCallback(
+    (pid: number) => {
+      onClaim(pid)
+        .then((tx) => {
+          if (tx) {
+            setTxHash(tx)
+            setTxOpen(true)
+          }
+        })
+        .catch((e) => {
+          console.error(e.message || e)
+        })
       // .finally(() => setTxOpen(false))
-  }, [onClaim])
+    },
+    [onClaim]
+  )
 
   return (
     <ContentHolder>
@@ -360,67 +344,6 @@ const InvestorsAccount = () => {
         <Text fontSize="48px" style={{ fontWeight: 700, marginBottom: '32px' }}>
           Your NFT deck
         </Text>
-        <Modal isOpen={isOpenModal} onDismiss={handleClose}>
-          <Flex flexDirection="column">
-            <Text
-              style={{
-                textAlign: 'center',
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                lineHeight: '22px',
-                letterSpacing: '0.3px',
-                color: '#0B1359'
-              }}
-            >
-              Sorry, we haven’t found this address in
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  lineHeight: '22px',
-                  letterSpacing: '0.3px',
-                  color: '#0B1359'
-                }}
-              >
-                the Strategical Partnership Whitelist:
-              </Text>
-            </Text>
-            <AddressWrap>{accountEllipsis}</AddressWrap>
-            <StyledTextWrapper>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  letterSpacing: '0.3px',
-                  color: '#0B1359'
-                }}
-              >
-                If you have been registered for the Whitelist before, please try to connect with another address.
-              </Text>
-              <Text
-                mt="15px"
-                style={{
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  letterSpacing: '0.3px',
-                  color: '#0B1359'
-                }}
-              >
-                If that didn&#39;t help, please contact <StyledLink href="https://t.me/akents">@Akents</StyledLink> and
-                he will help you to solve this issue.
-              </Text>
-            </StyledTextWrapper>
-          </Flex>
-        </Modal>
         {/* <Modal isOpen={isHideModalOpen} onDismiss={handleClose}> */}
         {/*  <Flex flexDirection="column" style={{ margin: '0 auto' }}> */}
         {/*    <Text */}
@@ -460,10 +383,7 @@ const InvestorsAccount = () => {
           </StyledHeading>
           <NftCardsContainer>
             {cardListPrivate.map((card) => (
-              <NftAccountCard
-                key={`cardListPrivate-${card.id}`}
-                card={card}
-              />
+              <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
             ))}
           </NftCardsContainer>
           <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
@@ -471,10 +391,7 @@ const InvestorsAccount = () => {
           </StyledHeading>
           <NftCardsContainer>
             {cardListStrategical.map((card) => (
-              <NftAccountCard
-                key={`cardListStrategical-${card.id}`}
-                card={card}
-              />
+              <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
             ))}
           </NftCardsContainer>
           <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
@@ -482,12 +399,8 @@ const InvestorsAccount = () => {
           </StyledHeading>
           <NftCardsContainer>
             {cardListPublic.map((card) => (
-              <NftAccountCard
-                key={`cardListPublic-${card.id}`}
-                card={card}
-              />
+              <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
             ))}
-
           </NftCardsContainer>
           <HelperDiv>
             <span>*</span>
@@ -497,15 +410,14 @@ const InvestorsAccount = () => {
           <NftTable>
             <NftPoolsHeader />
             <NftTableContent>
-              {
-                poolsWithData.map((pool) => (
-                  <NftPoolCard
-                    key={`Pool-Nft-${pool.id}`}
-                    pool={pool} onClaim={onClaimHandler}
-                    pending={Boolean(pendingClaimResult?.[0] === pool.id)}
-                  />
-                ))
-              }
+              {poolsWithData.map((pool) => (
+                <NftPoolCard
+                  key={`Pool-Nft-${pool.id}`}
+                  pool={pool}
+                  onClaim={onClaimHandler}
+                  pending={Boolean(pendingClaimResult?.[0] === pool.id)}
+                />
+              ))}
             </NftTableContent>
           </NftTable>
         </AppBody>
