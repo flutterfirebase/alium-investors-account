@@ -1,27 +1,25 @@
+import { Button } from '@alium-official/uikit'
 import React, { useCallback, useContext } from 'react'
+import { ExternalLink as LinkIcon } from 'react-feather'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import styled, { ThemeContext } from 'styled-components'
-import { Button } from '@alium-official/uikit'
-import { useTranslation } from 'react-i18next'
-import { ExternalLink as LinkIcon } from 'react-feather'
+import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg'
+import FortmaticIcon from '../../assets/images/fortmaticIcon.png'
+import PortisIcon from '../../assets/images/portisIcon.png'
+import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg'
+import { ReactComponent as Close } from '../../assets/images/x.svg'
+import { bsc, fortmatic, injected, portis, walletconnect, walletlink } from '../../connectors'
+import { SUPPORTED_WALLETS } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { AppDispatch } from '../../state'
 import { clearAllTransactions } from '../../state/transactions/actions'
-import { shortenAddress, getEtherscanLink } from '../../utils'
+import { getEtherscanLink, shortenAddress } from '../../utils'
+import Identicon from '../Identicon'
 import { AutoRow } from '../Row'
+import { ExternalLink, LinkStyledButton, TYPE } from '../Shared'
 import Copy from './Copy'
 import Transaction from './Transaction'
-
-import { SUPPORTED_WALLETS } from '../../constants'
-import { ReactComponent as Close } from '../../assets/images/x.svg'
-
-import { injected, walletconnect, walletlink, fortmatic, portis, bsc } from '../../connectors'
-import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg'
-import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg'
-import FortmaticIcon from '../../assets/images/fortmaticIcon.png'
-import PortisIcon from '../../assets/images/portisIcon.png'
-import Identicon from '../Identicon'
-import { ExternalLink, LinkStyledButton, TYPE } from '../Shared'
 
 const { body: Body } = TYPE
 
@@ -40,14 +38,13 @@ const UpperSection = styled.div`
   position: relative;
 
   h5 {
-    margin: 0;
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem;
     font-size: 1rem;
     font-weight: 400;
   }
 
   h5:last-child {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   h4 {
@@ -83,9 +80,9 @@ const AccountGroupingRow = styled.div`
 
 const AccountSection = styled.div`
   background-color: ${({ theme }) => theme.colors.invertedContrast};
-  padding: 0rem 1rem;
+  padding: 0 1rem;
   ${({ theme }) => theme.mediaQueries.lg} {
-    padding: 0rem 1rem 1.5rem 1rem;
+    padding: 0 1rem 1.5rem 1rem;
   }
 `
 
@@ -141,7 +138,6 @@ const AccountControl = styled.div`
 `
 
 const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
-  font-size: 0.825rem;
   color: ${({ theme }) => theme.colors.textDisabled};
   margin-left: 1rem;
   font-size: 0.825rem;
@@ -239,7 +235,7 @@ export default function AccountDetails({
 }: AccountDetailsProps) {
   const { chainId, account, connector } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
-  const {t} = useTranslation();
+  const { t } = useTranslation()
   const dispatch = useDispatch<AppDispatch>()
 
   function formatConnectorName() {
@@ -251,7 +247,7 @@ export default function AccountDetails({
           SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
       )
       .map((k) => SUPPORTED_WALLETS[k].name)[0]
-    return <WalletName>{t('connectedWith', {label: name})}</WalletName>
+    return <WalletName>{t('connectedWith', { label: name })}</WalletName>
   }
 
   function getStatusIcon() {

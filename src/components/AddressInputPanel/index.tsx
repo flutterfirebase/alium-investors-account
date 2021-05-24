@@ -1,12 +1,12 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { ThemeContext } from 'styled-components'
-import useENS from '../../hooks/useENS'
 import { useActiveWeb3React } from '../../hooks'
-import { ExternalLink, TYPE } from '../Shared'
+import useENS from '../../hooks/useENS'
+import { getEtherscanLink } from '../../utils'
 import { AutoColumn } from '../Column'
 import { RowBetween } from '../Row'
-import { getEtherscanLink } from '../../utils'
+import { ExternalLink, TYPE } from '../Shared'
 
 const { black: Black } = TYPE
 
@@ -41,7 +41,6 @@ const Input = styled.input<{ error?: boolean }>`
   outline: none;
   border: none;
   flex: 1 1 auto;
-  width: 0;
   background-color: ${({ theme }) => theme.colors.invertedContrast};
   transition: color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')};
   color: ${({ error, theme }) => (error ? theme.colors.failure : theme.colors.primary)};
@@ -52,7 +51,7 @@ const Input = styled.input<{ error?: boolean }>`
   ::placeholder {
     color: ${({ theme }) => theme.colors.textDisabled};
   }
-  padding: 0px;
+  padding: 0;
   -webkit-appearance: textfield;
 
   ::-webkit-search-decoration {
@@ -82,7 +81,7 @@ export default function AddressInputPanel({
 }) {
   const { chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
-  const {t} = useTranslation();
+  const { t } = useTranslation()
 
   const { address, loading, name } = useENS(value)
 

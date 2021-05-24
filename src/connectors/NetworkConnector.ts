@@ -1,5 +1,5 @@
-import { ConnectorUpdate } from '@web3-react/types'
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import { ConnectorUpdate } from '@web3-react/types'
 import invariant from 'tiny-invariant'
 
 interface NetworkConnectorArguments {
@@ -97,7 +97,7 @@ class MiniRpcProvider implements AsyncSendable {
         reject,
         request: { method },
       } = byKey[result.id]
-      if (resolve && reject) {
+      if (resolve) {
         if ('error' in result) {
           reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
         } else if ('result' in result) {

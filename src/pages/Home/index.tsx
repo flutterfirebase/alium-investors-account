@@ -59,12 +59,10 @@ const ContentHolder = styled.div`
 `
 
 const CardWrapper = styled.div`
-  width: 100%;
   font-family: Roboto, sans-serif;
   max-width: 950px;
   width: 100%;
-  margin: 0 auto;
-  margin-top: 20px;
+  margin: 20px auto 0;
   position: relative;
 `
 const GridContainer = styled.div`
@@ -92,7 +90,7 @@ const GridForm = styled.div`
   @media screen and (max-width: 641px) {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    column-gap: 0px;
+    column-gap: 0;
     row-gap: 20px;
   }
 `

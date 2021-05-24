@@ -1,5 +1,6 @@
 // Set of helper functions to facilitate wallet setup
 
+import { getChainId } from '@alium-official/uikit'
 import { nodes } from './getRpcUrl'
 
 /**
@@ -9,7 +10,7 @@ import { nodes } from './getRpcUrl'
 export const setupNetwork = async () => {
   const provider: any = (window as WindowChain).ethereum
   if (provider) {
-    const chainId: any = parseInt(process.env.REACT_APP_CHAIN_ID as string, 10)
+    const chainId = getChainId()
     try {
       await provider.request({
         method: 'wallet_addEthereumChain',

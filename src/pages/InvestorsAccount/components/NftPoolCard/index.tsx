@@ -1,56 +1,56 @@
 import { Button, Flex, Heading, Text } from '@alium-official/uikit'
+import { BigNumber, ethers } from 'ethers'
 import React from 'react'
 import styled from 'styled-components'
-import { BigNumber, ethers } from 'ethers'
 import { PoolsTypes } from '../../constants/pools'
 
 interface NftPoolCardProps {
-  pool: PoolsTypes;
-  onClaim: (pid: number) => void;
-  pending: boolean;
+  pool: PoolsTypes
+  onClaim: (pid: number) => void
+  pending: boolean
 }
 
 const NftPoolCardWrap = styled(Flex)`
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 6px;
   width: 100%;
   padding: 24px;
   margin-bottom: 16px;
-  &:last-child: {
+  &:last-child {
     margin-bottom: 0;
   }
-  @media (max-width: 1024px){
+  @media (max-width: 1024px) {
     flex-direction: column;
   }
 `
 
-const Field = styled(Flex)<{maxWidth: string}>`
+const Field = styled(Flex)<{ maxWidth: string }>`
   font-style: normal;
   justify-content: flex-start;
   font-weight: bold;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.3px;
-  color: #0B1359;
+  color: #0b1359;
   width: 100%;
-  max-width: ${({maxWidth}) => maxWidth};
+  max-width: ${({ maxWidth }) => maxWidth};
   flex: 1;
   &:last-child {
-    justify-content: flex-end; 
+    justify-content: flex-end;
   }
-  @media (max-width: 1024px){
+  @media (max-width: 1024px) {
     max-width: unset;
     padding: 10px 16px;
     justify-content: space-between;
     text-align: right;
     &:nth-child(2n + 1) {
-      background-color: #F4F5FA;
+      background-color: #f4f5fa;
     }
     &:first-child {
-      background-color: #FFF;
+      background-color: #fff;
     }
     &:last-child {
       justify-content: space-between;
@@ -64,16 +64,16 @@ const FieldName = styled(Text)`
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0.3px;
-  color: #8990A5;
+  color: #8990a5;
   text-align: left;
-  @media (max-width: 1024px){
+  @media (max-width: 1024px) {
     display: block;
   }
 `
 const FieldValue = styled(Flex)`
   flex-direction: row;
   align-items: center;
-  @media (max-width: 1024px){
+  @media (max-width: 1024px) {
     flex-direction: column;
     align-items: flex-end;
   }
@@ -82,7 +82,7 @@ const FieldValue = styled(Flex)`
 const FieldPool = styled(Field)`
   flex-direction: column;
   text-align: left;
-  @media (max-width: 1024px){
+  @media (max-width: 1024px) {
     margin-bottom: 16px;
     padding: 0;
   }
@@ -97,8 +97,8 @@ const FieldClaim = styled(Field)`
   }
   button {
     margin-left: 8px;
-  }  
-  @media (max-width: 1024px){
+  }
+  @media (max-width: 1024px) {
     align-items: flex-start;
     justify-content: space-between;
     button {
@@ -109,7 +109,7 @@ const FieldClaim = styled(Field)`
       width: unset;
       flex-direction: column;
       align-items: flex-end;
-    }  
+    }
   }
 `
 
@@ -144,14 +144,17 @@ const getTimeFormat = (timestamp: string | undefined) => {
   return 'loading'
 }
 
-function NftPoolCard({pool, onClaim, pending}: NftPoolCardProps) {
-
+function NftPoolCard({ pool, onClaim, pending }: NftPoolCardProps) {
   return (
-    <NftPoolCardWrap >
+    <NftPoolCardWrap>
       <FieldPool maxWidth="310px">
-        <Heading as="h3" size="lg" color="#0B1359">{pool.name}</Heading>
+        <Heading as="h3" size="lg" color="#0B1359">
+          {pool.name}
+        </Heading>
         <FieldPoolDescription>
-          <Text fontSize="14" color="#8990A5">{pool.description}</Text>
+          <Text fontSize="14" color="#8990A5">
+            {pool.description}
+          </Text>
         </FieldPoolDescription>
       </FieldPool>
       <Field maxWidth="96px">

@@ -1,12 +1,12 @@
+import { Flex, Text } from '@alium-official/uikit'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Flex, Text } from '@alium-official/uikit'
-import NftNavTabs from './components/NftNavTabs'
-import AppBody from '../AppBody'
-import NftCollectionHeader from './components/NftCollectionHeader'
-import NftCollectionCard from './components/NftCollectionCard'
-import cardImage from './images/Card-Preview.png'
 import useCollectionNft from '../../hooks/useCollectionNft'
+import AppBody from '../AppBody'
+import NftCollectionCard from './components/NftCollectionCard'
+import NftCollectionHeader from './components/NftCollectionHeader'
+import NftNavTabs from './components/NftNavTabs'
+import cardImage from './images/Card-Preview.png'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -16,7 +16,7 @@ const ContentHolder = styled.div`
 const SelectedNftRow = styled(Flex)`
   justify-content: center;
   align-content: center;
-  align-items; center;
+  align-items: center;
   width: 100%;
 `
 
@@ -41,14 +41,13 @@ const SelectedNftWrapper = styled(Flex)`
     position: absolute;
     bottom: 8px;
     left: 44px;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 `
 
 const CardWrapper = styled.div`
   width: 100%;
   font-family: Roboto, sans-serif;
-  width: 100%;
   margin: 0 auto;
   position: relative;
 
@@ -80,14 +79,13 @@ const NftTableContent = styled(Flex)`
 `
 
 function Collection() {
-
   const [selectedCard, setSelectedCard] = useState<[number, number] | null>(null)
 
   const onSelectCard = (pid, cid) => {
     setSelectedCard([pid, cid])
   }
 
-  const {poolsWithCards} = useCollectionNft()
+  const { poolsWithCards } = useCollectionNft()
 
   return (
     <ContentHolder>
@@ -98,14 +96,12 @@ function Collection() {
         <AppBody>
           <SelectedNftRow>
             <SelectedNftWrapper>
-              {
-                selectedCard && (
-                  <>
-                    <Image src={cardImage} alt="nft-preview" className="nft-preview" />
-                    <span>{selectedCard[1]}</span>
-                  </>
-                )
-              }
+              {selectedCard && (
+                <>
+                  <Image src={cardImage} alt="nft-preview" className="nft-preview" />
+                  <span>{selectedCard[1]}</span>
+                </>
+              )}
             </SelectedNftWrapper>
           </SelectedNftRow>
           <NftNavTabs />
@@ -113,15 +109,14 @@ function Collection() {
           <NftTable>
             <NftCollectionHeader />
             <NftTableContent>
-              {
-                poolsWithCards.map((pool) => (
-                  <NftCollectionCard
-                    key={`Pool-Nft-${pool.id}`}
-                    selectedCard={selectedCard}
-                    onSelectCard={onSelectCard}
-                    pool={pool} />
-                ))
-              }
+              {poolsWithCards.map((pool) => (
+                <NftCollectionCard
+                  key={`Pool-Nft-${pool.id}`}
+                  selectedCard={selectedCard}
+                  onSelectCard={onSelectCard}
+                  pool={pool}
+                />
+              ))}
             </NftTableContent>
           </NftTable>
         </AppBody>

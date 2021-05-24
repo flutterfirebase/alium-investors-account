@@ -1,14 +1,14 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useWeb3React } from '@web3-react/core'
-import { useTranslation } from 'react-i18next'
 // import { Heading, Button, Flex, ConnectorId, useWalletModal } from '@alium-official/uikit'
-import { Heading, Button, Flex, useWalletModal } from '@alium-official/uikit'
+import { Button, Flex, Heading, useWalletModal } from '@alium-official/uikit'
+import { useWeb3React } from '@web3-react/core'
 import { injected, walletconnect } from 'connectors'
-import SocialNetworks from './SocialNetworks/SocialNetworks'
-import logo from '../../images/logo.svg'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 import logoMobile from '../../images/logo-mobile.svg'
+import logo from '../../images/logo.svg'
 import icon from '../../images/plus-icon.svg'
+import SocialNetworks from './SocialNetworks/SocialNetworks'
 
 const Wrapper = styled.div`
   padding: 30px;
@@ -16,34 +16,36 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-@media screen and (max-width: 600px)
-  & .logo--desktop {
-    display: block;
-  }
-  & .logo--mobile {
-    display: none;
-  }
-  @media screen and (max-width: 854px) {
-    padding: 30px 40px 30px 40px;
-  }
-  @media screen and (max-width: 790px) {
-    padding: 30px 10px 30px 10px;
-  }
-  @media screen and (max-width: 640px) {
-    padding: 15px 10px;
-
+  @media screen and (max-width: 600px) {
     & .logo--desktop {
-      display: none;
-    }
-
-    & .logo--mobile {
       display: block;
     }
 
-    & .login-btn {
-      padding: 0 12px;
+    & .logo--mobile {
+      display: none;
     }
-  }
+
+    @media screen and (max-width: 854px) {
+      padding: 30px 40px 30px 40px;
+    }
+    @media screen and (max-width: 790px) {
+      padding: 30px 10px 30px 10px;
+    }
+    @media screen and (max-width: 640px) {
+      padding: 15px 10px;
+
+      & .logo--desktop {
+        display: none;
+      }
+
+      & .logo--mobile {
+        display: block;
+      }
+
+      & .login-btn {
+        padding: 0 12px;
+      }
+    }
 `
 
 const ImageWrap = styled.div`
@@ -57,6 +59,7 @@ const StyledHeading = styled(Heading)`
     display: block;
     font-size: 32px;
   }
+
   @media screen and (max-width: 1290px) {
     &.heading--desktop {
       font-size: 30px;

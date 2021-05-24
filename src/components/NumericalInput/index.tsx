@@ -16,7 +16,7 @@ const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: s
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0px;
+  padding: 0;
   -webkit-appearance: textfield;
 
   ::-webkit-search-decoration {
@@ -61,7 +61,7 @@ export const Input = React.memo(function InnerInput({
     <StyledInput
       {...rest}
       value={value}
-      onChange={event => {
+      onChange={(event) => {
         // replace commas with periods, because uniswap exclusively uses period as the decimal separator
         enforcer(event.target.value.replace(/,/g, '.'))
       }}

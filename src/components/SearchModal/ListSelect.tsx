@@ -39,8 +39,8 @@ const PopoverContainer = styled.div<{ show: boolean }>`
   transition: visibility 150ms linear, opacity 150ms linear;
   background: ${({ theme }) => theme.colors.invertedContrast};
   border: 1px solid ${({ theme }) => theme.colors.tertiary};
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
-    0px 24px 32px rgba(0, 0, 0, 0.01);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.01), 0 4px 8px rgba(0, 0, 0, 0.04), 0 16px 24px rgba(0, 0, 0, 0.04),
+    0 24px 32px rgba(0, 0, 0, 0.01);
   color: ${({ theme }) => theme.colors.textSubtle};
   border-radius: 0.5rem;
   padding: 1rem;

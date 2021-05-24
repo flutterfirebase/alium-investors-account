@@ -1,8 +1,8 @@
+import { transparentize } from 'polished'
 import React from 'react'
 import styled from 'styled-components'
-import { transparentize } from 'polished'
-import { RowBetween } from '../Row'
 import { AutoColumn } from '../Column'
+import { RowBetween } from '../Row'
 
 const Wrapper = styled(AutoColumn)`
   margin-top: 1.25rem;
@@ -36,7 +36,6 @@ const CircleRow = styled.div`
 const Connector = styled.div<{ prevConfirmed?: boolean }>`
   width: 100%;
   height: 2px;
-  background-color: ;
   background: linear-gradient(
     90deg,
     ${({ theme, prevConfirmed }) => transparentize(0.5, prevConfirmed ? theme.colors.success : theme.colors.primary)} 0%,
