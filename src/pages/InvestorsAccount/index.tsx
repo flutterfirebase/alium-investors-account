@@ -14,6 +14,7 @@ import { AppState } from 'state/index'
 import styled from 'styled-components'
 import { Dots } from '../../components/swap/styleds'
 import useCollectionNft from '../../hooks/useCollectionNft'
+import { getAccountTotalBalance } from '../../utils'
 import AppBody from '../AppBody'
 import NftAccountCard from './components/NftAccountCard'
 import NftNavTabs from './components/NftNavTabs'
@@ -161,7 +162,7 @@ const NoNFTText = styled(Flex)`
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
   const [isHideModalOpen, setHideModalOpen] = useState(false)
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
 
   const { t } = useTranslation()
 
@@ -170,6 +171,22 @@ const InvestorsAccount = () => {
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
+  const [accountTotalBalance, setAccountTotalBalance] = useState(-1)
+
+  const cbAccountTotalBalance = useCallback(() => {
+    ;(async () => {
+      try {
+        const newAccountTotalBalance = await getAccountTotalBalance(account, library)
+        setAccountTotalBalance(newAccountTotalBalance)
+      } catch (err) {
+        console.error(err)
+      }
+    })()
+  }, [account, library])
+
+  useEffect(() => {
+    cbAccountTotalBalance()
+  }, [cbAccountTotalBalance])
 
   useEffect(() => {
     if (!account) return
@@ -286,9 +303,9 @@ const InvestorsAccount = () => {
         <AppBody>
           {!account ? (
             'Please connect to your wallet first.'
-          ) : balanceAccount === undefined ? (
+          ) : balanceAccount === undefined || accountTotalBalance === -1 ? (
             <Dots>Loading</Dots>
-          ) : balanceAccount.toNumber() <= 0 ? (
+          ) : accountTotalBalance === 0 ? (
             <NoNFT>
               <NoNFTText>You don&apos;t have NFT tokens yet, but you can purchase them on the page</NoNFTText>
               <Button href="https://public.alium.finance/" target="_blank" as="a">
