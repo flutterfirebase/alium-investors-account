@@ -1,5 +1,5 @@
 import { ETHER } from '@alium-official/sdk'
-import { externalLinks, Menu as UikitMenu, MenuEntry } from '@alium-official/uikit'
+import { externalLinks, getMainDomain, Menu as UikitMenu, MenuEntry } from '@alium-official/uikit'
 import { useWeb3React } from '@web3-react/core'
 import useAuth from 'hooks/useAuth'
 import useTheme from 'hooks/useTheme'
@@ -20,8 +20,8 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
       label: 'Trade',
       icon: 'TradeIcon',
       items: [
-        { label: 'Exchange', href: process.env.REACT_APP_EXCHANGE_URL },
-        { label: 'Liquidity', href: process.env.REACT_APP_LIQUIDITY_URL },
+        { label: 'Exchange', href: `https://exchange.${getMainDomain()}` },
+        { label: 'Liquidity', href: `https://exchange.${getMainDomain()}/pool` },
       ],
     },
     // {
@@ -34,11 +34,12 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
     //   ],
     // },
     { label: 'Token holder area', icon: 'PrivateRoundIcon', href: '/' },
+
     {
       label: 'More',
       icon: 'MoreIcon',
       items: [
-        { label: 'Audits', href: `${process.env.REACT_APP_HOME_URL}/audits` },
+        { label: 'Audits', href: `https://${getMainDomain()}/audits` },
         // { label: 'Voting', href: 'https://voting.dev.alium.finance' },
         { label: 'GitHub', href: externalLinks.github },
         { label: 'Docs', href: 'https://aliumswap.gitbook.io/alium-finance/' },

@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Text } from '@alium-official/uikit'
+import { Button, Flex, getMainDomain, Heading, Text } from '@alium-official/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Modal from 'components/Modal'
 import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
@@ -308,7 +308,7 @@ const InvestorsAccount = () => {
           ) : accountTotalBalance === 0 ? (
             <NoNFT>
               <NoNFTText>You don&apos;t have NFT tokens yet, but you can purchase them on the page</NoNFTText>
-              <Button href="https://public.alium.finance/" target="_blank" as="a">
+              <Button href={`https://public.${getMainDomain()}`} target="_blank" as="a">
                 Buy NFT
               </Button>
             </NoNFT>
