@@ -14,7 +14,7 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
     {
       label: t('Home'),
       icon: 'HomeIcon',
-      href: process.env.REACT_APP_HOME_URL,
+      href: `https://${getMainDomain()}`,
     },
     {
       label: 'Trade',
