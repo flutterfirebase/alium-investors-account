@@ -5,8 +5,6 @@ import { Text } from '@alium-official/uikit'
 
 const Card = styled.div<any>`
   width: 100%;
-  border-radius: 16px;
-  padding: 1.25rem;
   padding: ${({ padding }) => padding};
   border: ${({ border }) => border};
   border-radius: 6px;

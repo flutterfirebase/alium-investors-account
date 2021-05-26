@@ -1,35 +1,33 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import axios from 'axios'
-import { parseUnits } from '@ethersproject/units'
-import styled from 'styled-components'
 import { JSBI, TokenAmount } from '@alium-official/sdk'
-import { Heading, Text, Flex, Button } from '@alium-official/uikit'
+import { Button, Flex, Heading, Text } from '@alium-official/uikit'
+import { parseUnits } from '@ethersproject/units'
+import axios from 'axios'
+import { GreyCard } from 'components/Card'
+import { AutoColumn } from 'components/Column'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Modal from 'components/Modal'
-
+import { RowBetween } from 'components/Row'
+import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
+import { NFT_PRIVATE_ADDRESS } from 'constants/abis/nftPrivate'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useNFTPrivateContract } from 'hooks/useContract'
-
-import { NFT_PRIVATE_ADDRESS } from 'constants/abis/nftPrivate'
-import { WrappedTokenInfo } from 'state/lists/hooks'
-import { useCurrencyBalance } from 'state/wallet/hooks'
-import { useTransactionAdder } from 'state/transactions/hooks'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
-import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
-import { AutoColumn } from 'components/Column'
-import { RowBetween } from 'components/Row'
-import { GreyCard } from 'components/Card'
-import { Dots } from '../Pool/styleds'
+import { WrappedTokenInfo } from 'state/lists/hooks'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import styled from 'styled-components'
 import AppBody from '../AppBody'
-import currencies from './constants/currencies'
-import cardList from './constants/cards'
 import bgIMG from '../Home/images/background-img.svg'
-import emails from './constants/membersList'
+import { Dots } from '../Pool/styleds'
 import NftPartnershipCard from './components/NftPartnershipCard'
+import cardList from './constants/cards'
+import currencies from './constants/currencies'
+import emails from './constants/membersList'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -38,11 +36,11 @@ const ContentHolder = styled.div`
     right: -20px;
     top: -35px;
   }
-  
+
   @media screen and (max-width: 1170px) {
     & .content-background {
       top: 12px;
-      }
+    }
   }
 
   @media screen and (max-width: 480px) {
@@ -53,9 +51,7 @@ const ContentHolder = styled.div`
   }
 `
 
-const ButtonWrap = styled.div`
-  
-`
+const ButtonWrap = styled.div``
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -64,11 +60,11 @@ const CardWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   position: relative;
-  
+
   @media screen and (max-width: 1024px) {
     max-width: 954px;
   }
-  
+
   @media screen and (max-width: 1016px) {
     padding: 0 32px 0 32px;
   }
@@ -140,7 +136,6 @@ const StyledHeading = styled(Heading)`
 `
 
 const AddressWrap = styled.div`
-  margin-top: 10px;
   background: rgba(108, 93, 211, 0.1);
   border: 1px solid #6c5dd3;
   padding: 5px;
@@ -156,27 +151,27 @@ const AddressWrap = styled.div`
 `
 
 const StyledLink = styled.a`
-  color: #6C5DD3;
+  color: #6c5dd3;
   display: inline-block;
   text-decoration: underline;
   cursor: pointer;
   :active {
-    outline: none; 
+    outline: none;
     border: none;
   }
   :focus {
-    outline: none; 
+    outline: none;
     border: none;
   }
 `
 
 const StyledTextWrapper = styled.div`
   padding: 0 80px;
-  
+
   @media screen and (max-width: 655px) {
     padding: 0 50px;
   }
-  
+
   @media screen and (max-width: 500px) {
     padding: 0;
   }
@@ -199,7 +194,7 @@ const NotifyMembers = (hash, currency) => {
 }
 
 const StrategicalPartnershipHome = () => {
-  const [isOpenModal, setOpenModal] = useState(false)
+  const [isOpenModal] = useState(false)
   const [isHideModalOpen, setHideModalOpen] = useState(false)
   const { account, chainId } = useActiveWeb3React()
 
@@ -212,16 +207,16 @@ const StrategicalPartnershipHome = () => {
   }, [account, isHideModalOpen, isOpenModal])
 
   const nftContract = useNFTPrivateContract()
-  const [ isSucceedPopupVisible, setSucceedPopupVisible ] = useState(false);
+  const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
 
   useEffect(() => {
     if (!account) return
-    nftContract?.bought(account).then(res => {
+    nftContract?.bought(account).then((res) => {
       if (res === true) {
-        setSucceedPopupVisible(true);
+        setSucceedPopupVisible(true)
       } else if (isSucceedPopupVisible) {
-          setSucceedPopupVisible(false)
-        }
+        setSucceedPopupVisible(false)
+      }
     })
   }, [account, isSucceedPopupVisible, nftContract])
 
@@ -233,7 +228,7 @@ const StrategicalPartnershipHome = () => {
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const [tempTxHash, setTempTxHash] = useState('')
   const [isTxOpen, setTxOpen] = useState(false)
-  const [bought, setBought] = useState(false);
+  const [bought, setBought] = useState(false)
 
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
   const transactions: any = chainId ? state[chainId] ?? {} : {}
@@ -295,7 +290,7 @@ const StrategicalPartnershipHome = () => {
   }, [approval, approvalSubmitted])
 
   const handleChange = (value) => {
-    setValues(value);
+    setValues(value)
     if (approvalSubmitted && approval !== ApprovalState.PENDING) {
       setApprovalSubmitted(false)
     }
@@ -350,16 +345,19 @@ const StrategicalPartnershipHome = () => {
               }}
             >
               Sorry, we haven’t found this address in
-              <Text style={{
-                textAlign: 'center',
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                lineHeight: '22px',
-                letterSpacing: '0.3px',
-                color: '#0B1359',
-              }}>
-                the Strategical Partnership Whitelist:</Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontStyle: 'normal',
+                  fontWeight: 'bold',
+                  fontSize: '16px',
+                  lineHeight: '22px',
+                  letterSpacing: '0.3px',
+                  color: '#0B1359',
+                }}
+              >
+                the Strategical Partnership Whitelist:
+              </Text>
             </Text>
             <AddressWrap>{accountEllipsis}</AddressWrap>
             <StyledTextWrapper>
@@ -388,7 +386,8 @@ const StrategicalPartnershipHome = () => {
                   color: '#0B1359',
                 }}
               >
-                If that didn&#39;t help, please contact <StyledLink href="https://t.me/akents">@Akents</StyledLink> and he will help you to solve this issue.
+                If that didn&#39;t help, please contact <StyledLink href="https://t.me/akents">@Akents</StyledLink> and
+                he will help you to solve this issue.
               </Text>
             </StyledTextWrapper>
           </Flex>
@@ -441,19 +440,19 @@ const StrategicalPartnershipHome = () => {
                         approval === ApprovalState.APPROVED ? (
                           !bought ? (
                             <RowBetween>
-                              <Button onClick={handleBuy}  style={{width: '100%'}}>{t('buyAmountCards', { count: 1 })}</Button>
+                              <Button onClick={handleBuy} style={{ width: '100%' }}>
+                                {t('buyAmountCards', { count: 1 })}
+                              </Button>
                             </RowBetween>
                           ) : (
-                            <GreyCard style={{ textAlign: 'center' }}>
-                              Please, wait...
-                            </GreyCard>
+                            <GreyCard style={{ textAlign: 'center' }}>Please, wait...</GreyCard>
                           )
                         ) : (
                           <RowBetween>
                             <Button
                               onClick={approveCallback}
                               disabled={approval === ApprovalState.PENDING || approvalSubmitted}
-                              style={{width: '100%'}}
+                              style={{ width: '100%' }}
                             >
                               {approval === ApprovalState.PENDING || approvalSubmitted ? (
                                 <Dots>{t('approving', { count: values.currency })}</Dots>

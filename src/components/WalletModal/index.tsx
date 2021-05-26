@@ -1,26 +1,24 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { isMobile } from 'react-device-detect'
-import { useTranslation } from 'react-i18next'
+import { AbstractConnector } from '@web3-react/abstract-connector'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { AbstractConnector } from '@web3-react/abstract-connector'
-import usePrevious from '../../hooks/usePrevious'
-import { useWalletModalOpen, useWalletModalToggle } from '../../state/application/hooks'
-
-import Modal from '../Modal'
-import AccountDetails from '../AccountDetails'
-import PendingView from './PendingView'
-import Option from './Option'
-import { SUPPORTED_WALLETS } from '../../constants'
-import { ExternalLink } from '../Shared'
+import React, { useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 import MetamaskIcon from '../../assets/images/metamask.png'
 import { ReactComponent as Close } from '../../assets/images/x.svg'
-import { injected, fortmatic, portis } from '../../connectors'
+import { fortmatic, injected, portis } from '../../connectors'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
-
+import { SUPPORTED_WALLETS } from '../../constants'
+import usePrevious from '../../hooks/usePrevious'
+import { useWalletModalOpen, useWalletModalToggle } from '../../state/application/hooks'
+import AccountDetails from '../AccountDetails'
+import Modal from '../Modal'
+import { ExternalLink } from '../Shared'
+import Option from './Option'
+import PendingView from './PendingView'
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -72,14 +70,13 @@ const UpperSection = styled.div`
   position: relative;
 
   h5 {
-    margin: 0;
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem;
     font-size: 1rem;
     font-weight: 400;
   }
 
   h5:last-child {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   h4 {
@@ -164,7 +161,7 @@ export default function WalletModal({
   // close modal when a connection is successful
   const activePrevious = usePrevious(active)
   const connectorPrevious = usePrevious(connector)
-  const {t} = useTranslation();
+  const { t } = useTranslation()
   useEffect(() => {
     if (walletModalOpen && ((active && !activePrevious) || (connector && connector !== connectorPrevious && !error))) {
       setWalletView(WALLET_VIEWS.ACCOUNT)
@@ -294,7 +291,9 @@ export default function WalletModal({
           <CloseIcon onClick={toggleWalletModal}>
             <CloseColor />
           </CloseIcon>
-          <HeaderRow>{error instanceof UnsupportedChainIdError ? t('wrongNetworkDetected') : t('errorConnecting')}</HeaderRow>
+          <HeaderRow>
+            {error instanceof UnsupportedChainIdError ? t('wrongNetworkDetected') : t('errorConnecting')}
+          </HeaderRow>
           <ContentWrapper>
             {error instanceof UnsupportedChainIdError ? (
               <h5>

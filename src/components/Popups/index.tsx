@@ -7,10 +7,10 @@ import PopupItem from './PopupItem'
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
   position: relative;
   max-width: 100%;
+  display: none;
   height: ${({ height }) => height};
   margin: ${({ height }) => (height ? '0 auto;' : 0)};
   margin-bottom: ${({ height }) => (height ? '20px' : 0)}};
-  display: none;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     display: block;
@@ -49,7 +49,7 @@ export default function Popups() {
   return (
     <>
       <FixedPopupColumn gap="20px">
-        {activePopups.map(item => (
+        {activePopups.map((item) => (
           <PopupItem key={item.key} content={item.content} popKey={item.key} removeAfterMs={item.removeAfterMs} />
         ))}
       </FixedPopupColumn>
@@ -58,7 +58,7 @@ export default function Popups() {
           {activePopups // reverse so new items up front
             .slice(0)
             .reverse()
-            .map(item => (
+            .map((item) => (
               <PopupItem key={item.key} content={item.content} popKey={item.key} removeAfterMs={item.removeAfterMs} />
             ))}
         </MobilePopupInner>

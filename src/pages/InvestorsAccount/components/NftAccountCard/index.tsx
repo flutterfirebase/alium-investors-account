@@ -1,12 +1,12 @@
+import { Button, Flex, Input } from '@alium-official/uikit'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { Flex, Button, Input } from '@alium-official/uikit'
-import { CardType } from '../../constants/cards'
-import useNftAccountCard from '../../../../hooks/useNftAccountCard'
 import Modal from '../../../../components/Modal'
+import { Dots } from '../../../../components/swap/styleds'
 import { TransactionSubmittedContent } from '../../../../components/TransactionConfirmationModal'
 import { useActiveWeb3React } from '../../../../hooks'
-import { Dots } from '../../../../components/swap/styleds'
+import useNftAccountCard from '../../../../hooks/useNftAccountCard'
+import { CardType } from '../../constants/cards'
 
 const NFTWrapper = styled.div`
   border: none;
@@ -39,12 +39,12 @@ const StyledFlex = styled(Flex)`
   box-sizing: border-box;
 `
 const ButtonFlex = styled(Flex)`
-  padding 0;
+  padding: 0;
   margin-top: 16px;
   box-sizing: border-box;
   width: 100%;
   button {
-    width: 100%; 
+    width: 100%;
   }
 `
 
@@ -65,20 +65,19 @@ const InputWrapper = styled(Flex)`
   width: 100%;
 `
 const Label = styled.label`
-  font-size: 12px; 
-  color: #6C5DD3;
+  font-size: 12px;
+  color: #6c5dd3;
   position: absolute;
   background-color: white;
   line-height: 14px;
-  top: -6px;
   left: 12px;
   padding: 0 4px;
-  top: calc(0% - 14px/2);
+  top: calc(0% - 14px / 2);
   @media (min-width: 568px) {
-    font-size: 10px; 
+    font-size: 10px;
   }
   @media (min-width: 1024px) {
-    font-size: 12px; 
+    font-size: 12px;
   }
 `
 
@@ -86,9 +85,7 @@ type PropsType = {
   card: CardType
 }
 
-const NftAccountCard = ({
-                          card
-                        }: PropsType) => {
+const NftAccountCard = ({ card }: PropsType) => {
   const isMp4 = card.img.split('.')[1] === 'mp4'
   const [value, setValue] = useState<number | string>('')
   const [isTxOpen, setTxOpen] = useState(false)
@@ -98,7 +95,10 @@ const NftAccountCard = ({
     setTxOpen(false)
   }
 
-  const {totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert} = useNftAccountCard(value, card.id)
+  const { totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert } = useNftAccountCard(
+    value,
+    card.id
+  )
 
   const limitId: number = useMemo(() => {
     return totalSupply ? parseInt(totalSupply) : 1
@@ -123,7 +123,7 @@ const NftAccountCard = ({
           setTxOpen(true)
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e.message || e)
       })
   }, [card.privateCall, onApprove])
@@ -136,7 +136,7 @@ const NftAccountCard = ({
           setTxOpen(true)
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e.message || e)
       })
   }, [card.privateCall, onConvert, value])
@@ -147,33 +147,27 @@ const NftAccountCard = ({
         <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
       </Modal>
       <StyledFlex>
-        {
-          isMp4
-          ? <Video autoPlay loop muted>
-              <source src={card.img} type="video/mp4" />
-            </Video>
-            : <Image src={card.img} alt="nft-preview" className="nft-preview" />
-        }
+        {isMp4 ? (
+          <Video autoPlay loop muted>
+            <source src={card.img} type="video/mp4" />
+          </Video>
+        ) : (
+          <Image src={card.img} alt="nft-preview" className="nft-preview" />
+        )}
         <InputWrapper>
-          <Label>
-            Put you NFT id from your collection
-          </Label>
-          <Input
-            type="number"
-            scale="lg"
-            step={1}
-            min={1}
-            placeholder="1"
-            value={value}
-            onChange={handleInput}
-          />
+          <Label>Put you NFT id from your collection</Label>
+          <Input type="number" scale="lg" step={1} min={1} placeholder="1" value={value} onChange={handleInput} />
         </InputWrapper>
         <ButtonFlex>
-          {
-            (card.privateCall && isApprovedPrivate) || (!card.privateCall && isApprovedPublic)
-            ? <Button onClick={onConvertHandler} disabled={Boolean(error)}>{pending ? <Dots>Converting</Dots> : error || "Convert to ALMs"}</Button>
-              : <Button onClick={onApproveHandler} disabled={pending}>{pending ? <Dots>Approving</Dots> : "Approve"}</Button>
-          }
+          {(card.privateCall && isApprovedPrivate) || (!card.privateCall && isApprovedPublic) ? (
+            <Button onClick={onConvertHandler} disabled={Boolean(error)}>
+              {pending ? <Dots>Converting</Dots> : error || 'Convert to ALMs'}
+            </Button>
+          ) : (
+            <Button onClick={onApproveHandler} disabled={pending}>
+              {pending ? <Dots>Approving</Dots> : 'Approve'}
+            </Button>
+          )}
         </ButtonFlex>
       </StyledFlex>
     </NFTWrapper>

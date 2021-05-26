@@ -1,19 +1,18 @@
-import React, { useState, useCallback } from 'react'
 import { Currency, Pair } from '@alium-official/sdk'
 import { Button, ChevronDownIcon, Text } from '@alium-official/uikit'
+import { darken } from 'polished'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { darken } from 'polished'
+import { useActiveWeb3React } from '../../hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
-import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
+import { TranslateString } from '../../utils/translateTextHelpers'
 import CurrencyLogo from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
-import { RowBetween } from '../Row'
 import { Input as NumericalInput } from '../NumericalInput'
-import { useActiveWeb3React } from '../../hooks'
-import TranslatedText from "../TranslatedText"
-import { TranslateString } from '../../utils/translateTextHelpers'
-
+import { RowBetween } from '../Row'
+import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
+import TranslatedText from '../TranslatedText'
 
 const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
@@ -35,8 +34,6 @@ const CurrencySelect = styled.button<{ selected: boolean }>`
   user-select: none;
   border: none;
   padding: 0 0.5rem;
-
-  :focus,
 `
 
 const LabelRow = styled.div`
@@ -63,7 +60,7 @@ const InputPanel = styled.div<{ hideInput?: boolean }>`
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
-  border: 1px solid #D2D6E5;
+  border: 1px solid #d2d6e5;
   position: relative;
   border-radius: 6px;
   background-color: transparent;
@@ -90,7 +87,7 @@ interface CurrencyInputPanelProps {
   hideInput?: boolean
   otherCurrency?: Currency | null
   id: string
-  showCommonBases?: boolean,
+  showCommonBases?: boolean
   currencyList?: any
 }
 
@@ -109,9 +106,9 @@ export default function CurrencyInputPanel({
   otherCurrency,
   id,
   showCommonBases,
-  currencyList
+  currencyList,
 }: CurrencyInputPanelProps) {
-  const {t} = useTranslation();
+  const { t } = useTranslation()
   const [modalOpen, setModalOpen] = useState(false)
   const { account } = useActiveWeb3React()
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
@@ -129,7 +126,7 @@ export default function CurrencyInputPanel({
               {account && (
                 <Text onClick={onMax} fontSize="14px" style={{ display: 'inline', cursor: 'pointer' }}>
                   {!hideBalance && !!currency && selectedCurrencyBalance
-                    ? t('balance', {balanceInput: selectedCurrencyBalance?.toSignificant(6)})
+                    ? t('balance', { balanceInput: selectedCurrencyBalance?.toSignificant(6) })
                     : ' -'}
                 </Text>
               )}
@@ -142,7 +139,7 @@ export default function CurrencyInputPanel({
               <NumericalInput
                 className="token-amount-input"
                 value={value}
-                onUserInput={val => {
+                onUserInput={(val) => {
                   onUserInput(val)
                 }}
               />
@@ -175,9 +172,10 @@ export default function CurrencyInputPanel({
               ) : (
                 <Text>
                   {(currency && currency.symbol && currency.symbol.length > 20
-                    ? `${currency.symbol.slice(0, 4) 
-                      }...${ 
-                      currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)}`
+                    ? `${currency.symbol.slice(0, 4)}...${currency.symbol.slice(
+                        currency.symbol.length - 5,
+                        currency.symbol.length
+                      )}`
                     : currency?.symbol) || <TranslatedText translationId={82}>Select a currency</TranslatedText>}
                 </Text>
               )}

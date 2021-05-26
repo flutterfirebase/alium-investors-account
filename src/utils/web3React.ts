@@ -1,14 +1,14 @@
+import { ConnectorNames, getChainId } from '@alium-official/uikit'
+import { BscConnector } from '@binance-chain/bsc-connector'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { BscConnector } from '@binance-chain/bsc-connector'
-import { ConnectorNames } from '@alium-official/uikit'
 // @ts-ignore
 import Web3 from 'web3'
 import getNodeUrl from './getRpcUrl'
 
 const POLLING_INTERVAL = 12000
 const rpcUrl = getNodeUrl()
-const chainId: number = parseInt(process.env.REACT_APP_CHAIN_ID as string, 10)
+const chainId = getChainId()
 
 const injected = new InjectedConnector({ supportedChainIds: [chainId] })
 

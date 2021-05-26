@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { Input, Text } from '@alium-official/uikit'
-
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useUserDeadline } from 'state/user/hooks'
+import styled from 'styled-components'
 import QuestionHelper from '../QuestionHelper'
 import TranslatedText from '../TranslatedText'
-import { useTranslation } from 'react-i18next'
 
 const StyledTransactionDeadlineSetting = styled.div`
   margin-bottom: 16px;
@@ -40,7 +39,7 @@ const TransactionDeadlineSetting = () => {
     const { value: inputValue } = evt.target
     setValue(parseInt(inputValue, 10))
   }
-  const {t} = useTranslation();
+  const { t } = useTranslation()
 
   // Updates local storage if value is valid
   useEffect(() => {

@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
-import { connectorLocalStorageKey, ConnectorNames } from '@alium-official/uikit'
+import { ConnectorNames, getConnectorId } from '@alium-official/uikit'
 import useAuth from 'hooks/useAuth'
+import { useEffect } from 'react'
 
 const useEagerConnect = () => {
   const { login } = useAuth()
 
   useEffect(() => {
-    const connectorId = window.localStorage.getItem(connectorLocalStorageKey) as ConnectorNames
+    const connectorId = getConnectorId()
 
     // Disable eager connect for BSC Wallet. Currently the BSC Wallet extension does not inject BinanceChain
     // into the Window object in time causing it to throw an error

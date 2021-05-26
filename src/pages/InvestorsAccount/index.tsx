@@ -1,24 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Heading, Text, Flex, Button } from '@alium-official/uikit'
+import { Button, Flex, Heading, Text } from '@alium-official/uikit'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 import Modal from 'components/Modal'
+import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'hooks'
 import { useNFTPrivateContract } from 'hooks/useContract'
+import useNftPoolHook from 'hooks/useNftPool'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { removePopup } from 'state/application/actions'
 import { PopupList } from 'state/application/reducer'
 import { AppState } from 'state/index'
-import { TransactionSubmittedContent, TransactionSucceedContent } from 'components/TransactionConfirmationModal'
-import useNftPoolHook from 'hooks/useNftPool'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import { removePopup } from 'state/application/actions'
-import AppBody from '../AppBody'
-import NftNavTabs from './components/NftNavTabs'
-import NftAccountCard from './components/NftAccountCard'
-import NftPoolsHeader from './components/NftPoolsHeader'
-import NftPoolCard from './components/NftPoolCard'
-import useCollectionNft from '../../hooks/useCollectionNft'
+import styled from 'styled-components'
 import { Dots } from '../../components/swap/styleds'
+import useCollectionNft from '../../hooks/useCollectionNft'
+import { getAccountTotalBalance } from '../../utils'
+import AppBody from '../AppBody'
+import NftAccountCard from './components/NftAccountCard'
+import NftNavTabs from './components/NftNavTabs'
+import NftPoolCard from './components/NftPoolCard'
+import NftPoolsHeader from './components/NftPoolsHeader'
 
 const ContentHolder = styled.div`
   position: relative;
@@ -26,7 +27,6 @@ const ContentHolder = styled.div`
 `
 
 const CardWrapper = styled.div`
-  width: 100%;
   font-family: Roboto, sans-serif;
   width: 100%;
   margin: 0 auto;
@@ -48,9 +48,11 @@ const StyledHeading = styled(Heading)`
   &.heading--desktop {
     display: none;
   }
+
   &.heading--mobile {
     display: none;
   }
+
   @media screen and (max-width: 1170px) {
     &.heading--desktop {
       display: block;
@@ -70,6 +72,7 @@ const StyledHeading = styled(Heading)`
     &.heading--desktop {
       display: none;
     }
+
     &.heading--mobile {
       display: block;
       text-align: left;
@@ -122,6 +125,7 @@ const HelperDiv = styled(Text)`
   border-radius: 6px;
   margin-top: 17px;
   width: fit-content;
+
   span {
     font-weight: 500;
     font-size: 24px;
@@ -152,13 +156,13 @@ const NoNFTText = styled(Flex)`
   line-height: 1.5;
   font-weight: 500;
   color: #000;
-  margin-bottom: 16px
+  margin-bottom: 16px;
 `
 
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
   const [isHideModalOpen, setHideModalOpen] = useState(false)
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
 
   const { t } = useTranslation()
 
@@ -167,6 +171,22 @@ const InvestorsAccount = () => {
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
+  const [accountTotalBalance, setAccountTotalBalance] = useState(-1)
+
+  const cbAccountTotalBalance = useCallback(() => {
+    ;(async () => {
+      try {
+        const newAccountTotalBalance = await getAccountTotalBalance(account, library)
+        setAccountTotalBalance(newAccountTotalBalance)
+      } catch (err) {
+        console.error(err)
+      }
+    })()
+  }, [account, library])
+
+  useEffect(() => {
+    cbAccountTotalBalance()
+  }, [cbAccountTotalBalance])
 
   useEffect(() => {
     if (!account) return
@@ -192,7 +212,6 @@ const InvestorsAccount = () => {
     setTxHash('')
     setTxOpen(false)
   }
-
 
   // const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
 
@@ -220,19 +239,22 @@ const InvestorsAccount = () => {
     setSucceedPopupVisible(false)
   }
 
-  const onClaimHandler = useCallback((pid: number) => {
-    onClaim(pid)
-      .then((tx) => {
-        if (tx) {
-          setTxHash(tx)
-          setTxOpen(true)
-        }
-      })
-      .catch(e => {
-        console.error(e.message || e)
-      })
+  const onClaimHandler = useCallback(
+    (pid: number) => {
+      onClaim(pid)
+        .then((tx) => {
+          if (tx) {
+            setTxHash(tx)
+            setTxOpen(true)
+          }
+        })
+        .catch((e) => {
+          console.error(e.message || e)
+        })
       // .finally(() => setTxOpen(false))
-  }, [onClaim])
+    },
+    [onClaim]
+  )
 
   return (
     <ContentHolder>
@@ -279,82 +301,72 @@ const InvestorsAccount = () => {
         </StyledHeading>
 
         <AppBody>
-           {
-            balanceAccount === undefined
-            ? <Dots>Loading</Dots>
-              : balanceAccount.toNumber() <= 0
-             ? <NoNFT>
-                <NoNFTText>You don&apos;t have NFT tokens yet, but you can purchase them on the page</NoNFTText>
-                <Button href='https://public.alium.finance/' target="_blank" as="a">Buy NFT</Button>
-              </NoNFT>
-              : <>
-                <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
-                  Private Pool Cards
-                </StyledHeading>
-                <NftCardsContainer>
-                  {privateCardsWithCount.map((card) => {
-                      if (card.cardsCount > 0) {
-                        return( <NftAccountCard
-                          key={`cardListPrivate-${card.id}`}
-                          card={card}
-                        />)
-                      }
-                      return null
-                    }
-
-                  )}
-                </NftCardsContainer>
-                <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
-                  Strategical Pool Cards
-                </StyledHeading>
-                <NftCardsContainer>
-                  {strategicalCardsWithCount.map((card) => {
-                    if (card.cardsCount > 0) {
-                      return( <NftAccountCard
-                        key={`cardListStrategical-${card.id}`}
-                        card={card}
-                      />)
-                    }
-                    return null
-                  })}
-                </NftCardsContainer>
-                <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
-                  Public Pool Cards
-                </StyledHeading>
-                <NftCardsContainer>
-                  {publicCardsWithCount.map((card) => {
-                    if (card.cardsCount > 0) {
-                      return( <NftAccountCard
-                        key={`cardListPublic-${card.id}`}
-                        card={card}
-                      />)
-                    }
-                    return null
-                  })}
-
-                </NftCardsContainer>
-                <HelperDiv>
-                  <span>*</span>
-                  Please note that converting Private NFTs to ALMs is an irreversible action.
-                </HelperDiv>
-                <NftNavTabs />
-                <NftTable>
-                  <NftPoolsHeader />
-                  <NftTableContent>
-                    {
-                      poolsWithData.map((pool) => (
-                        <NftPoolCard
-                          key={`Pool-Nft-${pool.id}`}
-                          pool={pool} onClaim={onClaimHandler}
-                          pending={Boolean(pendingClaimResult?.[0] === pool.id)}
-                        />
-                      ))
-                    }
-                  </NftTableContent>
-                </NftTable>
-              </>
-           }
-
+          {!account ? (
+            'Please connect to your wallet first.'
+          ) : balanceAccount === undefined || accountTotalBalance === -1 ? (
+            <Dots>Loading</Dots>
+          ) : accountTotalBalance === 0 ? (
+            <NoNFT>
+              <NoNFTText>You don&apos;t have NFT tokens yet, but you can purchase them on the page</NoNFTText>
+              <Button href="https://public.alium.finance/" target="_blank" as="a">
+                Buy NFT
+              </Button>
+            </NoNFT>
+          ) : (
+            <>
+              <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+                Private Pool Cards
+              </StyledHeading>
+              <NftCardsContainer>
+                {privateCardsWithCount.map((card) => {
+                  if (card.cardsCount > 0) {
+                    return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
+                  }
+                  return null
+                })}
+              </NftCardsContainer>
+              <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+                Strategical Pool Cards
+              </StyledHeading>
+              <NftCardsContainer>
+                {strategicalCardsWithCount.map((card) => {
+                  if (card.cardsCount > 0) {
+                    return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
+                  }
+                  return null
+                })}
+              </NftCardsContainer>
+              <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+                Public Pool Cards
+              </StyledHeading>
+              <NftCardsContainer>
+                {publicCardsWithCount.map((card) => {
+                  if (card.cardsCount > 0) {
+                    return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
+                  }
+                  return null
+                })}
+              </NftCardsContainer>
+              <HelperDiv>
+                <span>*</span>
+                Please note that converting Private NFTs to ALMs is an irreversible action.
+              </HelperDiv>
+              <NftNavTabs />
+              <NftTable>
+                <NftPoolsHeader />
+                <NftTableContent>
+                  {poolsWithData.map((pool) => (
+                    <NftPoolCard
+                      key={`Pool-Nft-${pool.id}`}
+                      pool={pool}
+                      onClaim={onClaimHandler}
+                      pending={Boolean(pendingClaimResult?.[0] === pool.id)}
+                    />
+                  ))}
+                </NftTableContent>
+              </NftTable>
+            </>
+          )}
         </AppBody>
       </CardWrapper>
     </ContentHolder>

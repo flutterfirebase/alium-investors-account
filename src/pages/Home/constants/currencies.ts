@@ -1,4 +1,6 @@
-const ChainId: any = process.env.REACT_APP_CHAIN_ID
+import { getChainId } from '@alium-official/uikit'
+
+const chainId = getChainId()
 
 const currencies = {
   '97': {
@@ -101,4 +103,4 @@ const currencies = {
   },
 }
 
-export default currencies[ChainId]
+export default currencies[chainId]

@@ -99,11 +99,10 @@ const StyledLabel = styled.p`
 
 const StyledOptionsContainer = styled.div`
   box-sizing: border-box;
-  border-radius: 6px;
   position: relative;
   margin-top: 48px;
   background: white;
-  box-shadow: 0px 6px 12px rgba(185, 189, 208, 0.4);
+  box-shadow: 0 6px 12px rgba(185, 189, 208, 0.4);
   border-radius: 6px;
   @media screen and (max-width: 790px) {
     position: fixed;

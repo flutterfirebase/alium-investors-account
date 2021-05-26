@@ -1,7 +1,8 @@
-import { AbiItem } from 'web3-utils'
+import { getChainId } from '@alium-official/uikit'
 import { Interface } from '@ethersproject/abi'
-import { getWeb3NoAccount } from 'utils/web3'
 import { MULTICALL_FUNC_ABI, MULTICALL_FUNC_NETWORKS } from 'constants/multicall'
+import { getWeb3NoAccount } from 'utils/web3'
+import { AbiItem } from 'web3-utils'
 
 interface Call {
   address: string // Address of the contract
@@ -11,7 +12,7 @@ interface Call {
 
 const multicall = async (abi: any[], calls: Call[]) => {
   const web3 = getWeb3NoAccount()
-  const chainId = process.env.REACT_APP_CHAIN_ID ?? 97
+  const chainId = getChainId()
   const multi = new web3.eth.Contract(MULTICALL_FUNC_ABI as unknown as AbiItem, MULTICALL_FUNC_NETWORKS[chainId])
   const itf = new Interface(abi)
 
