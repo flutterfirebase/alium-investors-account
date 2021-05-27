@@ -166,12 +166,13 @@ const InvestorsAccount = () => {
 
   const { t } = useTranslation()
 
-  const { poolsWithData, onClaim, pendingClaimResult } = useNftPoolHook()
+  const { poolsWithData, onClaim, pendingClaimResult, filterPools } = useNftPoolHook()
   const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = useCollectionNft()
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
   const [accountTotalBalance, setAccountTotalBalance] = useState(-1)
+  // console.log(balanceAccount, accountTotalBalance)
 
   const cbAccountTotalBalance = useCallback(() => {
     ;(async () => {
@@ -277,7 +278,7 @@ const InvestorsAccount = () => {
                 fontSize: '16px',
                 lineHeight: '22px',
                 letterSpacing: '0.3px',
-                color: '#0B1359',
+                color: '#0B1359'
               }}
             >
               {t('pleaseUnlockWallet')}
@@ -314,28 +315,41 @@ const InvestorsAccount = () => {
             </NoNFT>
           ) : (
             <>
-              <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
-                Private Pool Cards
-              </StyledHeading>
-              <NftCardsContainer>
-                {privateCardsWithCount.map((card) => {
-                  if (card.cardsCount > 0) {
-                    return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
-                  }
-                  return null
-                })}
-              </NftCardsContainer>
-              <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
-                Strategical Pool Cards
-              </StyledHeading>
-              <NftCardsContainer>
-                {strategicalCardsWithCount.map((card) => {
-                  if (card.cardsCount > 0) {
-                    return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
-                  }
-                  return null
-                })}
-              </NftCardsContainer>
+              {
+                privateCardsWithCount.length > 0 &&
+                <>
+                  <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+                    Private Pool Cards
+                  </StyledHeading>
+                  <NftCardsContainer>
+                    {privateCardsWithCount.map((card) => {
+                      if (card.cardsCount > 0) {
+                        return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
+                      }
+                      return null
+                    })}
+                  </NftCardsContainer>
+                </>
+              }
+              {
+                strategicalCardsWithCount.length > 0 &&
+                <>
+                  <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+                    Strategical Pool Cards
+                  </StyledHeading>
+                  <NftCardsContainer>
+                    {strategicalCardsWithCount.map((card) => {
+                      if (card.cardsCount > 0) {
+                        return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
+                      }
+                      return null
+                    })}
+                  </NftCardsContainer>
+                </>
+              }
+              {
+
+              }
               <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                 Public Pool Cards
               </StyledHeading>
@@ -355,7 +369,7 @@ const InvestorsAccount = () => {
               <NftTable>
                 <NftPoolsHeader />
                 <NftTableContent>
-                  {poolsWithData.map((pool) => (
+                  {poolsWithData.filter(filterPools).map((pool) => (
                     <NftPoolCard
                       key={`Pool-Nft-${pool.id}`}
                       pool={pool}

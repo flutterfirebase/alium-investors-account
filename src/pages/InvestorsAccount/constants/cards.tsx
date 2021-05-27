@@ -31,7 +31,7 @@ export type CardType = {
 export const cardListPublic: CardType[] = [
   {
     id: 6,
-    img: nft1,
+    img: nft5,
     headline: 'Strategical Partnership',
     cards: '0',
     cost: '100 000 BUSD',
@@ -42,7 +42,7 @@ export const cardListPublic: CardType[] = [
   },
   {
     id: 7,
-    img: nft2,
+    img: nft4,
     headline: 'Strategical Partnership',
     cards: '0',
     cost: '100 000 BUSD',
@@ -64,7 +64,7 @@ export const cardListPublic: CardType[] = [
   },
   {
     id: 9,
-    img: nft4,
+    img: nft2,
     headline: 'Strategical Partnership',
     cards: '0',
     cost: '100 000 BUSD',
@@ -75,7 +75,7 @@ export const cardListPublic: CardType[] = [
   },
   {
     id: 10,
-    img: nft5,
+    img: nft1,
     headline: 'Strategical Partnership',
     cards: '0',
     cost: '100 000 BUSD',
@@ -83,7 +83,7 @@ export const cardListPublic: CardType[] = [
     price: 100000,
     privateCall: false,
     cardsCount: 0
-  },
+  }
 ]
 export const cardListStrategical: CardType[] = [
   {

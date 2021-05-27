@@ -1,4 +1,4 @@
-import { Button, Flex, Input } from '@alium-official/uikit'
+import { Button, Flex, Input, Text } from '@alium-official/uikit'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Modal from '../../../../components/Modal'
@@ -81,13 +81,30 @@ const Label = styled.label`
   }
 `
 
+const Select = styled.select`
+  background-color: none;
+  border: 1px solid #d2d6e5;
+  border-radius: 6px;
+  box-shadow: inset 0px 2px 2px -1px rgb(74 74 104 / 10%);
+  color: #0B1359;
+  display: block;
+  font-size: 16px;
+  height: 48px;
+  outline: 0;
+  padding: 0 16px;
+  width: 100%;
+`
+
+const Option = styled.option`
+`
+
 type PropsType = {
   card: CardType
 }
 
 const NftAccountCard = ({ card }: PropsType) => {
   const isMp4 = card.img.split('.')[1] === 'mp4'
-  const [value, setValue] = useState<number | string>('')
+  const [value, setValue] = useState<number | string>('-')
   const [isTxOpen, setTxOpen] = useState(false)
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const { chainId } = useActiveWeb3React()
@@ -95,7 +112,7 @@ const NftAccountCard = ({ card }: PropsType) => {
     setTxOpen(false)
   }
 
-  const { totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert } = useNftAccountCard(
+  const { totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert, cardIds } = useNftAccountCard(
     value,
     card.id
   )
@@ -155,8 +172,21 @@ const NftAccountCard = ({ card }: PropsType) => {
           <Image src={card.img} alt="nft-preview" className="nft-preview" />
         )}
         <InputWrapper>
-          <Label>Put you NFT id from your collection</Label>
-          <Input type="number" scale="lg" step={1} min={1} placeholder="1" value={value} onChange={handleInput} />
+           <Label>Select you NFT id</Label>
+          {/* <Input type="number" scale="lg" step={1} min={1} placeholder="1" value={value} onChange={handleInput} /> */}
+          <Select
+            value={value}
+            onChange={handleInput}
+          >
+            <Option value="-">-</Option>
+            {
+              cardIds.map((cardId) => {
+                return (
+                  <Option value={cardId}>{cardId}</Option>
+                )
+              })
+            }
+          </Select>
         </InputWrapper>
         <ButtonFlex>
           {(card.privateCall && isApprovedPrivate) || (!card.privateCall && isApprovedPublic) ? (
