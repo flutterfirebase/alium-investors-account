@@ -7,7 +7,7 @@ import CardRow from './CardRow'
 interface NftCollectionCardProps {
   pool: PoolsTypes
   selectedCard: [number, number] | null
-  onSelectCard: (pid: number, cid: number) => void
+  onSelectCard: (pid: number, cid: number, from: number) => void
 }
 
 const NftCollectionCardWrap = styled(Flex)`
