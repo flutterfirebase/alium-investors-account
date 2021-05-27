@@ -11,6 +11,7 @@ const MobilePopupWrapper = styled.div<{ height: string | number }>`
   height: ${({ height }) => height};
   margin: ${({ height }) => (height ? '0 auto;' : 0)};
   margin-bottom: ${({ height }) => (height ? '20px' : 0)}};
+  margin-top: ${({ height }) => (height ? '100px' : 0)}};
 
   ${({ theme }) => theme.mediaQueries.sm} {
     display: block;
@@ -31,7 +32,7 @@ const MobilePopupInner = styled.div`
 
 const FixedPopupColumn = styled(AutoColumn)`
   position: fixed;
-  top: 64px;
+  top: 68px;
   right: 1rem;
   max-width: 355px !important;
   width: 100%;

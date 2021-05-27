@@ -339,10 +339,7 @@ const InvestorsAccount = () => {
                   </StyledHeading>
                   <NftCardsContainer>
                     {privateCardsWithCount.map((card) => {
-                      if (card.cardsCount > 0) {
-                        return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
-                      }
-                      return null
+                      return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
                     })}
                   </NftCardsContainer>
                 </>
@@ -355,28 +352,24 @@ const InvestorsAccount = () => {
                   </StyledHeading>
                   <NftCardsContainer>
                     {strategicalCardsWithCount.map((card) => {
-                      if (card.cardsCount > 0) {
-                        return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
-                      }
-                      return null
+                      return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
                     })}
                   </NftCardsContainer>
                 </>
               }
               {
-
+                publicCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
+                <>
+                  <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
+                    Public Pool Cards
+                  </StyledHeading>
+                  <NftCardsContainer>
+                    {publicCardsWithCount.filter((pool) => pool.cardsCount > 0).map((card) => {
+                      return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
+                    })}
+                  </NftCardsContainer>
+                </>
               }
-              <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
-                Public Pool Cards
-              </StyledHeading>
-              <NftCardsContainer>
-                {publicCardsWithCount.filter((pool) => pool.cardsCount > 0).map((card) => {
-                  if (card.cardsCount > 0) {
-                    return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
-                  }
-                  return null
-                })}
-              </NftCardsContainer>
               <HelperDiv>
                 <span>*</span>
                 Please note that converting Private NFTs to ALMs is an irreversible action.
