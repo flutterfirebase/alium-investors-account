@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Contract } from '@ethersproject/contracts'
 import { BigNumber, ethers } from 'ethers'
-import pools from '../pages/InvestorsAccount/constants/pools'
+import pools, { PoolsTypes } from '../pages/InvestorsAccount/constants/pools'
 import { useSingleContractMultipleData } from '../state/multicall/hooks'
 import { useActiveWeb3React } from './index'
 import { getContract } from '../utils'
@@ -117,10 +117,20 @@ export default function useNftPool() {
     return null
   }
 
+  const filterPools = (pool: PoolsTypes) => {
+    let condition: boolean
+    condition = pool.claimed?.toString() !== '0'
+    condition = condition || pool.locked?.toString() !== '0'
+    condition = condition || pool.unlocked?.toString() !== '0'
+    condition = condition || pool.total?.toString() !== '0'
+    return condition
+  }
+
   return {
     poolsWithData,
     onClaim,
-    pendingClaimResult
+    pendingClaimResult,
+    filterPools
   }
 
 }

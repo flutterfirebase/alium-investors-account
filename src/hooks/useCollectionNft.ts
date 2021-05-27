@@ -112,6 +112,7 @@ export default function useCollectionNft() {
     })
   }, [tokenTypesWithTokenId])
   return {
+    tokenTypesWithTokenId,
     balanceAccount,
     privateCardsWithCount,
     publicCardsWithCount,

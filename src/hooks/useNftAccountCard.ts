@@ -9,6 +9,7 @@ import {
 } from '../pages/InvestorsAccount/constants'
 import { useSingleCallResult } from '../state/multicall/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import useCollectionNft from './useCollectionNft'
 
 export default function useNftAccountCard(tokenId: number | string, cardId: number) {
   const [collectibleContract, setCollectibleContract] = useState<Contract | null>(null)
@@ -16,6 +17,11 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
   const [publicExchangerContract, setPublicExchangerContract] = useState<Contract | null>(null)
   const [pending, setPending] = useState<boolean>(false)
   const { account, library } = useActiveWeb3React()
+  const {tokenTypesWithTokenId} = useCollectionNft()
+
+  const cardIds: Array<string | number> = useMemo(() => {
+    return tokenTypesWithTokenId[cardId] || []
+  }, [cardId, tokenTypesWithTokenId])
 
   useEffect(() => {
     if (library && account) {
@@ -28,7 +34,7 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
     }
   }, [library, account])
   const addTransaction = useTransactionAdder()
-  const inputs = useMemo(() => tokenId !== '' ? [tokenId] : [1], [tokenId])
+  const inputs = useMemo(() => tokenId !== '' && tokenId !== '-' ? [tokenId] : [1], [tokenId])
   const ownerOfToken = useSingleCallResult(collectibleContract, 'ownerOf', inputs).result
   const tokenType = useSingleCallResult(collectibleContract, 'getTokenType', inputs).result?.[0].toString()
   const isApprovedPublic = useSingleCallResult(collectibleContract, 'isApprovedForAll', [account || undefined, NFT_EXCHANGER_PUBLIC]).result?.[0]
@@ -85,7 +91,7 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
     error = "Invalid Pool ID"
   }
 
-  if (tokenId === '') {
+  if (tokenId === '' || tokenId === '-') {
     error = 'Enter NFT ID'
   }
 
@@ -96,6 +102,7 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
     totalSupply: totalSupply?.[0]?.toString(),
     error,
     pending,
-    onConvert
+    onConvert,
+    cardIds
   }
 }

@@ -1,5 +1,5 @@
 import { Flex, Text } from '@alium-official/uikit'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import useCollectionNft from '../../hooks/useCollectionNft'
 import AppBody from '../AppBody'
@@ -80,8 +80,17 @@ const NftTableContent = styled(Flex)`
 
 function Collection() {
   const [selectedCard, setSelectedCard] = useState<[number, number] | null>(null)
+  const selectImage = useRef<HTMLDivElement>(null)
 
-  const onSelectCard = (pid, cid) => {
+  const onSelectCard = (pid, cid, from) => {
+    if (selectImage) {
+      const toTop = selectImage.current?.offsetHeight || 0
+      const offsetPosition = from - toTop;
+      window.scrollBy({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
     setSelectedCard([pid, cid])
   }
 
@@ -89,13 +98,13 @@ function Collection() {
 
   return (
     <ContentHolder>
-      <CardWrapper>
+      <CardWrapper ref={selectImage} >
         <Text fontSize="48px" style={{ fontWeight: 700, marginBottom: '32px' }}>
           Your NFT deck
         </Text>
         <AppBody>
           <SelectedNftRow>
-            <SelectedNftWrapper>
+            <SelectedNftWrapper >
               {selectedCard && (
                 <>
                   <Image src={cardImage} alt="nft-preview" className="nft-preview" />
@@ -109,7 +118,7 @@ function Collection() {
           <NftTable>
             <NftCollectionHeader />
             <NftTableContent>
-              {poolsWithCards.map((pool) => (
+              {poolsWithCards.filter((pool) => pool.cards?.length > 0).map((pool) => (
                 <NftCollectionCard
                   key={`Pool-Nft-${pool.id}`}
                   selectedCard={selectedCard}

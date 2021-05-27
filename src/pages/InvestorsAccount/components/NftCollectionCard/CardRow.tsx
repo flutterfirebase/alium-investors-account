@@ -10,7 +10,7 @@ import { PoolsTypes } from '../../constants/pools'
 interface CardRowProps {
   pool: PoolsTypes;
   selectedCard: [number, number] | null;
-  onSelectCard: (pid: number, cid: number) => void;
+  onSelectCard: (pid: number, cid: number, from: number) => void;
   cards: number[];
 }
 
@@ -91,8 +91,8 @@ function CardRow({ selectedCard, onSelectCard, cards, pool }: CardRowProps) {
             imgSrc = card1One
           }
           return (
-            <Card onClick={() => {
-              onSelectCard(pool.id, card)
+            <Card onClick={(el: any) => {
+              onSelectCard(pool.id, card, el.target.getBoundingClientRect().top)
             }}
                   active={selectedCard?.[0] === pool.id && selectedCard?.[1] ===  card}
                   margin={margin} index={id}

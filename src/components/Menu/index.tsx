@@ -1,5 +1,5 @@
 import { ETHER } from '@alium-official/sdk'
-import { externalLinks, Menu as UikitMenu, MenuEntry } from '@alium-official/uikit'
+import { externalLinks, getMainDomain, Menu as UikitMenu, MenuEntry } from '@alium-official/uikit'
 import { useWeb3React } from '@web3-react/core'
 import useAuth from 'hooks/useAuth'
 import useTheme from 'hooks/useTheme'
@@ -11,34 +11,30 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
   const { t } = useTranslation()
 
   const links: MenuEntry[] = [
-    {
-      label: t('Home'),
-      icon: 'HomeIcon',
-      href: process.env.REACT_APP_HOME_URL,
-    },
+    { label: t('Home'), icon: 'HomeIcon', href: `https://${getMainDomain()}` },
     {
       label: 'Trade',
       icon: 'TradeIcon',
       items: [
-        { label: 'Exchange', href: process.env.REACT_APP_EXCHANGE_URL },
-        { label: 'Liquidity', href: process.env.REACT_APP_LIQUIDITY_URL },
+        { label: 'Exchange', href: `https://exchange.${getMainDomain()}` },
+        { label: 'Liquidity', href: `https://exchange.${getMainDomain()}/pool` },
       ],
     },
+    { label: 'Token holder area', icon: 'PrivateRoundIcon', href: `https://account.${getMainDomain()}` },
     // {
     //   label: 'Analytics',
     //   icon: 'InfoIcon',
     //   items: [
-    //     { label: 'Overview', href: process.env.REACT_APP_INFO_URL },
-    //     { label: 'Tokens', href: `${process.env.REACT_APP_INFO_URL}/tokens` },
-    //     { label: 'Pairs', href: `${process.env.REACT_APP_INFO_URL}/pairs` },
+    //     { label: 'Overview', href: `https://info.${getMainDomain()}` },
+    //     { label: 'Tokens', href: `https://info.${getMainDomain()}/tokens` },
+    //     { label: 'Pairs', href: `https://info.${getMainDomain()}/pairs` },
     //   ],
     // },
-    { label: 'Token holder area', icon: 'PrivateRoundIcon', href: '/' },
     {
       label: 'More',
       icon: 'MoreIcon',
       items: [
-        { label: 'Audits', href: `${process.env.REACT_APP_HOME_URL}/audits` },
+        { label: 'Audits', href: `https://${getMainDomain()}/audits` },
         // { label: 'Voting', href: 'https://voting.dev.alium.finance' },
         { label: 'GitHub', href: externalLinks.github },
         { label: 'Docs', href: 'https://aliumswap.gitbook.io/alium-finance/' },
