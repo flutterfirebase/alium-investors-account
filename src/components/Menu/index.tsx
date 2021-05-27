@@ -11,11 +11,7 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
   const { t } = useTranslation()
 
   const links: MenuEntry[] = [
-    {
-      label: t('Home'),
-      icon: 'HomeIcon',
-      href: `https://${getMainDomain()}`,
-    },
+    { label: t('Home'), icon: 'HomeIcon', href: `https://${getMainDomain()}` },
     {
       label: 'Trade',
       icon: 'TradeIcon',
@@ -24,17 +20,16 @@ const Menu: React.FC<{ loginBlockVisible?: boolean }> = ({ loginBlockVisible, ..
         { label: 'Liquidity', href: `https://exchange.${getMainDomain()}/pool` },
       ],
     },
+    { label: 'Token holder area', icon: 'PrivateRoundIcon', href: `https://account.${getMainDomain()}` },
     // {
     //   label: 'Analytics',
     //   icon: 'InfoIcon',
     //   items: [
-    //     { label: 'Overview', href: process.env.REACT_APP_INFO_URL },
-    //     { label: 'Tokens', href: `${process.env.REACT_APP_INFO_URL}/tokens` },
-    //     { label: 'Pairs', href: `${process.env.REACT_APP_INFO_URL}/pairs` },
+    //     { label: 'Overview', href: `https://info.${getMainDomain()}` },
+    //     { label: 'Tokens', href: `https://info.${getMainDomain()}/tokens` },
+    //     { label: 'Pairs', href: `https://info.${getMainDomain()}/pairs` },
     //   ],
     // },
-    { label: 'Token holder area', icon: 'PrivateRoundIcon', href: '/' },
-
     {
       label: 'More',
       icon: 'MoreIcon',
