@@ -158,6 +158,16 @@ const NoNFTText = styled(Flex)`
   color: #000;
   margin-bottom: 16px;
 `
+// Helpers
+let claimProcessTitemout
+
+const claimTimeout = () => {
+  if (!claimProcessTitemout) {
+    setTimeout(() => {
+      claimProcessTitemout = undefined
+    }, 10000)
+  }
+}
 
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
@@ -208,7 +218,7 @@ const InvestorsAccount = () => {
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
   const transactions: any = chainId ? state[chainId] ?? {} : {}
 
-  if (txHash !== '' && transactions[txHash]?.receipt) {
+  if (txHash !== '' && transactions[txHash]?.receipt && !claimProcessTitemout) {
     setTempTxHash(txHash)
     setTxHash('')
     setTxOpen(false)
@@ -247,6 +257,7 @@ const InvestorsAccount = () => {
           if (tx) {
             setTxHash(tx)
             setTxOpen(true)
+            claimTimeout()
           }
         })
         .catch((e) => {
@@ -290,7 +301,12 @@ const InvestorsAccount = () => {
           <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
         </Modal>
 
-        <Modal isOpen={isSucceedPopupVisible} onDismiss={handleSucceedModalClose} maxHeight={90} padding="24px">
+        <Modal
+          isOpen={isSucceedPopupVisible && !claimProcessTitemout}
+          onDismiss={handleSucceedModalClose}
+          maxHeight={90}
+          padding="24px"
+        >
           <TransactionSucceedContent hash={succeedHash} onDismiss={handleSucceedModalClose} />
         </Modal>
 
