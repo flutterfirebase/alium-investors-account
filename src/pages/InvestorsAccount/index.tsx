@@ -332,7 +332,7 @@ const InvestorsAccount = () => {
           ) : (
             <>
               {
-                privateCardsWithCount.length > 0 &&
+                privateCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Private Pool Cards
@@ -348,7 +348,7 @@ const InvestorsAccount = () => {
                 </>
               }
               {
-                strategicalCardsWithCount.length > 0 &&
+                strategicalCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Strategical Pool Cards
@@ -370,7 +370,7 @@ const InvestorsAccount = () => {
                 Public Pool Cards
               </StyledHeading>
               <NftCardsContainer>
-                {publicCardsWithCount.map((card) => {
+                {publicCardsWithCount.filter((pool) => pool.cardsCount > 0).map((card) => {
                   if (card.cardsCount > 0) {
                     return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
                   }
