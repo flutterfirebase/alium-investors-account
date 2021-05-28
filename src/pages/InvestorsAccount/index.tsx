@@ -202,7 +202,6 @@ const InvestorsAccount = () => {
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const [tempTxHash, setTempTxHash] = useState('')
   const [isTxOpen, setTxOpen] = useState(false)
-  // const [bought, setBought] = useState(false);
 
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
   const transactions: any = chainId ? state[chainId] ?? {} : {}
