@@ -182,7 +182,6 @@ const InvestorsAccount = () => {
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
   const [accountTotalBalance, setAccountTotalBalance] = useState(-1)
-  // console.log(balanceAccount, accountTotalBalance)
 
   const cbAccountTotalBalance = useCallback(() => {
     ;(async () => {
@@ -322,7 +321,7 @@ const InvestorsAccount = () => {
             'Please connect to your wallet first.'
           ) : balanceAccount === undefined || accountTotalBalance === -1 ? (
             <Dots>Loading</Dots>
-          ) : accountTotalBalance === 0 ? (
+          ) : accountTotalBalance === 0 && balanceAccount?.toString() === '0' ? (
             <NoNFT>
               <NoNFTText>You don&apos;t have NFT tokens yet, but you can purchase them on the page</NoNFTText>
               <Button href={`https://public.${getMainDomain()}`} target="_blank" as="a">
