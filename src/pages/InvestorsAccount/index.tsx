@@ -167,13 +167,8 @@ const InvestorsAccount = () => {
 
   const { t } = useTranslation()
 
-  const nftPoolHook = useNftPoolHook()
-  console.log('!!!!!!!! nftPoolHook', nftPoolHook)
-  const { poolsWithData, onClaim, pendingClaimResult, filterPools } = nftPoolHook
-
-  const collectionNft = useCollectionNft()
-  console.log('!!!!!!!! collectionNft', collectionNft)
-  const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = collectionNft
+  const { poolsWithData, onClaim, pendingClaimResult, filterPools } = useNftPoolHook()
+  const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = useCollectionNft()
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
