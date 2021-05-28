@@ -155,10 +155,6 @@ const NftAccountCard = ({ card }: PropsType) => {
       })
   }, [card.privateCall, onConvert, value])
 
-  if (cardIds.length === 0) {
-    return null
-  }
-
   return (
     <NFTWrapper>
       <Modal isOpen={isTxOpen} onDismiss={handleTxClose} maxHeight={90} padding="24px" isTransparancy>
