@@ -213,12 +213,6 @@ const InvestorsAccount = () => {
     setTxOpen(false)
   }
 
-  // const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  // const handleClose = () => {
-  // }
-
   const handleTxClose = () => {
     setTxOpen(false)
   }
