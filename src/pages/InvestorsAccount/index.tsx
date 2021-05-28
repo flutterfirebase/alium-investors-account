@@ -251,7 +251,6 @@ const InvestorsAccount = () => {
         .catch((e) => {
           console.error(e.message || e)
         })
-      // .finally(() => setTxOpen(false))
     },
     [onClaim]
   )
