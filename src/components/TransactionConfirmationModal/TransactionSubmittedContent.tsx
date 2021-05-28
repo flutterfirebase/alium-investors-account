@@ -1,5 +1,5 @@
 import { ChainId } from '@alium-official/sdk'
-import { Button, LinkExternal, Spinner } from '@alium-official/uikit'
+import { Button, LinkExternal } from '@alium-official/uikit'
 import React, { useContext } from 'react'
 import { ArrowUpCircle } from 'react-feather'
 import { useTranslation } from 'react-i18next'
