@@ -145,6 +145,8 @@ const getTimeFormat = (timestamp: string | undefined) => {
 }
 
 function NftPoolCard({ pool, onClaim, pending }: NftPoolCardProps) {
+  const isUnlocked = !!Number(ethers.utils.formatEther(pool.unlocked || BigNumber.from(0)))
+
   return (
     <NftPoolCardWrap>
       <FieldPool maxWidth="310px">
@@ -173,16 +175,18 @@ function NftPoolCard({ pool, onClaim, pending }: NftPoolCardProps) {
         <FieldName>Claimed</FieldName>
         <FieldValue>
           {ethers.utils.formatEther(pool.claimed || BigNumber.from(0))}
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={pending}
-            onClick={() => {
-              onClaim(pool.id)
-            }}
-          >
-            {pending ? 'Wait' : 'Claim'}
-          </Button>
+          {isUnlocked && (
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={pending}
+              onClick={() => {
+                onClaim(pool.id)
+              }}
+            >
+              {pending ? 'Wait' : 'Claim'}
+            </Button>
+          )}
         </FieldValue>
       </FieldClaim>
       <Field maxWidth="140px">

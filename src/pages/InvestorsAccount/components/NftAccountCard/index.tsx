@@ -43,6 +43,7 @@ const ButtonFlex = styled(Flex)`
   margin-top: 16px;
   box-sizing: border-box;
   width: 100%;
+
   button {
     width: 100%;
   }
@@ -105,14 +106,17 @@ const NftAccountCard = ({ card }: PropsType) => {
   const isMp4 = card.img.split('.')[1] === 'mp4'
   const [value, setValue] = useState<number | string>('-')
   const [isTxOpen, setTxOpen] = useState(false)
+  // const [isApproveTransactionLoading, setIsApproveTransactionLoading] = useState(false)
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const { chainId } = useActiveWeb3React()
   const handleTxClose = () => {
     setTxOpen(false)
   }
 
+  const nftAccountCard = useNftAccountCard(value, card.id)
+
   const { totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert, cardIds } =
-    useNftAccountCard(value, card.id)
+    nftAccountCard
 
   const limitId: number = useMemo(() => {
     return totalSupply ? parseInt(totalSupply) : 1
@@ -130,6 +134,7 @@ const NftAccountCard = ({ card }: PropsType) => {
   )
 
   const onApproveHandler = useCallback(() => {
+    // setIsApproveTransactionLoading(true)
     onApprove(card.privateCall)
       .then((tx) => {
         if (tx) {
@@ -138,8 +143,9 @@ const NftAccountCard = ({ card }: PropsType) => {
         }
       })
       .catch((e) => {
-        console.error(e.message || e)
+        console.error('onApproveHandler', e.message || e)
       })
+    // .finally(() => setIsApproveTransactionLoading(false))
   }, [card.privateCall, onApprove])
 
   const onConvertHandler = useCallback(() => {
@@ -151,7 +157,7 @@ const NftAccountCard = ({ card }: PropsType) => {
         }
       })
       .catch((e) => {
-        console.error(e.message || e)
+        console.error('onConvertHandler', e.message || e)
       })
   }, [card.privateCall, onConvert, value])
 
@@ -185,6 +191,7 @@ const NftAccountCard = ({ card }: PropsType) => {
             </Button>
           ) : (
             <Button onClick={onApproveHandler} disabled={pending}>
+              {/* {pending || isApproveTransactionLoading ? <Dots>Approving</Dots> : 'Approve'} */}
               {pending ? <Dots>Approving</Dots> : 'Approve'}
             </Button>
           )}
