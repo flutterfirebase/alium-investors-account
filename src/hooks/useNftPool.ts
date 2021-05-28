@@ -1,18 +1,20 @@
-import { useEffect, useMemo, useState } from 'react'
 import { Contract } from '@ethersproject/contracts'
 import { BigNumber, ethers } from 'ethers'
-import pools, { PoolsTypes } from '../pages/InvestorsAccount/constants/pools'
-import { useSingleContractMultipleData } from '../state/multicall/hooks'
-import { useActiveWeb3React } from './index'
-import { getContract } from '../utils'
+import { useEffect, useMemo, useState } from 'react'
 import {
   AliumVestingAbi,
-  NFT_EXCHANGER_PRIVATE, NFT_EXCHANGER_PUBLIC,
+  NFTPrivateExchangerAbi,
+  NFTPublicExchangerAbi,
+  NFT_EXCHANGER_PRIVATE,
+  NFT_EXCHANGER_PUBLIC,
   NFT_VESTING,
-  NFTPrivateExchangerAbi, NFTPublicExchangerAbi
 } from '../pages/InvestorsAccount/constants'
-import { useTransactionAdder } from '../state/transactions/hooks'
 import { cardListPrivate, cardListPublic, cardListStrategical } from '../pages/InvestorsAccount/constants/cards'
+import pools, { PoolsTypes } from '../pages/InvestorsAccount/constants/pools'
+import { useSingleContractMultipleData } from '../state/multicall/hooks'
+import { useTransactionAdder } from '../state/transactions/hooks'
+import { getContract } from '../utils'
+import { useActiveWeb3React } from './index'
 
 export default function useNftPool() {
   const [vestingContract, setVestingContract] = useState<Contract | null>(null)
@@ -34,17 +36,17 @@ export default function useNftPool() {
   }, [library, account])
 
   const balanceInputs = useMemo(() => {
-    return pools.map((pool) => ([account || '', pool.id])).filter((input) => input[0] !== '')
+    return pools.map((pool) => [account || '', pool.id]).filter((input) => input[0] !== '')
   }, [account])
   const balancesResult = useSingleContractMultipleData(vestingContract, 'getBalanceOf', balanceInputs)
 
   const pendingRewardInputs = useMemo(() => {
-    return pools.map((pool) => ([account || '', pool.id])).filter((input) => input[0] !== '')
+    return pools.map((pool) => [account || '', pool.id]).filter((input) => input[0] !== '')
   }, [account])
   const pendingRewardResult = useSingleContractMultipleData(vestingContract, 'pendingReward', pendingRewardInputs)
 
   const nextDateInputs = useMemo(() => {
-    return pools.map((pool) => ([pool.id]))
+    return pools.map((pool) => [pool.id])
   }, [])
   const nextDateResult = useSingleContractMultipleData(vestingContract, 'getNextUnlockAt', nextDateInputs)
 
@@ -52,17 +54,21 @@ export default function useNftPool() {
   const publicPools = pools.filter((pool) => !pool.privateCall)
 
   const publicClaimRewardsInputs = useMemo(() => {
-    return publicPools.map((pool) => ([pool.id]))
+    return publicPools.map((pool) => [pool.id])
   }, [publicPools])
 
   const privateClaimRewardsInputs = useMemo(() => {
-    return privatePools.map((pool) => ([pool.id]))
+    return privatePools.map((pool) => [pool.id])
   }, [privatePools])
 
   const publicClaimRewards = useSingleContractMultipleData(publicExchangerContract, 'rewards', publicClaimRewardsInputs)
-  const privateClaimRewards = useSingleContractMultipleData(privateExchangerContract, 'rewards', privateClaimRewardsInputs)
+  const privateClaimRewards = useSingleContractMultipleData(
+    privateExchangerContract,
+    'rewards',
+    privateClaimRewardsInputs
+  )
 
-  const tokensRewards: {[poolId: string] : number| string} = useMemo(() => {
+  const tokensRewards: { [poolId: string]: number | string } = useMemo(() => {
     const newObj = {}
     publicPools.forEach((pool, id) => {
       newObj[pool.id] = ethers.utils.formatEther(publicClaimRewards[id]?.result?.[0] || BigNumber.from(0))
@@ -86,7 +92,7 @@ export default function useNftPool() {
         timestamp: nextDateResult[id]?.result?.[0].toString() || undefined,
       }
     })
-  } , [balancesResult, pendingRewardResult, nextDateResult])
+  }, [balancesResult, pendingRewardResult, nextDateResult])
 
   async function onClaim(pid): Promise<string | null> {
     if (vestingContract) {
@@ -95,7 +101,8 @@ export default function useNftPool() {
         return null
       }
       setPendingClaimResult([pid, true])
-      return vestingContract.claim(pid, { from: account })
+      return vestingContract
+        .claim(pid, { from: account })
         .then((response: any) => {
           addTransaction(response, {
             summary: 'boughtCards',
@@ -105,14 +112,12 @@ export default function useNftPool() {
               price: tokensRewards[pid],
             },
           })
-         return response.hash
+          return response.hash
         })
-        .catch(e => {
+        .catch((e) => {
           console.error(e.message || e)
         })
-        .finally(
-          setPendingClaimResult(null)
-        )
+        .finally(setPendingClaimResult(null))
     }
     return null
   }
@@ -130,7 +135,6 @@ export default function useNftPool() {
     poolsWithData,
     onClaim,
     pendingClaimResult,
-    filterPools
+    filterPools,
   }
-
 }

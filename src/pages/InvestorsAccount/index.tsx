@@ -161,13 +161,19 @@ const NoNFTText = styled(Flex)`
 
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
+  const [isTransactionLoading, setIsTransactionLoading] = useState(false)
   const [isHideModalOpen, setHideModalOpen] = useState(false)
   const { account, chainId, library } = useActiveWeb3React()
 
   const { t } = useTranslation()
 
-  const { poolsWithData, onClaim, pendingClaimResult, filterPools } = useNftPoolHook()
-  const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = useCollectionNft()
+  const nftPoolHook = useNftPoolHook()
+  console.log('!!!!!!!! nftPoolHook', nftPoolHook)
+  const { poolsWithData, onClaim, pendingClaimResult, filterPools } = nftPoolHook
+
+  const collectionNft = useCollectionNft()
+  console.log('!!!!!!!! collectionNft', collectionNft)
+  const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = collectionNft
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
@@ -230,10 +236,13 @@ const InvestorsAccount = () => {
     removePopup({ key: succeedHash })
     setTempTxHash('')
     setSucceedPopupVisible(false)
+
+    setIsTransactionLoading(false)
   }
 
   const onClaimHandler = useCallback(
     (pid: number) => {
+      setIsTransactionLoading(true)
       onClaim(pid)
         .then((tx) => {
           if (tx) {
@@ -366,6 +375,7 @@ const InvestorsAccount = () => {
                       pool={pool}
                       onClaim={onClaimHandler}
                       pending={Boolean(pendingClaimResult?.[0] === pool.id)}
+                      isLoading={isTransactionLoading}
                     />
                   ))}
                 </NftTableContent>

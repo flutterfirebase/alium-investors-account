@@ -1,6 +1,6 @@
 import { Button, Flex, Heading, Text } from '@alium-official/uikit'
 import { BigNumber, ethers } from 'ethers'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { PoolsTypes } from '../../constants/pools'
 
@@ -8,6 +8,7 @@ interface NftPoolCardProps {
   pool: PoolsTypes
   onClaim: (pid: number) => void
   pending: boolean
+  isLoading?: boolean
 }
 
 const NftPoolCardWrap = styled(Flex)`
@@ -19,9 +20,11 @@ const NftPoolCardWrap = styled(Flex)`
   width: 100%;
   padding: 24px;
   margin-bottom: 16px;
+
   &:last-child {
     margin-bottom: 0;
   }
+
   @media (max-width: 1024px) {
     flex-direction: column;
   }
@@ -38,9 +41,11 @@ const Field = styled(Flex)<{ maxWidth: string }>`
   width: 100%;
   max-width: ${({ maxWidth }) => maxWidth};
   flex: 1;
+
   &:last-child {
     justify-content: flex-end;
   }
+
   @media (max-width: 1024px) {
     max-width: unset;
     padding: 10px 16px;
@@ -49,9 +54,11 @@ const Field = styled(Flex)<{ maxWidth: string }>`
     &:nth-child(2n + 1) {
       background-color: #f4f5fa;
     }
+
     &:first-child {
       background-color: #fff;
     }
+
     &:last-child {
       justify-content: space-between;
     }
@@ -90,14 +97,17 @@ const FieldPool = styled(Field)`
 const FieldClaim = styled(Field)`
   align-items: center;
   align-content: center;
+
   & > div {
     width: 100%;
     justify-content: space-between;
     flex-direction: row-reverse;
   }
+
   button {
     margin-left: 8px;
   }
+
   @media (max-width: 1024px) {
     align-items: flex-start;
     justify-content: space-between;
@@ -105,6 +115,7 @@ const FieldClaim = styled(Field)`
       margin-top: 8px;
       margin-left: 0;
     }
+
     & > div {
       width: unset;
       flex-direction: column;
@@ -144,8 +155,27 @@ const getTimeFormat = (timestamp: string | undefined) => {
   return 'loading'
 }
 
-function NftPoolCard({ pool, onClaim, pending }: NftPoolCardProps) {
-  const isUnlocked = !!Number(ethers.utils.formatEther(pool.unlocked || BigNumber.from(0)))
+function NftPoolCard({ pool, onClaim, pending, isLoading }: NftPoolCardProps) {
+  const total = ethers.utils.formatEther(pool.total || BigNumber.from(0))
+  const locked = ethers.utils.formatEther(pool.locked || BigNumber.from(0))
+  const unlocked = ethers.utils.formatEther(pool.unlocked || BigNumber.from(0))
+  const claimed = ethers.utils.formatEther(pool.claimed || BigNumber.from(0))
+  const isUnlocked = !!Number(unlocked)
+  const [isLoadingLocal, setIsLoadingLocal] = useState(false)
+
+  const [initClaimed, setInitClaimed] = useState<string>('')
+
+  useEffect(() => {
+    if (isLoading === true) setIsLoadingLocal(true)
+  }, [isLoading])
+
+  useEffect(() => {
+    if (!initClaimed) setInitClaimed(claimed)
+  }, [claimed, initClaimed])
+
+  useEffect(() => {
+    if (initClaimed !== claimed) setIsLoadingLocal(false)
+  }, [claimed, initClaimed])
 
   return (
     <NftPoolCardWrap>
@@ -161,25 +191,25 @@ function NftPoolCard({ pool, onClaim, pending }: NftPoolCardProps) {
       </FieldPool>
       <Field maxWidth="96px">
         <FieldName>Total ALMs</FieldName>
-        {ethers.utils.formatEther(pool.total || BigNumber.from(0))}
+        {total}
       </Field>
       <Field maxWidth="96px">
         <FieldName>Locked</FieldName>
-        {ethers.utils.formatEther(pool.locked || BigNumber.from(0))}
+        {locked}
       </Field>
       <Field maxWidth="80px">
         <FieldName>Unlocked</FieldName>
-        {ethers.utils.formatEther(pool.unlocked || BigNumber.from(0))}
+        {unlocked}
       </Field>
       <FieldClaim maxWidth="172px">
         <FieldName>Claimed</FieldName>
         <FieldValue>
-          {ethers.utils.formatEther(pool.claimed || BigNumber.from(0))}
+          {claimed}
           {isUnlocked && (
             <Button
               variant="secondary"
               size="sm"
-              disabled={pending}
+              disabled={pending || isLoading || isLoadingLocal}
               onClick={() => {
                 onClaim(pool.id)
               }}
