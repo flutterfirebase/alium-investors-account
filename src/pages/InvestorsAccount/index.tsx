@@ -158,16 +158,6 @@ const NoNFTText = styled(Flex)`
   color: #000;
   margin-bottom: 16px;
 `
-// Helpers
-let claimProcessTitemout
-
-const claimTimeout = () => {
-  if (!claimProcessTitemout) {
-    setTimeout(() => {
-      claimProcessTitemout = undefined
-    }, 10000)
-  }
-}
 
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
@@ -217,7 +207,7 @@ const InvestorsAccount = () => {
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
   const transactions: any = chainId ? state[chainId] ?? {} : {}
 
-  if (txHash !== '' && transactions[txHash]?.receipt && !claimProcessTitemout) {
+  if (txHash !== '' && transactions[txHash]?.receipt) {
     setTempTxHash(txHash)
     setTxHash('')
     setTxOpen(false)
@@ -256,7 +246,6 @@ const InvestorsAccount = () => {
           if (tx) {
             setTxHash(tx)
             setTxOpen(true)
-            claimTimeout()
           }
         })
         .catch((e) => {
@@ -288,7 +277,7 @@ const InvestorsAccount = () => {
                 fontSize: '16px',
                 lineHeight: '22px',
                 letterSpacing: '0.3px',
-                color: '#0B1359'
+                color: '#0B1359',
               }}
             >
               {t('pleaseUnlockWallet')}
@@ -301,7 +290,7 @@ const InvestorsAccount = () => {
         </Modal>
 
         <Modal
-          isOpen={isSucceedPopupVisible && !claimProcessTitemout}
+          isOpen={isSucceedPopupVisible}
           onDismiss={handleSucceedModalClose}
           maxHeight={90}
           padding="24px"
@@ -330,8 +319,7 @@ const InvestorsAccount = () => {
             </NoNFT>
           ) : (
             <>
-              {
-                privateCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
+              {privateCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 && (
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Private Pool Cards
@@ -342,9 +330,8 @@ const InvestorsAccount = () => {
                     })}
                   </NftCardsContainer>
                 </>
-              }
-              {
-                strategicalCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
+              )}
+              {strategicalCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 && (
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Strategical Pool Cards
@@ -355,20 +342,21 @@ const InvestorsAccount = () => {
                     })}
                   </NftCardsContainer>
                 </>
-              }
-              {
-                publicCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
+              )}
+              {publicCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 && (
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Public Pool Cards
                   </StyledHeading>
                   <NftCardsContainer>
-                    {publicCardsWithCount.filter((pool) => pool.cardsCount > 0).map((card) => {
-                      return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
-                    })}
+                    {publicCardsWithCount
+                      .filter((pool) => pool.cardsCount > 0)
+                      .map((card) => {
+                        return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
+                      })}
                   </NftCardsContainer>
                 </>
-              }
+              )}
               <HelperDiv>
                 <span>*</span>
                 Please note that converting Private NFTs to ALMs is an irreversible action.
