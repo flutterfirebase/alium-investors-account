@@ -202,7 +202,6 @@ const InvestorsAccount = () => {
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const [tempTxHash, setTempTxHash] = useState('')
   const [isTxOpen, setTxOpen] = useState(false)
-  // const [bought, setBought] = useState(false);
 
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
   const transactions: any = chainId ? state[chainId] ?? {} : {}
@@ -212,12 +211,6 @@ const InvestorsAccount = () => {
     setTxHash('')
     setTxOpen(false)
   }
-
-  // const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  // const handleClose = () => {
-  // }
 
   const handleTxClose = () => {
     setTxOpen(false)
