@@ -106,7 +106,7 @@ const NftAccountCard = ({ card }: PropsType) => {
   const isMp4 = card.img.split('.')[1] === 'mp4'
   const [value, setValue] = useState<number | string>('-')
   const [isTxOpen, setTxOpen] = useState(false)
-  const [isApproveTransactionComplete, setIsApproveTransactionComplete] = useState(false)
+  const [isApproveTransactionLoading, setIsApproveTransactionLoading] = useState(false)
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const { chainId } = useActiveWeb3React()
   const handleTxClose = () => {
@@ -134,7 +134,7 @@ const NftAccountCard = ({ card }: PropsType) => {
   )
 
   const onApproveHandler = useCallback(() => {
-    setIsApproveTransactionComplete(false)
+    setIsApproveTransactionLoading(true)
     onApprove(card.privateCall)
       .then((tx) => {
         if (tx) {
@@ -145,7 +145,7 @@ const NftAccountCard = ({ card }: PropsType) => {
       .catch((e) => {
         console.error('onApproveHandler', e.message || e)
       })
-      .finally(() => setIsApproveTransactionComplete(true))
+      .finally(() => setIsApproveTransactionLoading(false))
   }, [card.privateCall, onApprove])
 
   const onConvertHandler = useCallback(() => {
@@ -191,7 +191,7 @@ const NftAccountCard = ({ card }: PropsType) => {
             </Button>
           ) : (
             <Button onClick={onApproveHandler} disabled={pending}>
-              {pending ? <Dots>Approving</Dots> : isApproveTransactionComplete ? <Dots>Approving</Dots> : 'Approve'}
+              {pending || isApproveTransactionLoading ? <Dots>Approving</Dots> : 'Approve'}
             </Button>
           )}
         </ButtonFlex>
