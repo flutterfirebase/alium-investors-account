@@ -29,9 +29,9 @@ const TransactionSubmittedContent = ({ onDismiss, chainId, hash }: TransactionSu
           {chainId && hash && (
             <LinkExternal href={getEtherscanLink(chainId, hash, 'transaction')}>{t('viewOnBscScan')}</LinkExternal>
           )}
-          <AutoColumn gap="8px" justify="center">
+          {/* <AutoColumn gap="8px" justify="center">
             <Spinner />
-          </AutoColumn>
+          </AutoColumn> */}
           <Button onClick={onDismiss} mt="20px">
             {t('close')}
           </Button>
