@@ -297,8 +297,7 @@ const InvestorsAccount = () => {
             'Please connect to your wallet first.'
           ) : balanceAccount === undefined || accountTotalBalance === -1 ? (
             <>
-              <Dots>Loading</Dots>
-              <span style={{ color: 'red' }}>please wait</span>
+              <Dots>Loading please wait</Dots>
             </>
           ) : accountTotalBalance === 0 && balanceAccount?.toString() === '0' ? (
             <NoNFT>
