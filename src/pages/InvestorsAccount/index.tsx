@@ -168,10 +168,12 @@ const InvestorsAccount = () => {
 
   const { poolsWithData, onClaim, pendingClaimResult, filterPools } = useNftPoolHook()
   const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = useCollectionNft()
+  console.info('balanceAccount from useCollectionNft()', balanceAccount)
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
   const [accountTotalBalance, setAccountTotalBalance] = useState(-1)
+  console.info('accountTotalBalance from AliumVesting', accountTotalBalance)
 
   const cbAccountTotalBalance = useCallback(() => {
     ;(async () => {
@@ -289,12 +291,7 @@ const InvestorsAccount = () => {
           <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
         </Modal>
 
-        <Modal
-          isOpen={isSucceedPopupVisible}
-          onDismiss={handleSucceedModalClose}
-          maxHeight={90}
-          padding="24px"
-        >
+        <Modal isOpen={isSucceedPopupVisible} onDismiss={handleSucceedModalClose} maxHeight={90} padding="24px">
           <TransactionSucceedContent hash={succeedHash} onDismiss={handleSucceedModalClose} />
         </Modal>
 

@@ -86,7 +86,7 @@ const Select = styled.select`
   border: 1px solid #d2d6e5;
   border-radius: 6px;
   box-shadow: inset 0px 2px 2px -1px rgb(74 74 104 / 10%);
-  color: #0B1359;
+  color: #0b1359;
   display: block;
   font-size: 16px;
   height: 48px;
@@ -95,8 +95,7 @@ const Select = styled.select`
   width: 100%;
 `
 
-const Option = styled.option`
-`
+const Option = styled.option``
 
 type PropsType = {
   card: CardType
@@ -112,10 +111,8 @@ const NftAccountCard = ({ card }: PropsType) => {
     setTxOpen(false)
   }
 
-  const { totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert, cardIds } = useNftAccountCard(
-    value,
-    card.id
-  )
+  const { totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert, cardIds } =
+    useNftAccountCard(value, card.id)
 
   const limitId: number = useMemo(() => {
     return totalSupply ? parseInt(totalSupply) : 1
@@ -158,6 +155,10 @@ const NftAccountCard = ({ card }: PropsType) => {
       })
   }, [card.privateCall, onConvert, value])
 
+  if (cardIds.length === 0) {
+    return null
+  }
+
   return (
     <NFTWrapper>
       <Modal isOpen={isTxOpen} onDismiss={handleTxClose} maxHeight={90} padding="24px" isTransparancy>
@@ -172,20 +173,13 @@ const NftAccountCard = ({ card }: PropsType) => {
           <Image src={card.img} alt="nft-preview" className="nft-preview" />
         )}
         <InputWrapper>
-           <Label>Select you NFT id</Label>
+          <Label>Select you NFT id</Label>
           {/* <Input type="number" scale="lg" step={1} min={1} placeholder="1" value={value} onChange={handleInput} /> */}
-          <Select
-            value={value}
-            onChange={handleInput}
-          >
+          <Select value={value} onChange={handleInput}>
             <Option value="-">-</Option>
-            {
-              cardIds.map((cardId) => {
-                return (
-                  <Option value={cardId}>{cardId}</Option>
-                )
-              })
-            }
+            {cardIds.map((cardId) => {
+              return <Option value={cardId}>{cardId}</Option>
+            })}
           </Select>
         </InputWrapper>
         <ButtonFlex>
