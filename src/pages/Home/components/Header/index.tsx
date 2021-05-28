@@ -46,6 +46,7 @@ const Wrapper = styled.div`
         padding: 0 12px;
       }
     }
+  }
 `
 
 const ImageWrap = styled.div`

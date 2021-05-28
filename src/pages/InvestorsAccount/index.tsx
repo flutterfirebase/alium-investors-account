@@ -168,12 +168,10 @@ const InvestorsAccount = () => {
 
   const { poolsWithData, onClaim, pendingClaimResult, filterPools } = useNftPoolHook()
   const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = useCollectionNft()
-  console.info('balanceAccount from useCollectionNft()', balanceAccount)
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
   const [accountTotalBalance, setAccountTotalBalance] = useState(-1)
-  console.info('accountTotalBalance from AliumVesting', accountTotalBalance)
 
   const cbAccountTotalBalance = useCallback(() => {
     ;(async () => {
@@ -204,7 +202,6 @@ const InvestorsAccount = () => {
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const [tempTxHash, setTempTxHash] = useState('')
   const [isTxOpen, setTxOpen] = useState(false)
-  // const [bought, setBought] = useState(false);
 
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
   const transactions: any = chainId ? state[chainId] ?? {} : {}
@@ -214,12 +211,6 @@ const InvestorsAccount = () => {
     setTxHash('')
     setTxOpen(false)
   }
-
-  // const accountEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  // const handleClose = () => {
-  // }
 
   const handleTxClose = () => {
     setTxOpen(false)
@@ -253,7 +244,6 @@ const InvestorsAccount = () => {
         .catch((e) => {
           console.error(e.message || e)
         })
-      // .finally(() => setTxOpen(false))
     },
     [onClaim]
   )
@@ -306,7 +296,9 @@ const InvestorsAccount = () => {
           {!account ? (
             'Please connect to your wallet first.'
           ) : balanceAccount === undefined || accountTotalBalance === -1 ? (
-            <Dots>Loading</Dots>
+            <>
+              <Dots>Loading please wait</Dots>
+            </>
           ) : accountTotalBalance === 0 && balanceAccount?.toString() === '0' ? (
             <NoNFT>
               <NoNFTText>You don&apos;t have NFT tokens yet, but you can purchase them on the page</NoNFTText>
@@ -322,9 +314,11 @@ const InvestorsAccount = () => {
                     Private Pool Cards
                   </StyledHeading>
                   <NftCardsContainer>
-                    {privateCardsWithCount.map((card) => {
-                      return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
-                    })}
+                    {privateCardsWithCount
+                      .filter((pool) => pool.cardsCount > 0)
+                      .map((card) => {
+                        return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
+                      })}
                   </NftCardsContainer>
                 </>
               )}
@@ -334,9 +328,11 @@ const InvestorsAccount = () => {
                     Strategical Pool Cards
                   </StyledHeading>
                   <NftCardsContainer>
-                    {strategicalCardsWithCount.map((card) => {
-                      return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
-                    })}
+                    {strategicalCardsWithCount
+                      .filter((pool) => pool.cardsCount > 0)
+                      .map((card) => {
+                        return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
+                      })}
                   </NftCardsContainer>
                 </>
               )}
