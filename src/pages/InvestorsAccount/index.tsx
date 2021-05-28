@@ -161,6 +161,7 @@ const NoNFTText = styled(Flex)`
 
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
+  const [isTransactionLoading, setIsTransactionLoading] = useState(false)
   const [isHideModalOpen, setHideModalOpen] = useState(false)
   const { account, chainId, library } = useActiveWeb3React()
 
@@ -230,10 +231,13 @@ const InvestorsAccount = () => {
     removePopup({ key: succeedHash })
     setTempTxHash('')
     setSucceedPopupVisible(false)
+
+    setIsTransactionLoading(false)
   }
 
   const onClaimHandler = useCallback(
     (pid: number) => {
+      setIsTransactionLoading(true)
       onClaim(pid)
         .then((tx) => {
           if (tx) {
@@ -366,6 +370,7 @@ const InvestorsAccount = () => {
                       pool={pool}
                       onClaim={onClaimHandler}
                       pending={Boolean(pendingClaimResult?.[0] === pool.id)}
+                      isLoading={isTransactionLoading}
                     />
                   ))}
                 </NftTableContent>

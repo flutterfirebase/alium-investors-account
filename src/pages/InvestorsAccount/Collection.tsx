@@ -1,5 +1,5 @@
-import { Flex,Text } from '@alium-official/uikit'
-import React,{ useEffect,useRef,useState } from 'react'
+import { Flex, Text } from '@alium-official/uikit'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import useCollectionNft from '../../hooks/useCollectionNft'
 import AppBody from '../AppBody'
@@ -85,11 +85,11 @@ function Collection() {
   const onSelectCard = (pid, cid, from) => {
     if (selectImage) {
       const toTop = selectImage.current?.offsetHeight || 0
-      const offsetPosition = from - toTop;
+      const offsetPosition = from - toTop
       window.scrollBy({
         top: offsetPosition,
-        behavior: 'smooth'
-      });
+        behavior: 'smooth',
+      })
     }
     setSelectedCard([pid, cid])
   }
@@ -102,7 +102,7 @@ function Collection() {
     if (poolClearedCards?.length && !selectedCard) {
       const firstEl = poolClearedCards[0]
       const firstCard = firstEl?.cards[0]
-      if (firstEl && firstCard) onSelectCard(firstEl, firstCard,0)
+      if (firstEl && firstCard) onSelectCard(firstEl, firstCard, 0)
     }
   }
   useEffect(() => {
@@ -118,14 +118,14 @@ function Collection() {
         </Text>
         <AppBody>
           <SelectedNftRow>
-            <SelectedNftWrapper>
-              {selectedCard && (
-                <>
+            {selectedCard && (
+              <>
+                <SelectedNftWrapper>
                   <Image src={cardImage} alt="nft-preview" className="nft-preview" />
                   <span>{selectedCard[1]}</span>
-                </>
-              )}
-            </SelectedNftWrapper>
+                </SelectedNftWrapper>
+              </>
+            )}
           </SelectedNftRow>
           <NftNavTabs />
 
