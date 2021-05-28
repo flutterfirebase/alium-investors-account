@@ -1,5 +1,5 @@
-import { Flex, Text } from '@alium-official/uikit'
-import React, { useRef, useState } from 'react'
+import { Flex,Text } from '@alium-official/uikit'
+import React,{ useEffect,useRef,useState } from 'react'
 import styled from 'styled-components'
 import useCollectionNft from '../../hooks/useCollectionNft'
 import AppBody from '../AppBody'
@@ -96,15 +96,29 @@ function Collection() {
 
   const { poolsWithCards } = useCollectionNft()
 
+  const poolClearedCards = poolsWithCards.filter((pool) => pool.cards?.length > 0)
+
+  const selectDefaultCard = () => {
+    if (poolClearedCards?.length && !selectedCard) {
+      const firstEl = poolClearedCards[0]
+      const firstCard = firstEl?.cards[0]
+      if (firstEl && firstCard) onSelectCard(firstEl, firstCard,0)
+    }
+  }
+  useEffect(() => {
+    selectDefaultCard()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolClearedCards])
+
   return (
     <ContentHolder>
-      <CardWrapper ref={selectImage} >
+      <CardWrapper ref={selectImage}>
         <Text fontSize="48px" style={{ fontWeight: 700, marginBottom: '32px' }}>
           Your NFT deck
         </Text>
         <AppBody>
           <SelectedNftRow>
-            <SelectedNftWrapper >
+            <SelectedNftWrapper>
               {selectedCard && (
                 <>
                   <Image src={cardImage} alt="nft-preview" className="nft-preview" />
@@ -118,14 +132,18 @@ function Collection() {
           <NftTable>
             <NftCollectionHeader />
             <NftTableContent>
-              {poolsWithCards.filter((pool) => pool.cards?.length > 0).map((pool) => (
-                <NftCollectionCard
-                  key={`Pool-Nft-${pool.id}`}
-                  selectedCard={selectedCard}
-                  onSelectCard={onSelectCard}
-                  pool={pool}
-                />
-              ))}
+              {poolClearedCards?.length ? (
+                poolClearedCards.map((pool) => (
+                  <NftCollectionCard
+                    key={`Pool-Nft-${pool.id}`}
+                    selectedCard={selectedCard}
+                    onSelectCard={onSelectCard}
+                    pool={pool}
+                  />
+                ))
+              ) : (
+                <></>
+              )}
             </NftTableContent>
           </NftTable>
         </AppBody>

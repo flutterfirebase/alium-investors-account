@@ -158,16 +158,6 @@ const NoNFTText = styled(Flex)`
   color: #000;
   margin-bottom: 16px;
 `
-// Helpers
-let claimProcessTitemout
-
-const claimTimeout = () => {
-  if (!claimProcessTitemout) {
-    setTimeout(() => {
-      claimProcessTitemout = undefined
-    }, 10000)
-  }
-}
 
 const InvestorsAccount = () => {
   // const [poolsWithData, setPoolsWithData] = useState<PoolsTypes[]>(pools)
@@ -178,10 +168,12 @@ const InvestorsAccount = () => {
 
   const { poolsWithData, onClaim, pendingClaimResult, filterPools } = useNftPoolHook()
   const { balanceAccount, strategicalCardsWithCount, publicCardsWithCount, privateCardsWithCount } = useCollectionNft()
+  console.info('balanceAccount from useCollectionNft()', balanceAccount)
 
   const nftContract = useNFTPrivateContract()
   const [isSucceedPopupVisible, setSucceedPopupVisible] = useState(false)
   const [accountTotalBalance, setAccountTotalBalance] = useState(-1)
+  console.info('accountTotalBalance from AliumVesting', accountTotalBalance)
 
   const cbAccountTotalBalance = useCallback(() => {
     ;(async () => {
@@ -217,7 +209,7 @@ const InvestorsAccount = () => {
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
   const transactions: any = chainId ? state[chainId] ?? {} : {}
 
-  if (txHash !== '' && transactions[txHash]?.receipt && !claimProcessTitemout) {
+  if (txHash !== '' && transactions[txHash]?.receipt) {
     setTempTxHash(txHash)
     setTxHash('')
     setTxOpen(false)
@@ -256,7 +248,6 @@ const InvestorsAccount = () => {
           if (tx) {
             setTxHash(tx)
             setTxOpen(true)
-            claimTimeout()
           }
         })
         .catch((e) => {
@@ -288,7 +279,7 @@ const InvestorsAccount = () => {
                 fontSize: '16px',
                 lineHeight: '22px',
                 letterSpacing: '0.3px',
-                color: '#0B1359'
+                color: '#0B1359',
               }}
             >
               {t('pleaseUnlockWallet')}
@@ -300,12 +291,7 @@ const InvestorsAccount = () => {
           <TransactionSubmittedContent chainId={chainId} hash={txHash} onDismiss={handleTxClose} />
         </Modal>
 
-        <Modal
-          isOpen={isSucceedPopupVisible && !claimProcessTitemout}
-          onDismiss={handleSucceedModalClose}
-          maxHeight={90}
-          padding="24px"
-        >
+        <Modal isOpen={isSucceedPopupVisible} onDismiss={handleSucceedModalClose} maxHeight={90} padding="24px">
           <TransactionSucceedContent hash={succeedHash} onDismiss={handleSucceedModalClose} />
         </Modal>
 
@@ -330,8 +316,7 @@ const InvestorsAccount = () => {
             </NoNFT>
           ) : (
             <>
-              {
-                privateCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
+              {privateCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 && (
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Private Pool Cards
@@ -342,9 +327,8 @@ const InvestorsAccount = () => {
                     })}
                   </NftCardsContainer>
                 </>
-              }
-              {
-                strategicalCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
+              )}
+              {strategicalCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 && (
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Strategical Pool Cards
@@ -355,20 +339,21 @@ const InvestorsAccount = () => {
                     })}
                   </NftCardsContainer>
                 </>
-              }
-              {
-                publicCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 &&
+              )}
+              {publicCardsWithCount.filter((pool) => pool.cardsCount > 0).length > 0 && (
                 <>
                   <StyledHeading as="h2" size="lg" color="heading" mb="16px" mt="16px">
                     Public Pool Cards
                   </StyledHeading>
                   <NftCardsContainer>
-                    {publicCardsWithCount.filter((pool) => pool.cardsCount > 0).map((card) => {
-                      return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
-                    })}
+                    {publicCardsWithCount
+                      .filter((pool) => pool.cardsCount > 0)
+                      .map((card) => {
+                        return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
+                      })}
                   </NftCardsContainer>
                 </>
-              }
+              )}
               <HelperDiv>
                 <span>*</span>
                 Please note that converting Private NFTs to ALMs is an irreversible action.

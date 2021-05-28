@@ -1,31 +1,40 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import { Flex, Heading, Text, ColoredCopyIcon } from '@alium-official/uikit'
-import { AppState } from 'state/index'
-import { PopupList } from 'state/application/reducer'
-import { CardType } from 'pages/Home/constants/cards'
+import { ColoredCopyIcon,Flex,Heading,Text } from '@alium-official/uikit'
 import { NFT_COLLECTIBLE_ADDRESS } from 'constants/abis/nftPrivate'
-
+import { CardType } from 'pages/Home/constants/cards'
+import React,{ useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { PopupList } from 'state/application/reducer'
+import { AppState } from 'state/index'
 import styled from 'styled-components'
-import { Wrapper, Section } from './helpers'
-
 import previewImg from '../../assets/images/transaction-succeed-preview.svg'
-
+import { Section,Wrapper } from './helpers'
 
 type TransactionSucceedContentProps = {
   onDismiss: () => void
   hash: string | undefined
 }
 
-
-
 const StyledDetailsLabel = (props: React.ComponentProps<typeof Text>) => (
-  <Text style={{ fontSize: "14px", lineHeight: "20px", letterSpacing: "0.3px", color: "#8990A5", textAlign: "center" }}  {...props} />
+  <Text
+    style={{ fontSize: '14px', lineHeight: '20px', letterSpacing: '0.3px', color: '#8990A5', textAlign: 'center' }}
+    {...props}
+  />
 )
 const StyledDetailsText = (props: React.ComponentProps<typeof Text>) => (
-  <Text style={{ fontSize: "14px", lineHeight: "20px", letterSpacing: "0.3px", fontWeight: "bold", color: "#6C5DD3", textAlign: "center", marginLeft: "4px" }}  {...props} />
+  <Text
+    style={{
+      fontSize: '14px',
+      lineHeight: '20px',
+      letterSpacing: '0.3px',
+      fontWeight: 'bold',
+      color: '#6C5DD3',
+      textAlign: 'center',
+      marginLeft: '4px',
+    }}
+    {...props}
+  />
 )
 
 const Content = styled.div`
@@ -44,7 +53,7 @@ const Content = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-  
+
     margin-top: 20px;
     & .address-field {
       max-width: 330px;
@@ -52,22 +61,21 @@ const Content = styled.div`
       margin-top: 8px;
       padding: 6px 10px;
       box-sizing: border-box;
-      border: 1px solid #D2D6E5;
+      border: 1px solid #d2d6e5;
       border-radius: 6px;
       cursor: pointer;
       & .address {
         white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis; 
+        text-overflow: ellipsis;
       }
     }
   }
 
-
   @media screen and (max-width: 1024px) {
     & .address-block {
       & .address-field {
-        max-width: 300px
+        max-width: 300px;
       }
     }
   }
@@ -79,10 +87,10 @@ const Content = styled.div`
         max-width: 250px;
       }
     }
-   
+
     & .info-block {
       width: 100%;
-      
+
       & .exchange-info {
         display: flex;
         flex-direction: column;
@@ -93,6 +101,7 @@ const Content = styled.div`
     & .address-field {
       max-width: 150px;
     }
+    overflow: hidden;
   }
 `
 
@@ -107,64 +116,72 @@ const CopyButton = styled.button`
   align-items: center;
   justify-content: center;
   svg * {
-    stroke: #8990A5;
+    stroke: #8990a5;
     transition: stroke 100ms ease-in-out;
   }
   &:hover {
     svg * {
-      stroke: #6C5DD3;
+      stroke: #6c5dd3;
     }
   }
   &:active {
     background-color: rgba(108, 93, 211, 0.3);
   }
 `
+const ImgPreview = styled.img`
+  width: 345px;
+  height: 164px;
+  @media (max-width: 440px) {
+    width: 300px;
+    height: 99px;
+  }
+`
 
 const TransactionSucceedContent = ({ onDismiss, hash }: TransactionSucceedContentProps) => {
-  const popupList = useSelector<AppState, PopupList | any>(s => s.application.popupList)
-  const filteredPopups = popupList.filter(popup => popup.key === hash)
+  const popupList = useSelector<AppState, PopupList | any>((s) => s.application.popupList)
+  const filteredPopups = popupList.filter((popup) => popup.key === hash)
 
-  let popupSummary = { count: 0, card: { }, price: undefined } as { count: number, card: CardType, price: undefined | string }
+  let popupSummary = { count: 0, card: {}, price: undefined } as {
+    count: number
+    card: CardType
+    price: undefined | string
+  }
   if (filteredPopups[0]) {
     popupSummary = filteredPopups[0].content.txn.additionalData
   }
-  const {t} = useTranslation();
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const copyAddress = () => {
     navigator.clipboard.writeText(NFT_COLLECTIBLE_ADDRESS)
   }
 
   return (
-    <Wrapper style={{ maxWidth: "550px" }} onClick={onDismiss}>
+    <Wrapper style={{ maxWidth: '550px' }} onClick={onDismiss}>
       <Section>
-
         <Content>
           <div className="info-block">
             {/* <ContentHeader onDismiss={onDismiss}> </ContentHeader> */}
-            <img className="preview-image" src={previewImg} alt="transaction-succeed-preview" />
-            <Heading style={{ textAlign: "center", marginTop: 20, marginBottom: 16 }}>{t('congratulations')}!</Heading>
+            <ImgPreview className="preview-image" src={previewImg} alt="transaction-succeed-preview" />
+            <Heading style={{ textAlign: 'center', marginTop: 20, marginBottom: 16 }}>{t('congratulations')}!</Heading>
             <StyledDetailsText>{popupSummary?.card.headline}</StyledDetailsText>
 
-            <Flex alignItems="center" justifyContent="center" style={{ marginTop: "4px" }}>
+            <Flex alignItems="center" justifyContent="center" style={{ marginTop: '4px' }}>
               <StyledDetailsLabel>{t('successfullyBought')}</StyledDetailsLabel>
               {/* <StyledDetailsText>{popupSummary.count} {popupSummary.count > 1 ? "cards" : "card"}</StyledDetailsText> */}
             </Flex>
 
-            {
-              popupSummary.price && (
-                <Flex alignItems="center" justifyContent="center" className="exchange-info" style={{ marginTop: "4px" }}>
-                  <StyledDetailsLabel>{t('laterExchange')}</StyledDetailsLabel>
-                  <StyledDetailsText>{popupSummary.price} ALM</StyledDetailsText>
-                </Flex>
-              )
-            }
-
+            {popupSummary.price && (
+              <Flex alignItems="center" justifyContent="center" className="exchange-info" style={{ marginTop: '4px' }}>
+                <StyledDetailsLabel>{t('laterExchange')}</StyledDetailsLabel>
+                <StyledDetailsText>{popupSummary.price} ALM</StyledDetailsText>
+              </Flex>
+            )}
           </div>
           <button className="address-block" onClick={copyAddress} type="button">
-            <StyledDetailsLabel >{t('toSeeNftCards')}</StyledDetailsLabel>
+            <StyledDetailsLabel>{t('toSeeNftCards')}</StyledDetailsLabel>
             <Flex className="address-field" alignItems="center" justifyContent="space-between">
               <StyledDetailsLabel className="address">{NFT_COLLECTIBLE_ADDRESS}</StyledDetailsLabel>
-              <CopyButton type="button" className={copied ? "active" : ""}>
+              <CopyButton type="button" className={copied ? 'active' : ''}>
                 <ColoredCopyIcon />
               </CopyButton>
             </Flex>
