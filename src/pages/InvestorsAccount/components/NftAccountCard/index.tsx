@@ -106,17 +106,30 @@ const NftAccountCard = ({ card }: PropsType) => {
   const isMp4 = card.img.split('.')[1] === 'mp4'
   const [value, setValue] = useState<number | string>('-')
   const [isTxOpen, setTxOpen] = useState(false)
-  // const [isApproveTransactionLoading, setIsApproveTransactionLoading] = useState(false)
   const [txHash, setTxHash] = useState('xczxczxczxc')
   const { chainId } = useActiveWeb3React()
   const handleTxClose = () => {
     setTxOpen(false)
   }
-
   const nftAccountCard = useNftAccountCard(value, card.id)
+  const {
+    totalSupply,
+    error,
+    isApprovedPrivate,
+    isApprovedPublic,
+    pending,
+    onApprove,
+    onConvert,
+    cardIds,
+    setPendingConvert,
+    setPendingApprove,
+  } = nftAccountCard
 
-  const { totalSupply, error, isApprovedPrivate, isApprovedPublic, pending, onApprove, onConvert, cardIds } =
-    nftAccountCard
+  // there is no suitable place to stop the PENDING
+  // const endPending = () => {
+  //   setPendingConvert(false)
+  //   setPendingApprove(false)
+  // }
 
   const limitId: number = useMemo(() => {
     return totalSupply ? parseInt(totalSupply) : 1
@@ -134,32 +147,34 @@ const NftAccountCard = ({ card }: PropsType) => {
   )
 
   const onApproveHandler = useCallback(() => {
-    // setIsApproveTransactionLoading(true)
-    onApprove(card.privateCall)
-      .then((tx) => {
+    setPendingApprove(true)
+    try {
+      onApprove(card.privateCall).then((tx) => {
         if (tx) {
           setTxHash(tx)
           setTxOpen(true)
         }
       })
-      .catch((e) => {
-        console.error('onApproveHandler', e.message || e)
-      })
-    // .finally(() => setIsApproveTransactionLoading(false))
-  }, [card.privateCall, onApprove])
+    } catch (e) {
+      console.error('onApproveHandler', e.message || e)
+      setPendingApprove(false)
+    }
+  }, [card.privateCall, onApprove, setPendingApprove])
 
-  const onConvertHandler = useCallback(() => {
-    onConvert(card.privateCall, typeof value === 'string' ? parseInt(value) : value)
-      .then((tx) => {
+  const onConvertHandler = useCallback(async () => {
+    setPendingConvert(true)
+    try {
+      onConvert(card.privateCall, typeof value === 'string' ? parseInt(value) : value).then((tx) => {
         if (tx) {
           setTxHash(tx)
           setTxOpen(true)
         }
       })
-      .catch((e) => {
-        console.error('onConvertHandler', e.message || e)
-      })
-  }, [card.privateCall, onConvert, value])
+    } catch (e) {
+      console.error('onConvertHandler', e.message || e)
+      setPendingConvert(false)
+    }
+  }, [card.privateCall, onConvert, setPendingConvert, value])
 
   return (
     <NFTWrapper>
@@ -186,12 +201,11 @@ const NftAccountCard = ({ card }: PropsType) => {
         </InputWrapper>
         <ButtonFlex>
           {(card.privateCall && isApprovedPrivate) || (!card.privateCall && isApprovedPublic) ? (
-            <Button onClick={onConvertHandler} disabled={Boolean(error)}>
+            <Button onClick={onConvertHandler} disabled={Boolean(error || pending)}>
               {pending ? <Dots>Converting</Dots> : error || 'Convert to ALMs'}
             </Button>
           ) : (
             <Button onClick={onApproveHandler} disabled={pending}>
-              {/* {pending || isApproveTransactionLoading ? <Dots>Approving</Dots> : 'Approve'} */}
               {pending ? <Dots>Approving</Dots> : 'Approve'}
             </Button>
           )}
