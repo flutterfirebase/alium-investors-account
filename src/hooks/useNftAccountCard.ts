@@ -22,6 +22,14 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
   const [pendingConvert, setPendingConvert] = useState<boolean>(false)
   const { account, library } = useActiveWeb3React()
   const { tokenTypesWithTokenId } = useCollectionNft()
+  const [errorResponse, setErrorResponse] = useState('')
+
+  const updateErrorResponse = (message: string) => {
+    setErrorResponse(message)
+    setTimeout(() => {
+      setErrorResponse('')
+    }, 1500)
+  }
 
   const cardIds: Array<string | number> = useMemo(() => {
     return tokenTypesWithTokenId[cardId] || []
@@ -67,6 +75,7 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
           })
           .catch((e) => {
             console.error(e.message || e)
+            updateErrorResponse(e?.data?.message || e?.message || '')
             setPendingApprove(false)
           })
       }
@@ -94,6 +103,7 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
           })
           .catch((e) => {
             console.error(e.message || e)
+            updateErrorResponse(e?.data?.message || e?.message || '')
             // user decline here
             setPendingConvert(false)
           })
@@ -116,7 +126,7 @@ export default function useNftAccountCard(tokenId: number | string, cardId: numb
     isApprovedPublic,
     onApprove: approve,
     totalSupply: totalSupply?.[0]?.toString(),
-    error,
+    error: error || errorResponse,
     pending: pendingApprove || pendingConvert,
     setPendingConvert,
     setPendingApprove,
