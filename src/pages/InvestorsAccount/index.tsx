@@ -322,8 +322,8 @@ const InvestorsAccount = () => {
                   <NftCardsContainer>
                     {privateCardsWithCount
                       .filter((pool) => pool.cardsCount > 0)
-                      .map((card) => {
-                        return <NftAccountCard key={`cardListPrivate-${card.id}`} card={card} />
+                      .map((card, index) => {
+                        return <NftAccountCard key={`cardListPrivate-${card.id}/${index.toString()}`} card={card} />
                       })}
                   </NftCardsContainer>
                 </>
@@ -336,8 +336,8 @@ const InvestorsAccount = () => {
                   <NftCardsContainer>
                     {strategicalCardsWithCount
                       .filter((pool) => pool.cardsCount > 0)
-                      .map((card) => {
-                        return <NftAccountCard key={`cardListStrategical-${card.id}`} card={card} />
+                      .map((card, index) => {
+                        return <NftAccountCard key={`cardListStrategical-${card.id}/${index.toString()}`} card={card} />
                       })}
                   </NftCardsContainer>
                 </>
@@ -350,8 +350,8 @@ const InvestorsAccount = () => {
                   <NftCardsContainer>
                     {publicCardsWithCount
                       .filter((pool) => pool.cardsCount > 0)
-                      .map((card) => {
-                        return <NftAccountCard key={`cardListPublic-${card.id}`} card={card} />
+                      .map((card, index) => {
+                        return <NftAccountCard key={`cardListPublic-${card.id}/${index.toString()}`} card={card} />
                       })}
                   </NftCardsContainer>
                 </>
